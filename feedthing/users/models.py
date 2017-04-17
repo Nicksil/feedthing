@@ -25,9 +25,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, TimeStampedModel):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    last_name = models.CharField(max_length=255, blank=True)
 
     objects = UserManager()
 
