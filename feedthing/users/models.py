@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 from core.models import TimeStampedModel
@@ -30,7 +31,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, TimeStampedModel):
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
