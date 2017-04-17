@@ -21,18 +21,6 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_staff', True)
-
-        if extra_fields.get('is_admin') is False:
-            raise ValueError('Superuser must have is_admin=True.')
-
-        if extra_fields.get('is_staff') is False:
-            raise ValueError('Superuser must have is_staff=True.')
-
-        return self.create_user(email, password, **extra_fields)
-
 
 class User(AbstractBaseUser, TimeStampedModel):
     email = models.EmailField(unique=True)
@@ -40,7 +28,6 @@ class User(AbstractBaseUser, TimeStampedModel):
     last_name = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
