@@ -1,6 +1,8 @@
+from django.conf.urls import include
 from django.conf.urls import url
-from django.views.generic import TemplateView
+
+from feeds import urls as feeds_urls
 
 urlpatterns = [
-    url(r'^', TemplateView.as_view(template_name='index.html'), name='index')
+    url(r'^', include(feeds_urls, namespace='feeds'))
 ]
