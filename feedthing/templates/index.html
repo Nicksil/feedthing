@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block body %}
     <form action="" method="POST">
+        {% csrf_token %}
         <label for="feed-url-id">Feed URL</label>
         <input type="url" name="url" id="feed-url-id">
         <button type="submit">Add</button>
     </form>
+    <p>{{ root_keys }}</p>
+    <p>{{ feed_keys }}</p>
 {% endblock %}
