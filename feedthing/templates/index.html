@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block body %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        <label for="feed-url-id">Feed URL</label>
-        <input type="url" name="url" id="feed-url-id">
-        <button type="submit">Add</button>
-    </form>
-    <p>{{ root_keys }}</p>
-    <p>{{ feed_keys }}</p>
+    <label for="feed-url-id">Feed URL</label>
+    <input type="url" id="feed-url-id">
+    <button id="feed-url-btn" type="button">Add</button>
+    <div>
+        <ul id="feeds-list"></ul>
+    </div>
+    {% comment %}
+    <textarea id="txtrea" cols="30" rows="10"></textarea>
+    <div id="contentDiv"></div>
+    {% endcomment %}
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}

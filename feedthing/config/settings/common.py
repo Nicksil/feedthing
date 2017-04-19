@@ -13,6 +13,7 @@ ALLOWED_HOSTS = []
 ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
 
+STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'staticfiles'),)
 STATIC_URL = '/static/'
 
 LANGUAGE_CODE = 'en-us'
