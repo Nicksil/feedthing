@@ -32,13 +32,23 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'django_extensions',
+    'rest_framework',
 )
 LOCAL_APPS = (
+    'api',
     'core',
     'feeds',
     'users',
 )
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
