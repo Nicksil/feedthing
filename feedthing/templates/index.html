@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <label for="feed-url-id">Feed URL</label>
-    <input type="url" id="feed-url-id">
-    <button id="feed-url-btn" type="button">Add</button>
-    <div>
-        <ul id="feeds-list"></ul>
-    </div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="feed-url-id">Feed URL</label>
+        <input type="url" name="feed_url" id="feed-url-id">
+        <button type="submit">Add</button>
+    </form>
 {% endblock %}

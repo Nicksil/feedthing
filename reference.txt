@@ -1,0 +1,141 @@
+# feedparser.parse => feedparser.FeedParserDict
+{
+    bozo (int): 0 | 1,
+    encoding (str): ['utf-8']
+    entries (list[feedparser.FeedParserDict]):
+        author
+        author_detail
+        authors
+        content
+        guidislink
+        id
+        link
+        links
+        published
+        published_parsed
+        summary
+        summary_detail
+        title
+        title_detail
+    feed (dict)
+    headers (dict)
+    href (str)
+    namespaces (dict)
+    status (int)
+    updated (str)
+    updated_parsed (time.struct_time)
+    version (str)
+}
+
+# Sample response from feedparser.parse
+
+{
+    'bozo': 0,
+    'encoding': 'utf-8',
+    'entries': [
+        {
+            'author': 'Charlotte Mays',
+            'author_detail': {
+                'name': 'Charlotte Mays'
+            },
+            'authors': [
+                {
+                    'name': 'Charlotte Mays'
+                }
+            ],
+            'content': [
+                {
+                    'base': 'https://www.caktusgroup.com/feeds/tags/django/',
+                    'language': 'en',
+                    'type': 'text/html',
+                    'value': '<html><head></head><body><div class="document">\n<p>Python 3.6 was released in the tail end of 2016. Read on for a few highlights from this release.</p>\n<div class="section" id="new-module-secrets">\n<h2>New module: secrets</h2>\n<p>Python 3.6 introduces a new module in the standard library called <tt class="docutils literal">secrets</tt>. While the <tt class="docutils literal">random</tt> module has long existed to provide us with pseudo-random numbers suitable for applications like modeling and simulation, these were not "cryptographically random" and not suitable for use in cryptography. <tt class="docutils literal">secrets</tt> fills this gap, providing a cryptographically strong method to, for instance, create a new, random password or a secure token.</p>\n</div>\n<div class="section" id="new-method-for-string-interpolation">\n<h2>New method for string interpolation</h2>\n<p>Python previously had several methods for string interpolation, but the most commonly used was <tt class="docutils literal">str.format()</tt>. Let’s look at how this used to be done. Assuming 2 existing variables, <tt class="docutils literal">name</tt> and <tt class="docutils literal">cookies_eaten, str.format()</tt> could look like this:</p>\n<pre class="literal-block">"{0} ate {1} cookies".format(name, cookies_eaten)\n</pre>\n<p>Or this:</p>\n<pre class="literal-block">"{name} ate {cookies_eaten} cookies".format(name=name, cookies_eaten=cookies_eaten)\n</pre>\n<p>Now, with the new f-strings, the variable names can be placed right into the string without the extra length of the format parameters:</p>\n<pre class="literal-block">f"{name} ate {cookies_eaten} cookies"\n</pre>\n<p>This provides a much more pythonic way of formatting strings, making the resulting code both simpler and more readable.</p>\n</div>\n<div class="section" id="underscores-in-numerals">\n<h2>Underscores in numerals</h2>\n<p>While it doesn’t come up often, it has long been a pain point that long numbers could be difficult to read in the code, allowing bugs to creep in. For instance, suppose I need to multiply an input by 1 billion before I process the value. I might say:</p>\n<pre class="literal-block">bill_val = input_val * 1000000000\n</pre>\n<p>Can you tell at a glance if that number has the right number of zeroes? I can’t. Python 3.6 allows us to make this clearer:</p>\n<pre class="literal-block">bill_val = input_val * 1_000_000_000\n</pre>\n<p>It’s a small thing, but anything that reduces the chance I’ll introduce a new bug is great in my book!</p>\n</div>\n<div class="section" id="variable-type-annotations">\n<h2>Variable type annotations</h2>\n<p>One key characteristic of Python has always been its flexible variable typing, but that isn’t always a good thing. Sometimes, it can help you catch mistakes earlier if you know what type you are expecting to be passed as parameters, or returned as the results of a function. There have previously been ways to annotate types within comments, but the 3.6 release of Python is the first to bring these annotations into official Python syntax. This is a completely optional aspect of the language, since the annotations have no effect at runtime, but this feature makes it easier to inspect your code for variable type inconsistencies before finalizing it.</p>\n</div>\n<div class="section" id="and-much-more">\n<h2>And much more…</h2>\n<p>In addition to the changes mentioned above, there have been improvements made to several modules in the standard library, as well as to the CPython implementation. To read about all of the updates this new release includes, take a look at the <a class="reference external" href="https://docs.python.org/3/whatsnew/3.6.html">official notes</a>.</p>\n</div>\n</div>\n</body></html>'
+                }
+            ],
+            'guidislink': False,
+            'id': 'https://www.caktusgroup.com/blog/2017/01/11/new-year-new-python-3-6/',
+            'link': 'https://www.caktusgroup.com/blog/2017/01/11/new-year-new-python-3-6/',
+            'links': [
+                {
+                    'href': 'https://www.caktusgroup.com/blog/2017/01/11/new-year-new-python-3-6/',
+                    'rel': 'alternate',
+                    'type': 'text/html'
+                }
+            ],
+            'published': 'Wed, 11 Jan 2017 19:44:14 +0000',
+            'published_parsed': time.struct_time(tm_year=2017, tm_mon=1, tm_mday=11, tm_hour=19, tm_min=44, tm_sec=14, tm_wday=2, tm_yday=11, tm_isdst=0),
+            'summary': 'Python 3.6 was released in the tail end of 2016. Read on for a few highlights from this release. New module: secrets Python 3.6 introduces a new module in the standard library called secrets. While the random module has long existed to provide us with pseudo-random numbers suitable for applications like modeling and simulation, these...',
+            'summary_detail': {
+                'base': 'https://www.caktusgroup.com/feeds/tags/django/',
+                'language': 'en',
+                'type': 'text/html',
+                'value': 'Python 3.6 was released in the tail end of 2016. Read on for a few highlights from this release. New module: secrets Python 3.6 introduces a new module in the standard library called secrets. While the random module has long existed to provide us with pseudo-random numbers suitable for applications like modeling and simulation, these...'
+            },
+            'title': 'New year, new Python: Python 3.6',
+            'title_detail': {
+                'base': 'https://www.caktusgroup.com/feeds/tags/django/',
+                'language': 'en',
+                'type': 'text/plain',
+                'value': 'New year, new Python: Python 3.6'
+            }
+        }
+    ],
+    'feed': {
+        'language': 'en-us',
+        'link': 'https://www.caktusgroup.com/blog/tags/django/',
+        'links': [
+            {
+                'href': 'https://www.caktusgroup.com/blog/tags/django/',
+                'rel': 'alternate',
+                'type': 'text/html'
+            },
+            {
+                'href': 'https://www.caktusgroup.com/feeds/tags/django/',
+                'rel': 'self',
+                'type': 'application/atom+xml'
+            }
+        ],
+        'subtitle': 'Blog | Django Web Development | Raleigh Durham Chapel Hill | Caktus Consulting Group',
+        'subtitle_detail': {
+            'base': 'https://www.caktusgroup.com/feeds/tags/django/',
+            'language': 'en',
+            'type': 'text/html',
+            'value': 'Blog | Django Web Development | Raleigh Durham Chapel Hill | Caktus Consulting Group'
+        },
+        'title': 'Caktus Blog',
+        'title_detail': {
+            'base': 'https://www.caktusgroup.com/feeds/tags/django/',
+            'language': 'en',
+            'type': 'text/plain',
+            'value': 'Caktus Blog'
+        },
+        'updated': 'Wed, 05 Apr 2017 12:00:00 +0000',
+        'updated_parsed': time.struct_time(tm_year=2017, tm_mon=4, tm_mday=5, tm_hour=12, tm_min=0, tm_sec=0, tm_wday=2, tm_yday=95, tm_isdst=0)
+    },
+    'headers': {
+        'Cache-Control': 'max-age=3600',
+        'Connection': 'close',
+        'Content-Language': 'en',
+        'Content-Type': 'application/rss+xml; charset=utf-8',
+        'Date': 'Sat, 22 Apr 2017 04:39:46 GMT',
+        'Expires': 'Sat, 22 Apr 2017 05:06:54 GMT',
+        'Last-Modified': 'Wed, 05 Apr 2017 12:00:00 GMT',
+        'P3P': 'CP="Hello IE"',
+        'Server': 'nginx/1.10.3',
+        'Transfer-Encoding': 'chunked',
+        'Vary': 'Accept-Language, Cookie',
+        'X-Frame-Options': 'DENY',
+        'strict-transport-security': 'max-age=31536000',
+        'x-content-type-options': 'nosniff',
+        'x-xss-protection': '1; mode=block'
+    },
+    'href': 'https://www.caktusgroup.com/feeds/tags/django/',
+    'namespaces': {
+        '': 'http://www.w3.org/2005/Atom',
+        'content': 'http://purl.org/rss/1.0/modules/content/',
+        'dc': 'http://purl.org/dc/elements/1.1/'
+    },
+    'status': 301,
+    'updated': 'Wed, 05 Apr 2017 12:00:00 GMT',
+    'updated_parsed': time.struct_time(tm_year=2017, tm_mon=4, tm_mday=5, tm_hour=12, tm_min=0, tm_sec=0, tm_wday=2, tm_yday=95, tm_isdst=0),
+    'version': 'rss20'
+}
