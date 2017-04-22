@@ -1,10 +1,12 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
+from api import urls as api_urls
 from feeds import urls as feeds_urls
 from users import urls as users_urls
 
 urlpatterns = [
+    url(r'^api/', include(api_urls, namespace='api')),
     url(r'^feeds/', include(feeds_urls, namespace='feeds')),
     url(r'^users/', include(users_urls, namespace='users')),
     url(r'^register/$', TemplateView.as_view(template_name='register.html'), name='register'),
