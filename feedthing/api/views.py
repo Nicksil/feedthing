@@ -2,13 +2,23 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
+from .serializers import EntrySerializer
 from .serializers import FeedSerializer
 from feeds.managers import FeedEntryManager
+from feeds.models import Entry
 from feeds.models import Feed
 
 
-class FeedViewSet(viewsets.ModelViewSet):
+class EntryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """API endpoint for viewing, editing Entry objects
+    """
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+
+
+class FeedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """API endpoint for viewing, editing Feed objects
     """
     queryset = Feed.objects.all()
@@ -20,6 +30,6 @@ class FeedViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post', 'put'])
     def fetch(self, request, pk=None):
         obj = self.get_object()
-        result = FeedEntryManager.fetch_and_save(obj)
+        FeedEntryManager.fetch_and_save(obj)
 
         return Response(status=status.HTTP_200_OK)
