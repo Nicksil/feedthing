@@ -11,11 +11,11 @@ class Feed(TimeStampedModel):
         related_name='feeds'
     )
 
-    description = models.CharField(max_length=255)
-    href = models.URLField()
-    link = models.URLField()
-    pub_date = models.DateTimeField()
-    title = models.CharField(max_length=255)
+    description = models.CharField(blank=True, default='', max_length=255)
+    href = models.URLField(blank=True, default='')
+    link = models.URLField(blank=True, default='')
+    summary = models.CharField(blank=True, default='', max_length=255)
+    title = models.CharField(blank=True, default='', max_length=255)
 
     class Meta:
         ordering = ('title',)
