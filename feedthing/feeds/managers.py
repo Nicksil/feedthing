@@ -1,9 +1,11 @@
 import datetime
 import time
 
-import feedparser
 from django.db import IntegrityError
 
+import feedparser
+
+from core.utils import ensure_aware
 from feeds.models import Entry
 
 
@@ -19,7 +21,7 @@ class FeedEntryManager:
         _published = entry.get('published_parsed', None)
 
         if _published and isinstance(_published, time.struct_time):
-            _published = self.convert_struct_time(_published)
+            _published = ensure_aware(self.convert_struct_time(_published))
 
         return {
             'feed': self.feed,

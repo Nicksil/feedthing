@@ -31,5 +31,5 @@ class Entry(TimeStampedModel):
     title = models.CharField(blank=True, max_length=255)
 
     class Meta:
-        ordering = ('published',)
+        ordering = ('-published',)
         unique_together = (('feed', 'link'),)
