@@ -1,19 +1,25 @@
+from django.shortcuts import render, redirect
+
 import feedparser
-from django.shortcuts import render
+
+from .models import Feed
 
 
 def index(request):
-    return render(request, 'feeds/index.html')
+    context = {'feeds': request.user.feeds.all()}
+    return render(request, 'feeds/index.html', context=context)
 
 
-def add_feed(url):
+def add_feed(request):
+    url = request.POST.get('url')
     parsed = feedparser.parse(url)
+    href = parsed['href']
+    title = parsed['feed']['title']
 
-    if 'feed' in parsed:
-        description = parsed['feed'].get('description', '')
-        href = parsed['feed'].get('href', '')
-        link = parsed['feed'].get('link', '')
-        summary = parsed['feed'].get('summary', '')
-        title = parsed['feed'].get('title', '')
+    Feed.objects.create(
+        href=href,
+        title=title,
+        user=request.user
+    )
 
-    return {'feed_title': parsed.feed.title}
+    return redirect('feeds:index')

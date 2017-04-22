@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <form action="" method="POST">
+    <form action="{% url 'feeds:add' %}" method="POST">
         {% csrf_token %}
         <label for="feed-url-id">Feed URL</label>
         <input type="url" name="feed_url" id="feed-url-id">
         <button type="submit">Add</button>
     </form>
+    {% if feeds.exists %}
+        <ul>
+            {% for feed in feeds %}
+                <li>{{ feed.title }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
