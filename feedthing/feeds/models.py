@@ -11,8 +11,20 @@ class Feed(TimeStampedModel):
         related_name='feeds'
     )
 
-    href = models.URLField(blank=True, default='', max_length=255)
-    title = models.CharField(blank=True, default='', max_length=255)
+    href = models.URLField(blank=True, max_length=255)
+    title = models.CharField(blank=True, max_length=255)
 
     class Meta:
         ordering = ('title',)
+
+
+class Entry(TimeStampedModel):
+    feed = models.ForeignKey(
+        Feed,
+        models.CASCADE,
+        related_name='entries'
+    )
+
+    href = models.URLField(blank=True, max_length=255)
+    published = models.DateTimeField()
+    title = models.CharField(blank=True, max_length=255)
