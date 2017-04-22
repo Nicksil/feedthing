@@ -18,6 +18,7 @@ class FeedEntryManager:
         return parsed.get('entries', [])
 
     def prepare(self, entry):
+        _link = self.get_link(entry)
         _published = entry.get('published_parsed', None)
 
         if _published and isinstance(_published, time.struct_time):
@@ -25,10 +26,17 @@ class FeedEntryManager:
 
         return {
             'feed': self.feed,
-            'link': entry.get('link', ''),
+            'link': _link,
             'published': _published,
             'title': entry.get('title', ''),
         }
+
+    @staticmethod
+    def get_link(entry):
+        if 'feedburner_origlink' in entry:
+            return entry['feedburner_origlink']
+
+        return entry.get('link', '')
 
     @staticmethod
     def convert_struct_time(value):
