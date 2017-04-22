@@ -6,9 +6,8 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'entries', views.EntryViewSet)
-router.register(r'feeds', views.FeedViewSet, base_name='feeds')
+router.register(r'feeds', views.FeedViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^', include(router.urls), name='api'),
 ]

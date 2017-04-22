@@ -16,6 +16,7 @@ class Feed(TimeStampedModel):
 
     class Meta:
         ordering = ('title',)
+        unique_together = (('user', 'href'),)
 
 
 class Entry(TimeStampedModel):
