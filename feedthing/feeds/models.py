@@ -26,6 +26,6 @@ class Entry(TimeStampedModel):
         related_name='entries'
     )
 
-    href = models.URLField(blank=True, max_length=255)
+    link = models.URLField(blank=True, max_length=255)
     published = models.DateTimeField()
     title = models.CharField(blank=True, max_length=255)
