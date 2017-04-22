@@ -1,16 +1,5 @@
 *.DS_Store
-*.log
 *.pyc
-*.retry
-.coverage
-.credentials
 .idea/
-.local
-.vagrant
-.virtualenvs
 __pycache__
-docs/_build/
-htmlcov/
 node_modules/
-photobutton/staticfiles/build/
-webpack-stats.json
