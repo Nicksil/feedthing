@@ -7,6 +7,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'feeds', views.FeedViewSet)
+router.register(r'entries', views.EntryViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
