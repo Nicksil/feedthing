@@ -8,6 +8,14 @@
         <title>FeedThing</title>
     </head>
     <body>
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'users:sign_out' %}">Sign out</a></li>
+                <li><a href="{% url 'feeds:index' %}">Feeds</a></li>
+            {% else %}
+                <li><a href="{% url 'sign_in' %}">Sign in</a></li>
+            {% endif %}
+        </ul>
         {% block body %}{% endblock %}
     </body>
 </html>

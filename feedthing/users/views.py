@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate as _authenticate
+from django.contrib.auth import authenticate as _authenticate, logout
 from django.contrib.auth import login
 from django.shortcuts import redirect
 
@@ -22,4 +22,9 @@ def authenticate(request):
     if user is not None:
         login(request, user)
 
+    return redirect('index')
+
+
+def sign_out(request):
+    logout(request)
     return redirect('index')
