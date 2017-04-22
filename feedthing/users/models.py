@@ -51,4 +51,4 @@ class User(AbstractBaseUser, TimeStampedModel):
         )
 
     def __str__(self):
-        return repr(self)
+        return self.email
