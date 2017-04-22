@@ -5,8 +5,8 @@ from django.db import IntegrityError
 
 import feedparser
 
+from .models import Entry
 from core.utils import ensure_aware
-from feeds.models import Entry
 
 
 class FeedEntryManager:

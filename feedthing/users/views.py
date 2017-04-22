@@ -1,14 +1,14 @@
-from django.contrib.auth import authenticate as _authenticate, logout
+from django.contrib.auth import authenticate as _authenticate
 from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.shortcuts import redirect
 
-from users.models import User
+from .models import User
 
 
 def register(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
-
     User.objects.create_user(email=email, password=password)
 
     return authenticate(request)

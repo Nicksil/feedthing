@@ -1,11 +1,9 @@
+"""In reference to TimeStampedModel: Copyright (c) 2009-2015, Carl Meyer and contributors
+(https://github.com/carljm/django-model-utils/blob/master/model_utils/fields.py)
+"""
 from django.db import models
 
 from . import fields
-
-"""
-Copyright (c) 2009-2015, Carl Meyer and contributors
-https://github.com/carljm/django-model-utils/blob/master/model_utils/fields.py
-"""
 
 
 class TimeStampedModel(models.Model):

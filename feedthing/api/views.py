@@ -27,8 +27,9 @@ class FeedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         return Feed.objects.filter(user=self.request.user)
 
+    # noinspection PyUnusedLocal
     @detail_route(methods=['post', 'put'])
-    def fetch(self, request, pk=None):
+    def fetch(self, *args, **kwargs):
         obj = self.get_object()
         FeedEntryManager.fetch_and_save(obj)
 

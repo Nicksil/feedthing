@@ -11,9 +11,8 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
-    # entries = EntrySerializer(many=True, read_only=True)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Feed
-        fields = ('href', 'title', 'url', 'user')
+        fields = ('href', 'id', 'title', 'url', 'user')
