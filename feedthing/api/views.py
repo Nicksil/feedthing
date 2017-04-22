@@ -21,9 +21,5 @@ class FeedViewSet(viewsets.ModelViewSet):
     def fetch(self, request, pk=None):
         obj = self.get_object()
         result = FeedEntryManager.fetch_and_save(obj)
-        # ------------- PDEBUG -------------
-        print('=' * 100)
-        print(result)
-        print('=' * 100)
-        # ------------- PDEBUG -------------
+
         return Response(status=status.HTTP_200_OK)

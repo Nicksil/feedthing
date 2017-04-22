@@ -2,6 +2,7 @@ import datetime
 import time
 
 import feedparser
+from django.db import IntegrityError
 
 from feeds.models import Entry
 
@@ -27,22 +28,22 @@ class FeedEntryManager:
             'title': entry.get('title', ''),
         }
 
-    def convert_struct_time(self, value):
+    @staticmethod
+    def convert_struct_time(value):
         """Converts a time.struct_time object to a datetime.datetime object"""
-        return datetime.datetime(time.mktime(value))
+        return datetime.datetime.fromtimestamp(time.mktime(value))
 
     @staticmethod
     def save(data):
-        return Entry.objects.create(**data)
+        try:
+            return Entry.objects.create(**data)
+        except IntegrityError:
+            return None
 
     @classmethod
     def fetch_and_save(cls, feed):
         _instance = cls(feed)
         entries = _instance.fetch()
         parsed = [_instance.prepare(e) for e in entries]
-        # ------------- PDEBUG -------------
-        print('=' * 100)
-        print(parsed)
-        print('=' * 100)
-        # ------------- PDEBUG -------------
+
         return [_instance.save(p) for p in parsed]
