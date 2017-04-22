@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-    <form action="" method="POST">
+    <form action="{% url 'users:authenticate' %}" method="POST">
         <label for="email-id">Email:</label>
         <input type="email" name="email" id="email-id">
         <label for="password-id">Password:</label>
