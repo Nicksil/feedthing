@@ -15,6 +15,7 @@ Reference Material
 
 ::
 
+    # feedparser.FeedParserDict contents (some text 'snipped' for brevity)
     {
         'bozo': 0,
         'encoding': 'utf-8',
