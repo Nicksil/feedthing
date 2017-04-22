@@ -1,4 +1,9 @@
 import feedparser
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, 'feeds/index.html')
 
 
 def add_feed(url):
