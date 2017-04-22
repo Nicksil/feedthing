@@ -7,13 +7,13 @@ from feeds.models import Feed
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Entry
-        fields = ('link', 'published', 'title')
+        fields = ('id', 'link', 'published', 'title')
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
-    entries = EntrySerializer(many=True, read_only=True)
+    # entries = EntrySerializer(many=True, read_only=True)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Feed
-        fields = ('entries', 'href', 'title', 'url', 'user')
+        fields = ('href', 'title', 'url', 'user')
