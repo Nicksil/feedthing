@@ -11,7 +11,7 @@ class Feed(TimeStampedModel):
         related_name='feeds'
     )
 
-    href = models.URLField(blank=True, default='')
+    href = models.URLField(blank=True, default='', max_length=255)
     title = models.CharField(blank=True, default='', max_length=255)
 
     class Meta:
