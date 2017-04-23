@@ -20,6 +20,7 @@ class FeedManager:
     """
 
     def __init__(self, user, feed=None, href=None):
+        self.entries = []
         self.feed = feed
         self.href = href
         self.user = user
@@ -38,6 +39,8 @@ class FeedManager:
         return feedparser.parse(_url)
 
     def prepare(self, data):
+        self.entries = data.get('entries', [])
+
         _etag = data.get('etag', '')
         _feed = data.get('feed')
         _headers = data.get('headers')
@@ -65,14 +68,6 @@ class FeedManager:
     def save(data):
         return Feed.objects.create(**data)
 
-    @classmethod
-    def fetch_and_save(cls, user, feed=None, href=None):
-        _instance = cls(user, feed=feed, href=href)
-        _fetched = _instance.fetch()
-        _prepped = _instance.prepare(_fetched)
-
-        return _instance.save(_prepped)
-
 
 class FeedEntryManager:
     """A very simple, cursory implementation to handle Entry model objects.
@@ -85,32 +80,23 @@ class FeedEntryManager:
         parsed = feedparser.parse(self.feed.href)
         return parsed.get('entries', [])
 
-    def prepare(self, entry):
-        _link = self.get_link(entry)
-        _published = entry.get('published_parsed', None)
+    def prepare(self, data):
+        if 'feedburner_origlink' in data:
+            _link = data['feedburner_origlink']
+        else:
+            _link = data.get('link', '')
+
+        _published = data.get('published_parsed', None)
 
         if _published and isinstance(_published, time.struct_time):
-            _published = ensure_aware(self.convert_struct_time(_published))
+            _published = ensure_aware(datetime.datetime.fromtimestamp(time.mktime(_published)))
 
         return {
             'feed': self.feed,
             'link': _link,
             'published': _published,
-            'title': entry.get('title', ''),
+            'title': data.get('title', ''),
         }
-
-    @staticmethod
-    def get_link(entry):
-        if 'feedburner_origlink' in entry:
-            return entry['feedburner_origlink']
-
-        return entry.get('link', '')
-
-    @staticmethod
-    def convert_struct_time(value):
-        """Converts a time.struct_time object to a datetime.datetime object
-        """
-        return datetime.datetime.fromtimestamp(time.mktime(value))
 
     @staticmethod
     def save(data):

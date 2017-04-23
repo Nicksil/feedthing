@@ -10,8 +10,14 @@ router.register(
 ).register(
     r'entries',
     views.EntryViewSet,
-    base_name='feeds-entry',
+    base_name='entry',
     parents_query_lookups=['feed']
 )
+
+# router.register(
+#     r'entries',
+#     views.EntryViewSet,
+#     base_name='entry'
+# )
 
 urlpatterns = router.urls
