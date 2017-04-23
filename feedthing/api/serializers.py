@@ -11,8 +11,10 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
-    entries = serializers.HyperlinkedIdentityField(
-        view_name='entry-list'
+    entries = serializers.HyperlinkedRelatedField(
+        view_name='entry-detail',
+        many=True,
+        read_only=True,
     )
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 

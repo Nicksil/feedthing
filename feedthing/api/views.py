@@ -6,7 +6,6 @@ api.views
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from .serializers import EntrySerializer
 from .serializers import FeedSerializer
@@ -16,7 +15,7 @@ from feeds.models import Entry
 from feeds.models import Feed
 
 
-class EntryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class EntryViewSet(viewsets.ModelViewSet):
     """API endpoint for viewing, editing Entry objects
     """
     serializer_class = EntrySerializer
@@ -25,7 +24,7 @@ class EntryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return Entry.objects.filter(feed__user=self.request.user)
 
 
-class FeedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class FeedViewSet(viewsets.ModelViewSet):
     """API endpoint for viewing, editing Feed objects
     """
     serializer_class = FeedSerializer
