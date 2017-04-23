@@ -10,13 +10,70 @@ from django.db import IntegrityError
 
 import feedparser
 
-from .models import Entry
+from .models import Entry, Feed
 from core.utils import ensure_aware
+
+
+class FeedManager:
+    """A very simple, cursory implementation to handle Feed model objects.
+    """
+
+    def __init__(self, user, feed=None, url=None):
+        self.feed = feed
+        self.url = url
+        self.user = user
+
+    def fetch(self):
+        if self.feed is not None and self.feed.href:
+            _url = self.feed.href
+        elif self.url is not None:
+            _url = self.url
+        else:
+            raise RuntimeError('No URL to fetch the feed.')
+
+        return feedparser.parse(_url)
+
+    def prepare(self, data):
+        _etag = data.get('etag', '')
+        _feed = data.get('feed')
+        _headers = data.get('headers')
+        _href = data.get('href', '')
+
+        if _headers and 'Last-Modified' in _headers:
+            _last_modified = _headers['Last-Modified']
+        else:
+            _last_modified = ''
+
+        if _feed and 'title' in _feed:
+            _title = _feed['title']
+        else:
+            _title = ''
+
+        return {
+            'etag': _etag,
+            'href': _href,
+            'last_modified': _last_modified,
+            'title': _title,
+            'user': self.user,
+        }
+
+    @staticmethod
+    def save(data):
+        return Feed.objects.create(**data)
+
+    @classmethod
+    def fetch_and_save(cls, user, feed=None, url=None):
+        _instance = cls(user, feed=feed, url=url)
+        _fetched = _instance.fetch()
+        _prepped = _instance.prepare(_fetched)
+        
+        return _instance.save(_prepped)
 
 
 class FeedEntryManager:
     """A very simple, cursory implementation to handle Entry model objects.
     """
+
     def __init__(self, feed):
         self.feed = feed
 
