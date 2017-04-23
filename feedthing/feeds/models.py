@@ -34,6 +34,12 @@ class Feed(TimeStampedModel):
         ordering = ('title',)
         unique_together = (('user', 'href'),)
 
+    def __repr__(self):
+        return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
+
+    def __str__(self):
+        return self.href
+
 
 class Entry(TimeStampedModel):
     """A model for a single Entry. A single Feed may have many Entry relations.

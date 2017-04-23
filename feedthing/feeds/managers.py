@@ -10,7 +10,8 @@ from django.db import IntegrityError
 
 import feedparser
 
-from .models import Entry, Feed
+from .models import Entry
+from .models import Feed
 from core.utils import ensure_aware
 
 
@@ -18,17 +19,20 @@ class FeedManager:
     """A very simple, cursory implementation to handle Feed model objects.
     """
 
-    def __init__(self, user, feed=None, url=None):
+    def __init__(self, user, feed=None, href=None):
         self.feed = feed
-        self.url = url
+        self.href = href
         self.user = user
 
     def fetch(self):
+        _url = None
+
         if self.feed is not None and self.feed.href:
             _url = self.feed.href
-        elif self.url is not None:
-            _url = self.url
-        else:
+        elif self.href is not None:
+            _url = self.href
+
+        if not _url:
             raise RuntimeError('No URL to fetch the feed.')
 
         return feedparser.parse(_url)
@@ -62,11 +66,11 @@ class FeedManager:
         return Feed.objects.create(**data)
 
     @classmethod
-    def fetch_and_save(cls, user, feed=None, url=None):
-        _instance = cls(user, feed=feed, url=url)
+    def fetch_and_save(cls, user, feed=None, href=None):
+        _instance = cls(user, feed=feed, href=href)
         _fetched = _instance.fetch()
         _prepped = _instance.prepare(_fetched)
-        
+
         return _instance.save(_prepped)
 
 

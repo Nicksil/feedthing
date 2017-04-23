@@ -6,8 +6,10 @@ Feed Thing
 TODO
 ~~~~
 
-- Implement ETag inspection (https://pythonhosted.org/feedparser/http-etag.html#etag-and-last-modified-headers)
-- Implement Last-Modified header inspection (https://pythonhosted.org/feedparser/http-etag.html#using-last-modified-headers-to-reduce-bandwidth)
+- Implement bandwidth courtesies:
+    - ETag inspection (https://pythonhosted.org/feedparser/http-etag.html#etag-and-last-modified-headers)
+    - Last-Modified header inspection (https://pythonhosted.org/feedparser/http-etag.html#using-last-modified-headers-to-reduce-bandwidth)
+    - What do if no ETag, Last-Modified header?
 - Check response status code for unreachable feeds; handle this case
 - Add feature to use OPML file for adding feeds
 - Add feature allowing multiple feed URLs in a single request

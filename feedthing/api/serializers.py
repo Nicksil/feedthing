@@ -15,4 +15,4 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Feed
-        fields = ('href', 'id', 'title', 'url', 'user')
+        fields = ('etag', 'href', 'id', 'last_modified', 'title', 'url', 'user')
