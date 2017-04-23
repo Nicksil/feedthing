@@ -1,0 +1,7 @@
+[run]
+source = ./feedthing
+omit =
+    *migrations*
+    *tests*
+    *apps.py
+    ./feedthing/manage.py
