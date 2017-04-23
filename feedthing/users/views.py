@@ -1,3 +1,8 @@
+"""
+users.views
+~~~~~~~~~~~
+"""
+
 from django.contrib.auth import authenticate as _authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
@@ -7,11 +12,7 @@ from .models import User
 
 
 def register(request):
-    """
-    users.views.register
-    ~~~~~~~~~~~~~~~~~~~~
-    
-    Create a single User object.
+    """Create a single User object.
     """
 
     email = request.POST.get('email')
@@ -22,13 +23,9 @@ def register(request):
 
 
 def authenticate(request):
+    """'Sign-in' a user, creating their session.
     """
-    users.views.authenticate
-    ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    'Sign-in' a user, creating their session.
-    """
-    
     email = request.POST.get('email')
     password = request.POST.get('password')
     user = _authenticate(email=email, password=password)
@@ -40,11 +37,7 @@ def authenticate(request):
 
 
 def sign_out(request):
-    """
-    users.views.sign_out
-    ~~~~~~~~~~~~~~~~~~~~
-
-    'Sign-out' a user, destroying their session.
+    """'Sign-out' a user, destroying their session.
     """
 
     logout(request)

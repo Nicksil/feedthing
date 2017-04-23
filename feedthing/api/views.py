@@ -1,3 +1,8 @@
+"""
+api.views
+~~~~~~~~~
+"""
+
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -12,22 +17,14 @@ from feeds.models import Feed
 
 
 class EntryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    api.views.EntryViewSet
-    ~~~~~~~~~~~~~~~~~~~~~~
-    
-    API endpoint for viewing, editing Entry objects
+    """API endpoint for viewing, editing Entry objects
     """
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
 
 
 class FeedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """
-    api.views.FeedViewSet
-    ~~~~~~~~~~~~~~~~~~~~~~
-    
-    API endpoint for viewing, editing Feed objects
+    """API endpoint for viewing, editing Feed objects
     """
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer

@@ -1,8 +1,12 @@
 """
+core.fields
+~~~~~~~~~~~
+
 In reference to AutoCreatedField, AutoLastModifiedField:
     Copyright (c) 2009-2015, Carl Meyer and contributors
     (https://github.com/carljm/django-model-utils/blob/master/model_utils/fields.py)
 """
+
 from django.db import models
 from django.utils import timezone
 

@@ -1,3 +1,8 @@
+"""
+users.managers
+~~~~~~~~~~~~~~
+"""
+
 import datetime
 import time
 
@@ -10,11 +15,7 @@ from core.utils import ensure_aware
 
 
 class FeedEntryManager:
-    """
-    feeds.managers.FeedEntryManager
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    A very simple, cursory implementation to handle Entry model objects.
+    """A very simple, cursory implementation to handle Entry model objects.
     """
     def __init__(self, feed):
         self.feed = feed
@@ -46,7 +47,8 @@ class FeedEntryManager:
 
     @staticmethod
     def convert_struct_time(value):
-        """Converts a time.struct_time object to a datetime.datetime object"""
+        """Converts a time.struct_time object to a datetime.datetime object
+        """
         return datetime.datetime.fromtimestamp(time.mktime(value))
 
     @staticmethod

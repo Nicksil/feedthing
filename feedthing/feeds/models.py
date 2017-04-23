@@ -1,3 +1,8 @@
+"""
+feeds.models
+~~~~~~~~~~~~
+"""
+
 from django.conf import settings
 from django.db import models
 
@@ -5,11 +10,7 @@ from core.models import TimeStampedModel
 
 
 class Feed(TimeStampedModel):
-    """
-    feeds.models.Feed
-    ~~~~~~~~~~~~~~~~~
-    
-    A model for a single Feed
+    """A model for a single Feed
     """
 
     user = models.ForeignKey(
@@ -27,11 +28,7 @@ class Feed(TimeStampedModel):
 
 
 class Entry(TimeStampedModel):
-    """
-    feeds.models.Entry
-    ~~~~~~~~~~~~~~~~~~
-
-    A model for a single Entry. A single Feed may have many Entry relations.
+    """A model for a single Entry. A single Feed may have many Entry relations.
     """
 
     feed = models.ForeignKey(

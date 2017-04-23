@@ -1,3 +1,8 @@
+"""
+users.models
+~~~~~~~~~~~~
+"""
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
@@ -6,11 +11,7 @@ from core.models import TimeStampedModel
 
 
 class UserManager(BaseUserManager):
-    """
-    users.models.UserManager
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Manager for User model.
+    """Manager for User model.
     """
 
     # From: django.db.models.manager.BaseManager [L19:L20]
@@ -30,11 +31,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, TimeStampedModel):
-    """
-    users.models.User
-    ~~~~~~~~~~~~~~~~~
-
-    A model for a single User.
+    """A model for a single User.
     """
 
     email = models.EmailField(unique=True)
