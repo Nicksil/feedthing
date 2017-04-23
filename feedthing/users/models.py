@@ -6,6 +6,13 @@ from core.models import TimeStampedModel
 
 
 class UserManager(BaseUserManager):
+    """
+    users.models.UserManager
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Manager for User model.
+    """
+
     # From: django.db.models.manager.BaseManager [L19:L20]
     #: If set to True the manager will be serialized into migrations and will
     #: thus be available in e.g. RunPython operations
@@ -23,6 +30,13 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, TimeStampedModel):
+    """
+    users.models.User
+    ~~~~~~~~~~~~~~~~~
+
+    A model for a single User.
+    """
+
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)

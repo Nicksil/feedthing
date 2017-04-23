@@ -10,6 +10,12 @@ from core.utils import ensure_aware
 
 
 class FeedEntryManager:
+    """
+    feeds.managers.FeedEntryManager
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    A very simple, cursory implementation to handle Entry model objects.
+    """
     def __init__(self, feed):
         self.feed = feed
 

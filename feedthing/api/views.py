@@ -12,14 +12,22 @@ from feeds.models import Feed
 
 
 class EntryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """API endpoint for viewing, editing Entry objects
+    """
+    api.views.EntryViewSet
+    ~~~~~~~~~~~~~~~~~~~~~~
+    
+    API endpoint for viewing, editing Entry objects
     """
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
 
 
 class FeedViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    """API endpoint for viewing, editing Feed objects
+    """
+    api.views.FeedViewSet
+    ~~~~~~~~~~~~~~~~~~~~~~
+    
+    API endpoint for viewing, editing Feed objects
     """
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer

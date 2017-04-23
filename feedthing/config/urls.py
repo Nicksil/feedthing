@@ -1,4 +1,5 @@
-from django.conf.urls import url, include
+from django.conf.urls import include
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from api import urls as api_urls

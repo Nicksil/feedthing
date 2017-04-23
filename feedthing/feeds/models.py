@@ -5,6 +5,13 @@ from core.models import TimeStampedModel
 
 
 class Feed(TimeStampedModel):
+    """
+    feeds.models.Feed
+    ~~~~~~~~~~~~~~~~~
+    
+    A model for a single Feed
+    """
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
@@ -20,6 +27,13 @@ class Feed(TimeStampedModel):
 
 
 class Entry(TimeStampedModel):
+    """
+    feeds.models.Entry
+    ~~~~~~~~~~~~~~~~~~
+
+    A model for a single Entry. A single Feed may have many Entry relations.
+    """
+
     feed = models.ForeignKey(
         Feed,
         models.CASCADE,

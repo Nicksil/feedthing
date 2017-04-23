@@ -7,6 +7,13 @@ from .models import User
 
 
 def register(request):
+    """
+    users.views.register
+    ~~~~~~~~~~~~~~~~~~~~
+    
+    Create a single User object.
+    """
+
     email = request.POST.get('email')
     password = request.POST.get('password')
     User.objects.create_user(email=email, password=password)
@@ -15,6 +22,13 @@ def register(request):
 
 
 def authenticate(request):
+    """
+    users.views.authenticate
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+    'Sign-in' a user, creating their session.
+    """
+    
     email = request.POST.get('email')
     password = request.POST.get('password')
     user = _authenticate(email=email, password=password)
@@ -26,5 +40,12 @@ def authenticate(request):
 
 
 def sign_out(request):
+    """
+    users.views.sign_out
+    ~~~~~~~~~~~~~~~~~~~~
+
+    'Sign-out' a user, destroying their session.
+    """
+
     logout(request)
     return redirect('index')
