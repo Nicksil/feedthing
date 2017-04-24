@@ -3,6 +3,7 @@ api.views
 ~~~~~~~~~
 """
 
+from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -16,13 +17,16 @@ from feeds.models import Entry
 from feeds.models import Feed
 
 
-class EntryViewSet(viewsets.ModelViewSet):
-    """API endpoint for viewing, editing Entry objects
-    """
+class EntryListAPIView(generics.ListAPIView):
     serializer_class = EntrySerializer
 
     def get_queryset(self):
-        return Entry.objects.filter(feed__user=self.request.user)
+        return Entry.objects.filter(feed=self.kwargs['feed_pk'])
+
+
+class EntryDetailAPIView(generics.RetrieveAPIView):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
 
 
 class FeedViewSet(viewsets.ModelViewSet):
@@ -40,12 +44,12 @@ class FeedViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         # Feed manager
-        _feed_mgr = FeedManager(request.user, href=request.data['href'])
-        _fetched = _feed_mgr.fetch()
-        _prepped = _feed_mgr.prepare(_fetched)
+        mgr = FeedManager(request.user, href=request.data['href'])
+        resp = mgr.fetch()
+        prepped = mgr.prepare(resp)
 
         # FIXME: See above.
-        serializer = self.get_serializer(data=_prepped)
+        serializer = self.get_serializer(data=prepped)
         serializer.is_valid(raise_exception=True)
 
         self.perform_create(serializer)
