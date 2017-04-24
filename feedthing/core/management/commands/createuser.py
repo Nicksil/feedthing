@@ -64,7 +64,7 @@ class Command(BaseCommand):
             self.stderr.write('\nOperation cancelled.')
             sys.exit(1)
 
-        user_data[self.UserModel.email] = email
+        user_data['email'] = email
         user_data['password'] = password
         self.UserModel._default_manager.db_manager(DEFAULT_DB_ALIAS).create_user(**user_data)
 
