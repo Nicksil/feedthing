@@ -1,31 +1,27 @@
-COVERAGEHTMLINDEX=./htmlcov/index.html
 MANAGE=./feedthing/manage.py
-PYTHON=python3
 
-,resetdb:
-	dropdb feedthing
-	createdb feedthing
+noop:
+	@echo 'noop'
 
-cleancoverage:
+clean-coverage:
 	@if [ -f .coverage ]; then rm .coverage; fi
 	@if [ -d htmlcov ]; then rm -r htmlcov; fi
 
-makemigrations:
+makemigrations-all:
 	python $(MANAGE) makemigrations
 
-migrate:
+migrate-all:
 	python $(MANAGE) migrate
 
 run:
 	$(MANAGE) runserver 0.0.0.0:8000
 
-test:
+test-all:
 	$(MANAGE) test
 
-llama:
-	@echo $(1)
-
-testwithcoverage:
+test-all-withcoverage:
 	coverage run $(MANAGE) test feedthing
-	coverage html
-	@$(PYTHON) -m webbrowser -t file://$(PWD)/htmlcov/index.html
+
+,resetdb:
+	dropdb feedthing
+	createdb feedthing
