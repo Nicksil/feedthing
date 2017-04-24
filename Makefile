@@ -1,4 +1,6 @@
+COVERAGEHTMLINDEX=./htmlcov/index.html
 MANAGE=./feedthing/manage.py
+PYTHON=python3
 
 ,resetdb:
 	dropdb feedthing
@@ -20,5 +22,10 @@ run:
 test:
 	$(MANAGE) test
 
+llama:
+	@echo $(1)
+
 testwithcoverage:
-	coverage run $(MANAGE) test
+	coverage run $(MANAGE) test feedthing
+	coverage html
+	@$(PYTHON) -m webbrowser -t file://$(PWD)/htmlcov/index.html

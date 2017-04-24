@@ -1,5 +1,6 @@
 *.DS_Store
 *.pyc
+.coverage
 .idea/
 __pycache__
-node_modules/
+htmlcov
