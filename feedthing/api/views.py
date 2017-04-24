@@ -5,10 +5,12 @@ api.views
 
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from .serializers import EntrySerializer
 from .serializers import FeedSerializer
+from feeds.managers import FeedEntryManager
 from feeds.managers import FeedManager
 from feeds.models import Entry
 from feeds.models import Feed
@@ -50,3 +52,9 @@ class FeedViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    # noinspection PyUnusedLocal
+    @detail_route(methods=['get'], url_path='fetch-entries', url_name='fetch-entries')
+    def fetch_entries(self, request, pk=None):
+        FeedEntryManager.fetch_and_save(feed_id=pk)
+        return Response(status=status.HTTP_200_OK)

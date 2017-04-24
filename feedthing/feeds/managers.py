@@ -73,8 +73,14 @@ class FeedEntryManager:
     """A very simple, cursory implementation to handle Entry model objects.
     """
 
-    def __init__(self, feed):
-        self.feed = feed
+    def __init__(self, feed=None, feed_id=None):
+        if feed is not None and feed_id is not None:
+            raise RuntimeError('Cannot provide both feed and feed_id arguments.')
+
+        if feed_id:
+            self.feed = Feed.objects.get(pk=feed_id)
+        else:
+            self.feed = feed
 
     def fetch(self):
         parsed = feedparser.parse(self.feed.href)
@@ -106,8 +112,8 @@ class FeedEntryManager:
             return None
 
     @classmethod
-    def fetch_and_save(cls, feed):
-        _instance = cls(feed)
+    def fetch_and_save(cls, feed=None, feed_id=None):
+        _instance = cls(feed=feed, feed_id=feed_id)
         entries = _instance.fetch()
         parsed = [_instance.prepare(e) for e in entries]
 
