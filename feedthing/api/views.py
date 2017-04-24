@@ -32,12 +32,20 @@ class FeedViewSet(viewsets.ModelViewSet):
         return Feed.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        # FIXME: This is a quick and dirty fix to take advantage of Django Rest Framework's built-in
+        # FIXME: validation. It's run a second time to validate the feed response data.
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Feed manager
         _feed_mgr = FeedManager(request.user, href=request.data['href'])
         _fetched = _feed_mgr.fetch()
         _prepped = _feed_mgr.prepare(_fetched)
 
+        # FIXME: See above.
         serializer = self.get_serializer(data=_prepped)
         serializer.is_valid(raise_exception=True)
+
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
