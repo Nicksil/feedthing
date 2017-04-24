@@ -9,7 +9,6 @@ from rest_framework.response import Response
 
 from .serializers import EntrySerializer
 from .serializers import FeedSerializer
-from feeds.managers import FeedEntryManager
 from feeds.managers import FeedManager
 from feeds.models import Entry
 from feeds.models import Feed
@@ -40,18 +39,6 @@ class FeedViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=_prepped)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
 
-        _data = serializer.data
-        _qs = Feed.objects.filter(user=request.user, id=_data['id'])
-
-        if _qs.exists():
-            assert _qs.count() == 1, 'More than one result returned.'
-
-            _feed = _qs.last()
-            _entry_mgr = FeedEntryManager(_feed)
-            _prepped_entries = [_entry_mgr.prepare(e) for e in _feed_mgr.entries]
-            [_entry_mgr.save(p) for p in _prepped_entries]
-
-        headers = self.get_success_headers(_data)
-
-        return Response(_data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
