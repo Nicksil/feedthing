@@ -9,7 +9,15 @@ router = DefaultRouter()
 router.register(r'feeds', views.FeedViewSet, base_name='feed')
 
 urlpatterns = [
-    url(r'^feeds/(?P<feed_pk>[^/.]+)/entries/$', views.EntryListAPIView.as_view(), name='entry-list'),
-    url(r'^feeds/(?P<feed_pk>[^/.]+)/entries/(?P<pk>[^/.]+)/$', views.EntryDetailAPIView.as_view()),
+    url(
+        r'^feeds/(?P<feed_pk>[^/.]+)/entries/$',
+        views.EntryListAPIView.as_view(),
+        name='entry-list'
+    ),
+    url(
+        r'^feeds/(?P<feed_pk>[^/.]+)/entries/(?P<pk>[^/.]+)/$',
+        views.EntryDetailAPIView.as_view(),
+        name='entry-detail'
+    ),
     url(r'^', include(router.urls)),
 ]

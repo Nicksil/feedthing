@@ -1,7 +1,11 @@
-MANAGE=feedthing/manage.py
+.DEFAULT_GOAL := ,noop
+.PHONY: clean-coverage clean-pyc clean-pycache coverage-html \
+		coverage-html-browser makemigrations-all migrate-all run \
+		test-all test-all-withcoverage ,noop ,resetdb
 
-noop:
-	@echo 'noop'
+HOST=0.0.0.0
+MANAGE=feedthing/manage.py
+PORT=8000
 
 clean-coverage:
 	@if [ -f .coverage ]; then rm .coverage; fi
@@ -17,22 +21,25 @@ coverage-html:
 	@coverage html
 
 coverage-html-browser: coverage-html
-	python3 -m webbrowser -t file://$(PWD)/htmlcov/index.html
+	python -m webbrowser -t file://$(PWD)/htmlcov/index.html
 
 makemigrations-all:
-	python $(MANAGE) makemigrations
+	$(MANAGE) makemigrations
 
 migrate-all:
-	python $(MANAGE) migrate
+	$(MANAGE) migrate
 
 run:
-	$(MANAGE) runserver 0.0.0.0:8000
+	$(MANAGE) runserver $(HOST):$(PORT)
 
 test-all: clean-pyc clean-pycache
 	$(MANAGE) test feedthing
 
 test-all-withcoverage: clean-pyc clean-pycache clean-coverage
 	coverage run $(MANAGE) test feedthing
+
+,noop:
+	@echo 'noop'
 
 ,resetdb:
 	dropdb feedthing

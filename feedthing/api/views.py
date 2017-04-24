@@ -30,8 +30,6 @@ class EntryDetailAPIView(generics.RetrieveAPIView):
 
 
 class FeedViewSet(viewsets.ModelViewSet):
-    """API endpoint for viewing, editing Feed objects
-    """
     serializer_class = FeedSerializer
 
     def get_queryset(self):
