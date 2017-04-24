@@ -13,6 +13,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
+from django.core.validators import validate_email
 from django.db import DEFAULT_DB_ALIAS
 
 
@@ -33,6 +34,12 @@ class Command(BaseCommand):
 
         if not email:
             raise CommandError('Must provide email address.')
+
+        try:
+            validate_email(email)
+        except ValidationError as err:
+            self.stderr.write('\n'.join(err.messages))
+            sys.exit(1)
 
         fake_user_data = {'email': email}
         user_data = {}
