@@ -13,6 +13,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
+from django.db import DEFAULT_DB_ALIAS
 
 
 class Command(BaseCommand):
@@ -65,6 +66,6 @@ class Command(BaseCommand):
 
         user_data[self.UserModel.email] = email
         user_data['password'] = password
-        self.UserModel.create_user(**user_data)
+        self.UserModel._default_manager.db_manager(DEFAULT_DB_ALIAS).create_user(**user_data)
 
         self.stdout.write('User created successfully.')
