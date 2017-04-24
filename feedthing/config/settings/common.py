@@ -2,9 +2,9 @@ import os
 
 AUTH_USER_MODEL = 'users.User'
 
-THIS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = os.path.dirname(THIS_DIR)
-ROOT_DIR = os.path.dirname(PROJECT_DIR)
+PROJECT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
