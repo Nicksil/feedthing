@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
     #: thus be available in e.g. RunPython operations
     use_in_migrations = True
 
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email=None, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
 
