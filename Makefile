@@ -13,6 +13,12 @@ clean-pyc:
 clean-pycache:
 	@find . -name '__pycache__' -exec rm -r {} +
 
+coverage-html:
+	@coverage html
+
+coverage-html-browser: coverage-html
+	python3 -m webbrowser -t file://$(PWD)/htmlcov/index.html
+
 makemigrations-all:
 	python $(MANAGE) makemigrations
 
