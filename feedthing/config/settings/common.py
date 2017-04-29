@@ -34,7 +34,6 @@ THIRD_PARTY_APPS = (
     'rest_framework',
 )
 LOCAL_APPS = (
-    'api',
     'core',
     'feeds',
     'users',
