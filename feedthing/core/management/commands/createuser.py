@@ -41,6 +41,14 @@ class Command(BaseCommand):
             self.stderr.write('\n'.join(err.messages))
             sys.exit(1)
 
+        exists = self.UserModel._default_manager.db_manager(
+            DEFAULT_DB_ALIAS
+        ).filter(email=email).exists()
+
+        if exists:
+            self.stderr.write('Email in-use.')
+            sys.exit(1)
+
         fake_user_data = {'email': email}
         user_data = {}
 

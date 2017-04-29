@@ -16,10 +16,10 @@ class Entry(TimeStampedModel):
         related_name='entries'
     )
 
-    link = models.URLField(blank=True, max_length=255)
+    href = models.URLField(max_length=255)
     published = models.DateTimeField()
     title = models.CharField(blank=True, max_length=255)
 
     class Meta:
         ordering = ('-published',)
-        unique_together = (('feed', 'link'),)
+        unique_together = (('feed', 'href'),)

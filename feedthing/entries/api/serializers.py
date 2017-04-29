@@ -6,4 +6,4 @@ from ..models import Entry
 class EntryHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Entry
-        fields = ('feed', 'link', 'published', 'title')
+        fields = ('feed', 'href', 'published', 'title', 'url')

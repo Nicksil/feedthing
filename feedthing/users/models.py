@@ -36,6 +36,11 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, TimeStampedModel):
     """A model for a single User.
     """
+    feeds = models.ManyToManyField(
+        'feeds.Feed',
+        blank=True,
+        related_name='users'
+    )
 
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True)

@@ -2,15 +2,14 @@
 feeds.models
 ~~~~~~~~~~~~
 """
-
-from django.conf import settings
 from django.db import models
 
 from core.models import TimeStampedModel
 
 
 class Feed(TimeStampedModel):
-    """A model for a single Feed
+    """
+    A model for a single Feed
     
     ``last_modified`` - (value from Last-Modified header within HTTP response) is set as a
     character field intentionally. For the time-being, I want to ensure the format mirrors
@@ -19,20 +18,13 @@ class Feed(TimeStampedModel):
     I'm doing.
     """
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        related_name='feeds'
-    )
-
     etag = models.CharField(blank=True, max_length=255)
-    href = models.URLField(blank=True, max_length=255)
+    href = models.URLField(max_length=255, unique=True)
     last_modified = models.CharField(blank=True, max_length=255)
     title = models.CharField(blank=True, max_length=255)
 
     class Meta:
         ordering = ('title',)
-        unique_together = (('user', 'href'),)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
