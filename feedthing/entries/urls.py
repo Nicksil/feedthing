@@ -1,8 +1,8 @@
 from rest_framework.routers import SimpleRouter
 
-from .api.views import FeedAPIViewSet
+from .api.views import EntryAPIViewSet
 
 router = SimpleRouter()
-router.register(r'api', FeedAPIViewSet)
+router.register(r'api', EntryAPIViewSet)
 
 urlpatterns = router.urls

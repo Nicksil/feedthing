@@ -39,24 +39,3 @@ class Feed(TimeStampedModel):
 
     def __str__(self):
         return self.href
-
-
-class Entry(TimeStampedModel):
-    """A model for a single Entry. A single Feed may have many Entry relations.
-    """
-
-    feed = models.ForeignKey(
-        Feed,
-        models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='entries'
-    )
-
-    link = models.URLField(blank=True, max_length=255)
-    published = models.DateTimeField()
-    title = models.CharField(blank=True, max_length=255)
-
-    class Meta:
-        ordering = ('-published',)
-        unique_together = (('feed', 'link'),)
