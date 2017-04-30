@@ -4,6 +4,7 @@ import time
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
+
 import feedparser
 
 from ..models import Feed
@@ -36,6 +37,7 @@ class FeedAPIViewSet(viewsets.ModelViewSet):
             _entry_serializer.is_valid(raise_exception=True)
             _entry_serializer.save()
 
+        serializer = self.get_serializer(feed)
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
