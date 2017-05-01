@@ -10,5 +10,6 @@ router.register(r'api', FeedAPIViewSet)
 urlpatterns = router.urls
 
 urlpatterns += [
-    url(r'^', views.index)
+    url(r'^add/$', views.add, name='add_feed'),
+    url(r'^', views.index, name='feeds'),
 ]

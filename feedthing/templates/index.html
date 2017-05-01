@@ -15,6 +15,15 @@
             </label>
             <button type="submit">Sign in</button>
         </form>
+    {% else %}
+        <form action="{% url 'add_feed' %}" method="POST">
+            {% csrf_token %}
+            <label>
+                Feed URL
+                <input name="url" type="text" required>
+            </label>
+            <button type="submit">Add</button>
+        </form>
     {% endif %}
     {% if feeds %}
         <ul>
