@@ -9,6 +9,7 @@ import feedparser
 
 from ..models import Feed
 from .serializers import FeedHyperlinkedModelSerializer
+from core.parsers import FeedParser
 from core.utils import ensure_aware
 from entries.api.serializers import EntryHyperlinkedModelSerializer
 
@@ -20,7 +21,7 @@ class FeedAPIViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         feed_data = feedparser.parse(request.data['href'])
 
-        parsed = self.parse_feed_response(feed_data)
+        parsed = FeedParser.parse(feed_data)
         _entries = parsed.pop('entries')
         request.data.update(parsed)
 
@@ -41,28 +42,6 @@ class FeedAPIViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    @staticmethod
-    def parse_feed_response(response: feedparser.FeedParserDict) -> dict:
-        _feed = response.get('feed')
-        if _feed and 'title' in _feed:
-            title = _feed['title']
-        else:
-            title = ''
-
-        _headers = response.get('headers')
-        if _headers and 'Last-Modified' in _headers:
-            last_modified = _headers['Last-Modified']
-        else:
-            last_modified = ''
-
-        return {
-            'entries': response.get('entries', []),
-            'etag': response.get('etag', ''),
-            'href': response.get('href', ''),
-            'last_modified': last_modified,
-            'title': title,
-        }
 
     @staticmethod
     def parse_entry_response(entry: feedparser.FeedParserDict) -> dict:
