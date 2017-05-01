@@ -1,4 +1,10 @@
+from typing import Optional
+import datetime
+import time
+
 import feedparser
+
+from .utils import ensure_aware
 
 
 class FeedParser:
@@ -34,3 +40,39 @@ class FeedParser:
             return feed['title']
 
         return ''
+
+
+class EntryParser:
+    def __init__(self, data: feedparser.FeedParserDict):
+        self.data = data
+
+    @classmethod
+    def parse(cls, data: feedparser.FeedParserDict) -> dict:
+        _instance = cls(data)
+        return _instance._parse()
+
+    def _parse(self):
+        link = self._get_link()
+        published = self._get_published()
+
+        return {
+            'href': link,
+            'published': published,
+            'title': self.data.get('title', ''),
+        }
+
+    def _get_link(self) -> str:
+        if 'feedburner_origlink' in self.data:
+            return self.data['feedburner_origlink']
+
+        return self.data.get('link', '')
+
+    def _get_published(self) -> Optional[datetime.datetime]:
+        published = self.data.get('published_parsed', None)
+
+        if published:
+            published = ensure_aware(
+                datetime.datetime.fromtimestamp(time.mktime(published))
+            )
+
+        return published
