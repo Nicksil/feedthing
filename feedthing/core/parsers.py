@@ -7,8 +7,8 @@ import feedparser
 from .utils import ensure_aware
 
 
-class FeedParser:
-    def __init__(self, data: feedparser.FeedParserDict):
+class BaseParser:
+    def __init__(self, data: feedparser.FeedParserDict) -> None:
         self.data = data
 
     @classmethod
@@ -17,13 +17,21 @@ class FeedParser:
         return _instance._parse()
 
     def _parse(self) -> dict:
+        return {}
+
+
+class FeedParser(BaseParser):
+    def _parse(self) -> dict:
         return {
             'entries': self.data.get('entries', []),
             'etag': self.data.get('etag', ''),
-            'href': self.data.get('href', ''),
+            'href': self._get_href(),
             'last_modified': self._get_last_modified(),
             'title': self._get_title(),
         }
+
+    def _get_href(self) -> str:
+        return self.data.get('href', '')
 
     def _get_last_modified(self) -> str:
         headers = self.data.get('headers')
@@ -42,26 +50,15 @@ class FeedParser:
         return ''
 
 
-class EntryParser:
-    def __init__(self, data: feedparser.FeedParserDict):
-        self.data = data
-
-    @classmethod
-    def parse(cls, data: feedparser.FeedParserDict) -> dict:
-        _instance = cls(data)
-        return _instance._parse()
-
-    def _parse(self):
-        link = self._get_link()
-        published = self._get_published()
-
+class EntryParser(BaseParser):
+    def _parse(self) -> dict:
         return {
-            'href': link,
-            'published': published,
+            'href': self._get_href(),
+            'published': self._get_published(),
             'title': self.data.get('title', ''),
         }
 
-    def _get_link(self) -> str:
+    def _get_href(self) -> str:
         if 'feedburner_origlink' in self.data:
             return self.data['feedburner_origlink']
 
