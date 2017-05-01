@@ -19,6 +19,9 @@ class BaseParser:
     def _parse(self) -> dict:
         return {}
 
+    def _get_href(self) -> str:
+        raise NotImplementedError
+
 
 class FeedParser(BaseParser):
     def _parse(self) -> dict:
