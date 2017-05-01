@@ -2,4 +2,38 @@
 {% load static %}
 {% block body %}
     <h1>Index</h1>
+    {% if not user.is_authenticated %}
+        <form action="{% url 'sign_in' %}" method="POST">
+            {% csrf_token %}
+            <label>
+                Email
+                <input name="email" type="text" required>
+            </label>
+            <label>
+                Password
+                <input name="password" type="password" required>
+            </label>
+            <button type="submit">Sign in</button>
+        </form>
+    {% endif %}
+    {% if feeds %}
+        <ul>
+            {% for feed in feeds %}
+                <li>
+                    {{ feed.title }}
+                    <ul>
+                        {% if feed.entries %}
+                            {% for entry in feed.entries %}
+                                <li>
+                                    <a href="{{ entry.href }}">{{ entry.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No entires</li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
