@@ -8,7 +8,7 @@ from feeds import urls as feeds_urls
 from users import urls as users_urls
 
 urlpatterns = [
-    url(r'^api/1/', include(api_urls)),
+    url(r'^api/v1/', include(api_urls)),
     url(r'^entries/', include(entries_urls)),
     url(r'^feeds/', include(feeds_urls)),
     url(r'^users/', include(users_urls)),
