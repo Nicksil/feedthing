@@ -1,11 +1,23 @@
 from django.conf.urls import url
 
 from .endpoints.catchall import CatchallEndpoint
+from .endpoints.entry_index import EntryIndexEndpoint
+from .endpoints.feed_index import FeedIndexEndpoint
 
 urlpatterns = [
     url(
+        r'^entries/$',
+        EntryIndexEndpoint.as_view(),
+        name='feedthing-api-v1-entry-index'
+    ),
+    url(
+        r'^feeds/$',
+        FeedIndexEndpoint.as_view(),
+        name='feedthing-api-v1-feed-index'
+    ),
+    url(
         r'^',
         CatchallEndpoint.as_view(),
-        name='photobutton-api-catchall'
+        name='feedthing-api-v1-catchall'
     ),
 ]
