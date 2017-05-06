@@ -2,6 +2,7 @@
 feeds.models
 ~~~~~~~~~~~~
 """
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 
@@ -12,6 +13,11 @@ class Feed(TimeStampedModel):
     """
     A model for a single Feed
     """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        related_name='feeds',
+    )
 
     etag = models.CharField(blank=True, max_length=255)
     href = models.URLField(max_length=255, unique=True)

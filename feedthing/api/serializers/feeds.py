@@ -10,22 +10,11 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
         lookup_url_kwarg='feed_slug',
         view_name='feedthing-api-v1-feed-details',
     )
-    user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         fields = ('etag', 'href', 'last_modified', 'title', 'url', 'user')
         model = Feed
-
-    def create(self, validated_data):
-        user = validated_data.pop('user', None)
-        feed = super().create(validated_data)
-
-        if user is not None:
-            feed.users.add(user)
-
-        return feed
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):

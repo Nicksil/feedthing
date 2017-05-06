@@ -28,21 +28,25 @@ class FeedParser(BaseParser):
         return {
             'entries': self.data.get('entries', []),
             'etag': self.data.get('etag', ''),
-            'href': self._get_href(),
             'last_modified': self._get_last_modified(),
             'title': self._get_title(),
         }
 
     def _get_href(self) -> str:
-        return self.data.get('href', '')
+        links = self.data['feed'].get('links', [])
+        # FIXME: If this link is diff from href used, re-run fetch to get true feed
+        for link in links:
+            if link['type'] == 'application/rss+xml':
+                return link['href']
 
-    def _get_last_modified(self) -> str:
-        headers = self.data.get('headers')
+        return self.data['href']
 
-        if headers and 'Last-Modified' in headers:
-            return headers['Last-Modified']
-
-        return ''
+    def _get_last_modified(self) -> Optional[datetime.datetime]:
+        last_modified = self.data.get('modified_parsed', None)
+        if last_modified:
+            return ensure_aware(
+                datetime.datetime.fromtimestamp(time.mktime(last_modified))
+            )
 
     def _get_title(self) -> str:
         feed = self.data.get('feed')
