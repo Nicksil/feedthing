@@ -9,6 +9,13 @@ class FeedIndexEndpoint(Endpoint):
         return Response(
             FeedSerializer(
                 request.user.feeds.all(),
+                context={'request': request},
                 many=True,
             ).data
         )
+
+    def post(self, request):
+        serializer = FeedSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

@@ -15,7 +15,7 @@ class Feed(TimeStampedModel):
 
     etag = models.CharField(blank=True, max_length=255)
     href = models.URLField(max_length=255, unique=True)
-    last_modified = models.DateTimeField(blank=True)
+    last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
     slug = models.SlugField(blank=True, editable=False, unique=True)
 
