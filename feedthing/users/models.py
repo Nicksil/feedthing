@@ -12,12 +12,9 @@ from core.models import TimeStampedModel
 
 
 class UserManager(BaseUserManager):
-    """Manager for User model.
     """
-
-    # From: django.db.models.manager.BaseManager [L19:L20]
-    #: If set to True the manager will be serialized into migrations and will
-    #: thus be available in e.g. RunPython operations
+    Manager for User model.
+    """
     use_in_migrations = True
 
     def create_user(self, email=None, password=None, **extra_fields):
@@ -34,7 +31,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, TimeStampedModel):
-    """A model for a single User.
+    """
+    A model for a single User.
     """
     feeds = models.ManyToManyField(
         'feeds.Feed',
@@ -59,14 +57,9 @@ class User(AbstractBaseUser, TimeStampedModel):
         return self.first_name.strip()
 
     def __repr__(self):
-        f_name = '\'{}\''.format(self.first_name) if self.first_name else 'None'
-        l_name = '\'{}\''.format(self.last_name) if self.last_name else 'None'
-
-        return '{}(email=\'{}\', password=None, first_name={}, last_name={})'.format(
+        return '{}(email=\'{}\', password=None)'.format(
             self.__class__.__name__,
-            self.email,
-            f_name,
-            l_name,
+            self.email
         )
 
     def __str__(self):

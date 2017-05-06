@@ -1,5 +1,8 @@
+from rest_framework.response import Response
+
 from ..base import Endpoint
 
 
 class FeedIndexEndpoint(Endpoint):
-    pass
+    def get(self, request):
+        return Response({})
