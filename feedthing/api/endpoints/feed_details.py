@@ -10,3 +10,11 @@ class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
         feed = self.get_object()
         serializer = self.get_serializer(feed)
         return Response(serializer.data)
+
+
+class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
+    # noinspection PyUnusedLocal
+    def post(self, request, feed_uid=None):
+        feed = self.get_object()
+        serializer = self.get_serializer(feed)
+        return Response(serializer.data)

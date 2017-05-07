@@ -3,9 +3,32 @@ core.utils
 ~~~~~~~~~~
 """
 from typing import Optional
+import datetime
 import math
+import time
 
 from django.utils import timezone
+
+
+def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> datetime.datetime:
+    dt = datetime.datetime.fromtimestamp(
+        time.mktime(s_time)
+    )
+
+    if aware:
+        return ensure_aware(dt)
+
+    return dt
+
+
+def ensure_aware(dt):
+    """Will convert datetime.datetime instance from naive into aware,
+    or return if instance is already aware.
+    """
+    if timezone.is_aware(dt):
+        return dt
+
+    return timezone.make_aware(dt)
 
 
 class FriendlyID:
@@ -90,13 +113,3 @@ class FriendlyID:
         _period = self.find_suitable_period()
 
         return int(((_num + _offset) * (self.SIZE // _period)) % (self.SIZE + 1) + 1)
-
-
-def ensure_aware(dt):
-    """Will convert datetime.datetime instance from naive into aware,
-    or return if instance is already aware.
-    """
-    if timezone.is_aware(dt):
-        return dt
-
-    return timezone.make_aware(dt)
