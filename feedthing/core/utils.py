@@ -11,6 +11,9 @@ from django.utils import timezone
 
 
 def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> datetime.datetime:
+    """Will convert time.struct_time instance to datetime.datetime object. Will return
+    aware datetime object unless aware = False (default is True).
+    """
     dt = datetime.datetime.fromtimestamp(
         time.mktime(s_time)
     )
