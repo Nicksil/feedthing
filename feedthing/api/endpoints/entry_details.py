@@ -3,6 +3,6 @@ from rest_framework.response import Response
 from ..base import Endpoint
 
 
-class FeedEntryIndexEndpoint(Endpoint):
-    def get(self, request):
+class EntryDetailsEndpoint(Endpoint):
+    def get(self, request, entry_uid=None):
         return Response({})
