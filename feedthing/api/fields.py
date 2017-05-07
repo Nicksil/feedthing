@@ -4,11 +4,12 @@ from rest_framework.reverse import reverse
 
 class NestedHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
     queryset = None
+    url_kwarg_attrs = {}
     view_name = None
 
-    def __init__(self, *args, **kwargs):
-        self.url_kwarg_attrs = kwargs.pop('url_kwarg_attrs', {})
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        self.url_kwarg_attrs = kwargs.pop('url_kwarg_attrs', self.url_kwarg_attrs)
+        super().__init__(view_name=self.view_name, **kwargs)
 
     def get_url(self, obj, view_name, request, format):
         url_kwargs = {}

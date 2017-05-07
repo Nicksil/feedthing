@@ -1,11 +1,25 @@
 from rest_framework import serializers
 
-from api.fields import NestedHyperlinkedIdentityField
+from ..fields import NestedHyperlinkedIdentityField
 from feeds.models import Entry
 from feeds.models import Feed
 
 
+class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
+    url_kwarg_attrs = {'entry_uid': 'uid', 'feed_uid': 'feed.uid'}
+    view_name = 'feedthing-api-v1-entry-details'
+
+
+class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    url = EntryNestedHyperlinkedIdentityField()
+
+    class Meta:
+        fields = ('href', 'published', 'title', 'url')
+        model = Entry
+
+
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
+    entries = EntryNestedHyperlinkedIdentityField(many=True)
     url = serializers.HyperlinkedIdentityField(
         lookup_field='uid',
         lookup_url_kwarg='feed_uid',
@@ -14,18 +28,5 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ('etag', 'href', 'last_modified', 'title', 'url', 'user')
+        fields = ('entries', 'etag', 'href', 'last_modified', 'title', 'url', 'user')
         model = Feed
-
-
-class EntrySerializer(serializers.HyperlinkedModelSerializer):
-    url = NestedHyperlinkedIdentityField(
-        lookup_field='uid',
-        lookup_url_kwarg='entry_uid',
-        url_kwarg_attrs={'entry_uid': 'uid', 'feed_uid': 'feed.uid'},
-        view_name='feedthing-api-v1-entry-details',
-    )
-
-    class Meta:
-        fields = ('href', 'published', 'title', 'url')
-        model = Entry
