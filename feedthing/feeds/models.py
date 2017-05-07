@@ -20,13 +20,14 @@ class Feed(TimeStampedModel):
     )
 
     etag = models.CharField(blank=True, max_length=255)
-    href = models.URLField(max_length=255, unique=True)
+    href = models.URLField(max_length=255)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
     uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
         ordering = ('title',)
+        unique_together = (('href', 'user'),)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -54,13 +55,14 @@ class Entry(TimeStampedModel):
         related_name='entries'
     )
 
-    href = models.URLField(max_length=255, unique=True)
+    href = models.URLField(max_length=255)
     published = models.DateTimeField()
     title = models.CharField(blank=True, max_length=255)
     uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
         ordering = ('-published',)
+        unique_together = (('feed', 'href'),)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
