@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/Nicksil/feedthing.svg?branch=master
+:target: https://travis-ci.org/Nicksil/feedthing
+
 Feed Thing
 ==========
 
