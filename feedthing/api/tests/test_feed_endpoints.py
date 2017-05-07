@@ -10,10 +10,10 @@ class FeedEndpointsTests(TestCase):
         self.simple_user = UserFactory(password=self.simple_user_pw)
 
     def test_feed_index_GET_request_returns_status_200(self):
-        self.client.login(
-            email=self.simple_user.email,
-            password=self.simple_user_pw,
-        )
+        # self.client.login(
+        #     email=self.simple_user.email,
+        #     password=self.simple_user_pw,
+        # )
 
         url = reverse('feedthing-api-v1-feed-index')
         response = self.client.get(url)
