@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/Nicksil/feedthing.svg?branch=master
    :target: https://travis-ci.org/Nicksil/feedthing
 
+.. image:: https://codecov.io/gh/Nicksil/feedthing/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/Nicksil/feedthing
+
 Feed Thing
 ==========
 
