@@ -25,9 +25,7 @@ TODO
 Reference
 ~~~~~~~~~
 
-feedparser.FeedParserDict Structure
-
-code-block:: python
+feedparser.FeedParserDict Structure::
 
     # feedparser.FeedParserDict contents (some text 'snipped' for brevity)
     {
