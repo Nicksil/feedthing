@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := ,noop
 .PHONY: clean-coverage clean-pyc clean-pycache coverage-html \
-		coverage-html-browser makemigrations-all migrate-all run \
+		coverage-html-browser docs makemigrations-all migrate-all run \
 		test test-all test-all-withcoverage ,noop ,resetdb
 
 HOST=0.0.0.0
@@ -22,6 +22,9 @@ coverage-html:
 
 coverage-html-browser: coverage-html
 	python -m webbrowser -t file://$(PWD)/htmlcov/index.html
+
+docs:
+	cd docs && make html
 
 makemigrations-all:
 	$(MANAGE) makemigrations

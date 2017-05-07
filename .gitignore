@@ -1,6 +1,7 @@
 *.DS_Store
 *.pyc
 .coverage
-.idea/
+.idea
 __pycache__
+docs/_build
 htmlcov
