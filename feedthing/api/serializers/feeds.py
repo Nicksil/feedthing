@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from api.fields import NestedHyperlinkedIdentityField
 from feeds.models import Entry
 from feeds.models import Feed
 
@@ -18,7 +19,7 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
+    url = NestedHyperlinkedIdentityField(
         lookup_field='uid',
         lookup_url_kwarg='entry_uid',
         view_name='feedthing-api-v1-entry-details',
