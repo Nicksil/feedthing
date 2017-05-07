@@ -8,5 +8,4 @@ class CatchallEndpoint(Endpoint):
         response = super().dispatch(request, *args, **kwargs)
         response.status_code = status.HTTP_404_NOT_FOUND
         response.data['detail'] = 'Nothing exists here.'
-        # return HttpResponse(status=404)
         return response
