@@ -25,9 +25,7 @@ TODO
 Reference
 ~~~~~~~~~
 
-feedparser.FeedParserDict Structure
-
-::
+feedparser.FeedParserDict Structure::
 
     # feedparser.FeedParserDict contents (some text 'snipped' for brevity)
     {
