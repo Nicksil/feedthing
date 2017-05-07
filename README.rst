@@ -6,7 +6,6 @@ Feed Thing
 TODO
 ~~~~
 
-- Move entries endpoint to a nested endpoint within feeds
 - Implement bandwidth courtesies:
     - ETag inspection (https://pythonhosted.org/feedparser/http-etag.html#etag-and-last-modified-headers)
     - Last-Modified header inspection (https://pythonhosted.org/feedparser/http-etag.html#using-last-modified-headers-to-reduce-bandwidth)
@@ -16,8 +15,8 @@ TODO
 - Add feature allowing multiple feed URLs in a single request
 
 
-Reference Material
-~~~~~~~~~~~~~~~~~~
+feedparser.FeedParserDict Structure Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
