@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := ,noop
 .PHONY: clean-coverage clean-pyc clean-pycache coverage-html \
 		coverage-html-browser makemigrations-all migrate-all run \
-		test-all test-all-withcoverage ,noop ,resetdb
+		test test-all test-all-withcoverage ,noop ,resetdb
 
 HOST=0.0.0.0
 MANAGE=feedthing/manage.py
