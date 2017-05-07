@@ -4,12 +4,12 @@ Feed Thing
     ...because I just want to read my feeds. That's it.
 
 Version
-~~~~~~~
+-------
 
 0.00.0.11a (everything will change)
 
 TODO
-----
+~~~~
 
 - Implement bandwidth courtesies:
 
