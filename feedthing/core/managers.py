@@ -14,7 +14,7 @@ from feeds.models import Feed
 
 class FeedDataManager:
     def __init__(self,
-                 href: str,
+                 href: Optional[str] = None,
                  feed: Optional[Feed] = None,
                  user: Type[AbstractBaseUser] = None
                  ) -> None:
@@ -40,7 +40,7 @@ class FeedDataManager:
         return mgr.to_internal()
 
     def fetch_data(self) -> feedparser.FeedParserDict:
-        self.data = feedparser.parse(self.href)
+        self.data = feedparser.parse(self._href)
         return self.data
 
     def to_internal(self, data: Optional[feedparser.FeedParserDict] = None) -> dict:
@@ -49,7 +49,7 @@ class FeedDataManager:
 
         return {
             'etag': data.get('etag', ''),
-            'href': self.href,
+            'href': self._href,
             'last_modified': self._get_last_modified(data),
             'title': data['feed'].get('title', ''),
             'user': self.user
@@ -65,6 +65,20 @@ class FeedDataManager:
             return struct_time_to_datetime(last_modified)
 
         return None
+
+    @property
+    def _href(self):
+        if self.href:
+            return self.href
+
+        if self.feed and self.feed.href:
+            return self.feed.href
+
+        if not self.href and not self.feed:
+            raise RuntimeError(
+                'Must provide either a valid ``href<str>`` or'
+                '``feed<Feed>`` with valid href attribute.'
+            )
 
 
 class EntryDataManager:
