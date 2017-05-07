@@ -22,6 +22,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
     url = NestedHyperlinkedIdentityField(
         lookup_field='uid',
         lookup_url_kwarg='entry_uid',
+        url_kwarg_attrs={'entry_uid': 'uid', 'feed_uid': 'feed.uid'},
         view_name='feedthing-api-v1-entry-details',
     )
 
