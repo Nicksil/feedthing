@@ -18,6 +18,12 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        lookup_field='uid',
+        lookup_url_kwarg='entry_uid',
+        view_name='feedthing-api-v1-feed-entry-details',
+    )
+
     class Meta:
         fields = ('href', 'published', 'title', 'url')
         model = Entry
