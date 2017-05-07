@@ -13,33 +13,53 @@ from feeds.models import Feed
 
 
 class FeedDataManager:
-    def __init__(self, href: str, user: Type[AbstractBaseUser] = None) -> None:
+    def __init__(self,
+                 href: str,
+                 feed: Optional[Feed] = None,
+                 user: Type[AbstractBaseUser] = None
+                 ) -> None:
         self.data = feedparser.FeedParserDict()
+        self.feed = feed
         self.href = href
         self.user = user
 
-    @classmethod
-    def fetch(cls, href: str, user: Type[AbstractBaseUser] = None) -> dict:
-        mgr = cls(href, user=user)
-        mgr.fetch_data()
+    @property
+    def entries(self) -> list:
+        if self.data and self.data.entries:
+            return EntryDataManager.parse(self.data.entries, self.feed, many=True)
+        return []
 
+    @classmethod
+    def fetch(cls,
+              href: str,
+              feed: Optional[Feed] = None,
+              user: Type[AbstractBaseUser] = None
+              ) -> dict:
+        mgr = cls(href, feed=feed, user=user)
+        mgr.fetch_data()
         return mgr.to_internal()
 
     def fetch_data(self) -> feedparser.FeedParserDict:
         self.data = feedparser.parse(self.href)
         return self.data
 
-    def to_internal(self) -> dict:
+    def to_internal(self, data: Optional[feedparser.FeedParserDict] = None) -> dict:
+        if data is None:
+            data = self.data
+
         return {
-            'etag': self.data.get('etag', ''),
+            'etag': data.get('etag', ''),
             'href': self.href,
-            'last_modified': self._get_last_modified(),
-            'title': self.data['feed'].get('title', ''),
+            'last_modified': self._get_last_modified(data),
+            'title': data['feed'].get('title', ''),
             'user': self.user
         }
 
-    def _get_last_modified(self) -> Optional[datetime.datetime]:
-        last_modified = self.data.get('modified_parsed', None)
+    def _get_last_modified(self, data: Optional[feedparser.FeedParserDict] = None) -> Optional[datetime.datetime]:
+        if data is None:
+            data = self.data
+
+        last_modified = data.get('modified_parsed', None)
 
         if last_modified is not None:
             return struct_time_to_datetime(last_modified)

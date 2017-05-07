@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 
+from feeds.models import Entry
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
 from core.managers import FeedDataManager
@@ -13,13 +14,18 @@ class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
 
     def post(self, request):
         href = request.data.get('href')
+        mgr = FeedDataManager(href)
         qs = self.get_queryset()
 
         if href and not qs.filter(href=href).exists():
-            request.data.update(FeedDataManager.fetch(href))
+            data = mgr.fetch_data()
+            request.data.update(mgr.to_internal(data))
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        feed = serializer.save()
+        mgr.feed = feed
+        [Entry.objects.create(**e) for e in mgr.entries]
+        serializer = self.get_serializer(feed)
 
         return Response(serializer.data)
