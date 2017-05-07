@@ -4,6 +4,7 @@ DEBUG = False
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
 REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = ('rest_framework.authentication.SessionAuthentication',)
+TEMPLATES[0]['APP_DIRS'] = False
 TEMPLATES[0]['OPTIONS']['debug'] = False
 
 CACHES = {
@@ -13,6 +14,7 @@ CACHES = {
     }
 }
 
+# Note: Be sure ``TEMPLATES[0]['APP_DIRS'] = False`` is set.
 TEMPLATES[0]['OPTIONS']['loaders'] = [(
     'django.template.loaders.cached.Loader',
     [
