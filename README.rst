@@ -1,7 +1,7 @@
 Feed Thing
 ==========
 
-    ...because I just want to read my feeds. That's it.
+    ...because I just want to read my feeds, that's all.
 
 Version
 ~~~~~~~
