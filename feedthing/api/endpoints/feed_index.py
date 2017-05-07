@@ -1,31 +1,25 @@
-import feedparser
 from rest_framework.response import Response
 
-from core.parsers import FeedParser
-from feeds.models import Feed
 from ..base import Endpoint
-from ..serializers.feeds import FeedSerializer
+from ..mixins import FeedEndpointMixin
+from core.managers import FeedDataManager
 
 
-class FeedIndexEndpoint(Endpoint):
+class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
+    # noinspection PyUnusedLocal
     def get(self, request):
-        return Response(
-            FeedSerializer(
-                request.user.feeds.all(),
-                context={'request': request},
-                many=True,
-            ).data
-        )
+        feeds = self.get_queryset()
+        return Response(self.get_serializer(feeds, many=True).data)
 
     def post(self, request):
-        href = request.data['href']
-        if not Feed.objects.filter(href=href, user=request.user).exists():
-            feed_data = feedparser.parse(href)
-            parsed = FeedParser.parse(feed_data)
-            # FIXME: If this link is diff from href used, re-run fetch to get true feed
-            entries = parsed.pop('entries')
-            request.data.update(parsed)
-        serializer = FeedSerializer(data=request.data, context={'request': request})
+        href = request.data.get('href')
+        qs = self.get_queryset()
+
+        if href and not qs.filter(href=href).exists():
+            request.data.update(FeedDataManager.fetch(href))
+
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data)

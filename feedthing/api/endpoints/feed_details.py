@@ -1,15 +1,12 @@
 from rest_framework.response import Response
 
 from ..base import Endpoint
-from ..exceptions import ResourceDoesNotExist
-from ..serializers.feeds import FeedSerializer
-from feeds.models import Feed
+from ..mixins import FeedEndpointMixin
 
 
-class FeedDetailsEndpoint(Endpoint):
+class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
+    # noinspection PyUnusedLocal
     def get(self, request, feed_uid=None):
-        try:
-            feed = Feed.objects.get(uid=feed_uid, user=request.user)
-        except Feed.DoesNotExist:
-            raise ResourceDoesNotExist
-        return Response(FeedSerializer(feed).data)
+        feed = self.get_object()
+        serializer = self.get_serializer(feed)
+        return Response(serializer.data)
