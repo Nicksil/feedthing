@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -9,7 +11,7 @@ class FeedEndpointsTests(TestCase):
         self.simple_user_pw = 'simple_password'
         self.simple_user = UserFactory(password=self.simple_user_pw)
 
-    def test_feed_index_GET_request_returns_status_200(self):
+    def test_feed_index_endpoint_GET_request_returns_list(self):
         self.client.login(
             email=self.simple_user.email,
             password=self.simple_user_pw,
@@ -17,5 +19,6 @@ class FeedEndpointsTests(TestCase):
 
         url = reverse('feedthing-api-v1-feed-index')
         response = self.client.get(url)
+        data = json.loads(response.content.decode())
 
-        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(data, list)
