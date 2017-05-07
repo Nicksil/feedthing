@@ -1,8 +1,12 @@
-from django.http import HttpResponse
+from rest_framework import status
 
 from ..base import Endpoint
 
 
 class CatchallEndpoint(Endpoint):
     def dispatch(self, request, *args, **kwargs):
-        return HttpResponse(status=404)
+        response = super().dispatch(request, *args, **kwargs)
+        response.status_code = status.HTTP_404_NOT_FOUND
+        response.data['detail'] = 'Nothing exists here.'
+        # return HttpResponse(status=404)
+        return response
