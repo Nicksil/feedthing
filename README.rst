@@ -20,8 +20,10 @@ TODO
 - Add feature allowing multiple feed URLs in a single request
 
 
-feedparser.FeedParserDict Structure Reference
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reference
+~~~~~~~~~
+
+feedparser.FeedParserDict Structure
 
 ::
 
