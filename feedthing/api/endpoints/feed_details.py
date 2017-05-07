@@ -25,9 +25,8 @@ class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
 
         for k, v in parsed.items():
             setattr(feed, k, v)
-
         feed.save()
-
+        
         entries = mgr.entries
 
         for entry in entries:
@@ -38,7 +37,6 @@ class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
 
                 for k, v in entry.items():
                     setattr(_existing, k, v)
-
                 _existing.save()
 
         serializer = self.get_serializer(feed)

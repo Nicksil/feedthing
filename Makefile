@@ -33,10 +33,12 @@ run:
 	$(MANAGE) runserver $(HOST):$(PORT)
 
 test-all: clean-pyc clean-pycache
-	$(MANAGE) test feedthing
+	$(MANAGE) test feedthing --settings=config.settings.tests
 
 test-all-withcoverage: clean-pyc clean-pycache clean-coverage
-	coverage run $(MANAGE) test feedthing
+	coverage run $(MANAGE) test feedthing --settings=config.settings.tests
+
+test: test-all
 
 ,noop:
 	@echo 'noop'
