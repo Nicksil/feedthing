@@ -7,9 +7,9 @@ from feeds.models import Feed
 
 
 class FeedDetailsEndpoint(Endpoint):
-    def get(self, request, feed_slug=None):
+    def get(self, request, feed_uid=None):
         try:
-            feed = Feed.objects.get(slug=feed_slug, user=request.user)
+            feed = Feed.objects.get(uid=feed_uid, user=request.user)
         except Feed.DoesNotExist:
             raise ResourceDoesNotExist
         return Response(FeedSerializer(feed).data)

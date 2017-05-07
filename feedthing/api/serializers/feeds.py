@@ -6,8 +6,8 @@ from feeds.models import Feed
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        lookup_field='slug',
-        lookup_url_kwarg='feed_slug',
+        lookup_field='uid',
+        lookup_url_kwarg='feed_uid',
         view_name='feedthing-api-v1-feed-details',
     )
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())

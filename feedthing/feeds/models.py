@@ -4,9 +4,9 @@ feeds.models
 """
 from django.conf import settings
 from django.db import models
-from django.utils.text import slugify
 
 from core.models import TimeStampedModel
+from core.utils import FriendlyID
 
 
 class Feed(TimeStampedModel):
@@ -23,15 +23,18 @@ class Feed(TimeStampedModel):
     href = models.URLField(max_length=255, unique=True)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
-    slug = models.SlugField(blank=True, editable=False, unique=True)
+    uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
         ordering = ('title',)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+        if not self.uid:
+            self.uid = FriendlyID.encode(self.id)
+            kwargs['force_insert'] = False
+            super().save(*args, **kwargs)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
@@ -54,15 +57,18 @@ class Entry(TimeStampedModel):
     href = models.URLField(max_length=255, unique=True)
     published = models.DateTimeField()
     title = models.CharField(blank=True, max_length=255)
-    slug = models.SlugField(blank=True, editable=False, unique=True)
+    uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
         ordering = ('-published',)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+        if not self.uid:
+            self.uid = FriendlyID.encode(self.id)
+            kwargs['force_insert'] = False
+            super().save(*args, **kwargs)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)

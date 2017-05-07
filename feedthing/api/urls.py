@@ -12,12 +12,12 @@ urlpatterns = [
         name='feedthing-api-v1-feed-index'
     ),
     url(
-        r'^feeds/(?P<feed_slug>[^/]+)/$',
+        r'^feeds/(?P<feed_uid>[^/]+)/$',
         FeedDetailsEndpoint.as_view(),
         name='feedthing-api-v1-feed-details'
     ),
     url(
-        r'^feeds/(?P<feed_slug>[^/]+)/entries/$',
+        r'^feeds/(?P<feed_uid>[^/]+)/entries/$',
         FeedEntryIndexEndpoint.as_view(),
         name='feedthing-api-v1-feed-entry-index'
     ),
