@@ -13,8 +13,23 @@ def logout_view(request):
     return redirect('/')
 
 urlpatterns = [
-    url(r'^api/v1/', include(api_urls)),
-    url(r'^users/login/$', LoginView.as_view(template_name='login.html'), name='login'),
-    url(r'^users/logout/$', logout_view, name='logout'),
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url(
+        r'^api/v1/',
+        include(api_urls)
+    ),
+    url(
+        r'^users/login/$',
+        LoginView.as_view(template_name='login.html'),
+        name='login'
+    ),
+    url(
+        r'^users/logout/$',
+        logout_view,
+        name='logout'
+    ),
+    url(
+        r'^$',
+        TemplateView.as_view(template_name='index.html'),
+        name='index'
+    ),
 ]
