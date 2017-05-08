@@ -5,6 +5,7 @@ users.models
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import validate_email
 from django.db import models
 
@@ -21,6 +22,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Users must have an email address')
 
+        email = self.normalize_email(email)
         validate_email(email)
 
         user = self.model(email=self.normalize_email(email), **extra_fields)
@@ -30,7 +32,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, TimeStampedModel):
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     """
     A model for a single User.
     """
@@ -42,6 +44,7 @@ class User(AbstractBaseUser, TimeStampedModel):
 
     objects = UserManager()
 
+    EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
 
     def get_full_name(self):

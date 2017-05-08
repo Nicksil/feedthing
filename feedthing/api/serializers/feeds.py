@@ -19,7 +19,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
-    entries = EntryNestedHyperlinkedIdentityField(many=True)
+    entries = EntryNestedHyperlinkedIdentityField(many=True, required=False)
     url = serializers.HyperlinkedIdentityField(
         lookup_field='uid',
         lookup_url_kwarg='feed_uid',

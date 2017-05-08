@@ -9,8 +9,8 @@ from feeds.models import Entry
 class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
     # noinspection PyUnusedLocal
     def get(self, request):
-        feeds = self.get_queryset()
-        return Response(self.get_serializer(feeds, many=True).data)
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         href = request.data.get('href')

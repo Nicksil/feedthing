@@ -1,16 +1,15 @@
 from rest_framework.response import Response
 
-from core.managers import FeedDataManager
-from feeds.models import Entry
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
+from core.managers import FeedDataManager
+from feeds.models import Entry
 
 
 class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
     # noinspection PyUnusedLocal
     def get(self, request, feed_uid=None):
-        feed = self.get_object()
-        serializer = self.get_serializer(feed)
+        serializer = self.get_serializer(self.get_object())
         return Response(serializer.data)
 
 
@@ -26,7 +25,7 @@ class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
         for k, v in parsed.items():
             setattr(feed, k, v)
         feed.save()
-        
+
         entries = mgr.entries
 
         for entry in entries:

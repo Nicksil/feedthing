@@ -46,7 +46,7 @@ class Feed(TimeStampedModel):
 
 class Entry(TimeStampedModel):
     """
-    A model for a single Entry. A single Feed may have many Entry relations.
+    A model for a single Entry
     """
 
     feed = models.ForeignKey(
