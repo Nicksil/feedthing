@@ -14,27 +14,30 @@
         <form action="{% url 'mark_read' %}" method="POST">
             {% csrf_token %}
             {% if feeds %}
-                <ul>
-                    {% for feed in feeds %}
-                        <li>
-                            {{ feed.title }}
-                            {% if feed.entries %}
-                                <ul>
-                                    {% for entry in feed.entries %}
-                                        <li>
+                {% for feed in feeds %}
+                    <h4>{{ feed.title }}</h4>
+                    {% if feed.entries %}
+                        <table>
+                            <tbody>
+                                {% for entry in feed.entries %}
+                                    <tr>
+                                        <td>
                                             <input type="checkbox" title="Mark as read" name="entries" value="{{ entry.uid }}">
-                                            <a
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                href="{{ entry.href }}"
-                                                class="entry{% if not entry.read %} bold{% endif %}">{{ entry.title }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                                        </td>
+                                        <td>
+                                            <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry{% if not entry.read %} bold{% endif %}">
+                                                {{ entry.title }}
+                                            </a>
+                                        </td>
+                                        <td title="{{ entry.published }}">
+                                            {{ entry.natural_published }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
             <button type="submit">Update</button>
         </form>

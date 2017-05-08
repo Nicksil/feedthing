@@ -1,3 +1,4 @@
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from rest_framework import serializers
 
 from ..fields import NestedHyperlinkedIdentityField
@@ -11,12 +12,16 @@ class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    natural_published = serializers.SerializerMethodField()
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
         extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('href', 'published', 'read', 'title', 'uid', 'url')
+        fields = ('href', 'natural_published', 'published', 'read', 'title', 'uid', 'url')
         model = Entry
+
+    def get_natural_published(self, obj):
+        return naturaltime(obj.published)
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,7 +41,7 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['entries'] = EntrySerializer(
-            instance.entries,
+            instance.entries.all()[:5],
             context={'request': self.context['request']},
             many=True).data
         return representation

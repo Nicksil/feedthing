@@ -40,7 +40,16 @@ class FeedDataManager:
         return mgr.to_internal()
 
     def fetch_data(self) -> feedparser.FeedParserDict:
+        kwargs = {}
+
+        if self.feed:
+            if self.feed.etag:
+                kwargs['etag'] = self.feed.etag
+            elif self.feed.last_modified:
+                kwargs['modified'] = str(self.feed.last_modified)
+
         self.data = feedparser.parse(self._href)
+
         return self.data
 
     def to_internal(self, data: Optional[feedparser.FeedParserDict] = None) -> dict:
