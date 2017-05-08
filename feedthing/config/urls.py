@@ -29,6 +29,16 @@ urlpatterns = [
         name='logout'
     ),
     url(
+        r'^import-opml/$',
+        feeds_views.import_opml,
+        name='import_opml'
+    ),
+    url(
+        r'^mark-read/$',
+        feeds_views.mark_read,
+        name='mark_read'
+    ),
+    url(
         r'^$',
         feeds_views.index,
         name='index'

@@ -11,27 +11,37 @@
             </label>
             <button type="submit">Add</button>
         </form>
-        {% if feeds %}
-            <ul>
-                {% for feed in feeds %}
-                    <li>
-                        {{ feed.title }}
-                        {% if feed.entries %}
-                            <ul>
-                                {% for entry in feed.entries %}
-                                    <li>
-                                        <a
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            href="{{ entry.href }}"
-                                            class="entry{% if not entry.read %} bold{% endif %}">{{ entry.title }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <form action="{% url 'mark_read' %}" method="POST">
+            {% csrf_token %}
+            {% if feeds %}
+                <ul>
+                    {% for feed in feeds %}
+                        <li>
+                            {{ feed.title }}
+                            {% if feed.entries %}
+                                <ul>
+                                    {% for entry in feed.entries %}
+                                        <li>
+                                            <input type="checkbox" title="Mark as read" name="entries" value="{{ entry.uid }}">
+                                            <a
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href="{{ entry.href }}"
+                                                class="entry{% if not entry.read %} bold{% endif %}">{{ entry.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <button type="submit">Update</button>
+        </form>
+        <form action="{% url 'import_opml' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="opml_file">
+            <button type="submit">Import</button>
+        </form>
     {% endif %}
 {% endblock %}
