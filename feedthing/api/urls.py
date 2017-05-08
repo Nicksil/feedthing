@@ -4,7 +4,7 @@ from .endpoints.catchall import CatchallEndpoint
 from .endpoints.entry_details import EntryDetailsEndpoint
 from .endpoints.entry_index import EntryIndexEndpoint
 from .endpoints.feed_details import FeedDetailsEndpoint
-from .endpoints.feed_details import FeedDetailsUpdateEndpoint
+from .endpoints.feed_details_update import FeedDetailsUpdateEndpoint
 from .endpoints.feed_index import FeedIndexEndpoint
 
 urlpatterns = [
