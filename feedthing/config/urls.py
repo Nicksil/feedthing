@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from api import urls as api_urls
+from feeds import views as feeds_views
 
 
 def logout_view(request):
@@ -29,7 +30,7 @@ urlpatterns = [
     ),
     url(
         r'^$',
-        TemplateView.as_view(template_name='index.html'),
+        feeds_views.index,
         name='index'
     ),
 ]

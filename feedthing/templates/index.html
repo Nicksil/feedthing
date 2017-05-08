@@ -3,11 +3,11 @@
 {% block body %}
     <h1>Index</h1>
     {% if user.is_authenticated %}
-        <form action="{% url 'add_feed' %}" method="POST">
+        <form action="{% url 'index' %}" method="POST">
             {% csrf_token %}
             <label>
                 Feed URL
-                <input name="url" type="text" required>
+                <input name="href" type="url" required>
             </label>
             <button type="submit">Add</button>
         </form>
@@ -16,17 +16,19 @@
                 {% for feed in feeds %}
                     <li>
                         {{ feed.title }}
-                        <ul>
-                            {% if feed.entries %}
+                        {% if feed.entries %}
+                            <ul>
                                 {% for entry in feed.entries %}
                                     <li>
-                                        <a href="{{ entry.href }}">{{ entry.title }}</a>
+                                        <a
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href="{{ entry.href }}"
+                                            class="entry{% if not entry.read %} bold{% endif %}">{{ entry.title }}</a>
                                     </li>
                                 {% endfor %}
-                            {% else %}
-                                <li>No entires</li>
-                            {% endif %}
-                        </ul>
+                            </ul>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>

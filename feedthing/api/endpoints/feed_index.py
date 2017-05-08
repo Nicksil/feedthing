@@ -13,15 +13,17 @@ class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
         return Response(serializer.data)
 
     def post(self, request):
+        query_dict = request.data.copy()
+
         href = request.data.get('href')
         mgr = FeedDataManager(href)
         qs = self.get_queryset()
 
         if href and not qs.filter(href=href).exists():
             data = mgr.fetch_data()
-            request.data.update(mgr.to_internal(data))
+            query_dict.update(mgr.to_internal(data))
 
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=query_dict)
         serializer.is_valid(raise_exception=True)
         feed = serializer.save()
         mgr.feed = feed

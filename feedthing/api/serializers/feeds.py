@@ -14,7 +14,8 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
-        fields = ('href', 'published', 'title', 'url')
+        extra_kwargs = {'uid': {'read_only': True}}
+        fields = ('href', 'published', 'read', 'title', 'uid', 'url')
         model = Entry
 
 
@@ -28,5 +29,14 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ('entries', 'etag', 'href', 'last_modified', 'title', 'url', 'user')
+        extra_kwargs = {'uid': {'read_only': True}}
+        fields = ('entries', 'etag', 'href', 'last_modified', 'title', 'uid', 'url', 'user')
         model = Feed
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['entries'] = EntrySerializer(
+            instance.entries,
+            context={'request': self.context['request']},
+            many=True).data
+        return representation
