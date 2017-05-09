@@ -16,11 +16,12 @@ class Feed(TimeStampedModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.CASCADE,
-        related_name='feeds',
+        related_name='feeds'
     )
 
     etag = models.CharField(blank=True, max_length=255)
-    href = models.URLField(max_length=255)
+    href = models.URLField()
+    html_href = models.URLField(blank=True)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
     uid = models.CharField(blank=True, max_length=255, unique=True)
@@ -41,7 +42,7 @@ class Feed(TimeStampedModel):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
 
     def __str__(self):
-        return 'Feed: {}'.format(self.href)
+        return '{}: {}'.format(self.__class__.__name__, self.href)
 
 
 class Entry(TimeStampedModel):
@@ -55,7 +56,7 @@ class Entry(TimeStampedModel):
         related_name='entries'
     )
 
-    href = models.URLField(max_length=255)
+    href = models.URLField()
     published = models.DateTimeField(blank=True, null=True)
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, max_length=255)
@@ -77,4 +78,4 @@ class Entry(TimeStampedModel):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
 
     def __str__(self):
-        return 'Entry: {}'.format(self.href)
+        return '{}: {}'.format(self.__class__.__name__, self.href)

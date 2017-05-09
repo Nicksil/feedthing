@@ -31,7 +31,7 @@ class FeedDataManager:
 
     @classmethod
     def fetch(cls,
-              href: str,
+              href: Optional[str] = None,
               feed: Optional[Feed] = None,
               user: Type[AbstractBaseUser] = None
               ) -> dict:
@@ -59,10 +59,23 @@ class FeedDataManager:
         return {
             'etag': data.get('etag', ''),
             'href': self._href,
+            'html_href': self._get_html_href(data),
             'last_modified': self._get_last_modified(data),
             'title': data['feed'].get('title', ''),
             'user': self.user
         }
+
+    def _get_html_href(self, data: Optional[feedparser.FeedParserDict] = None) -> str:
+        if data is None:
+            data = self.data
+
+        links = data['feed'].get('links', [])
+
+        for link in links:
+            if link['rel'] == 'alternate' and link['type'] == 'text/html':
+                return link['href']
+
+        return ''
 
     def _get_last_modified(self, data: Optional[feedparser.FeedParserDict] = None) -> Optional[datetime.datetime]:
         if data is None:
