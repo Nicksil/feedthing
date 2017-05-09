@@ -21,7 +21,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = reverse_lazy('feeds:index')
+
 STATIC_URL = '/static/'
 
 DJANGO_APPS = (

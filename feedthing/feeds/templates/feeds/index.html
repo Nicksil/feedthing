@@ -19,7 +19,13 @@
         {% csrf_token %}
         {% if feeds %}
             {% for feed in feeds %}
-                <h4>{{ feed.title }}</h4>
+                <h4>
+                    {% if feed.html_href %}
+                        <a href="{{ feed.html_href }}">{{ feed.title }}</a>
+                    {% else %}
+                        {{ feed.title }}
+                    {% endif %}
+                </h4>
                 {% if feed.entries %}
                     <table>
                         <tbody>
@@ -49,7 +55,9 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        <button type="submit">Mark read</button>
+        {% if feeds %}
+            <button type="submit">Mark read</button>
+        {% endif %}
     </form>
 {% endblock %}
 {% block extra_js %}
@@ -58,7 +66,7 @@
         var checkNoneBtns = document.getElementsByClassName('check-none');
 
         for (var b = 0, btn; btn = checkAllBtns[b]; b++) {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 var feedUid = e.target.getAttribute('data-feed-uid');
                 var boxes = document.querySelectorAll('input[data-feed-uid="' + feedUid + '"]');
                 for (var i = 0, node; node = boxes[i]; i++) {

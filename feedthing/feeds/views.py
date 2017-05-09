@@ -7,9 +7,11 @@ from bs4 import BeautifulSoup
 
 from .models import Entry
 from .models import Feed
+from api.endpoints.feed_details_update import FeedDetailsUpdateEndpoint
 from api.endpoints.feed_index import FeedIndexEndpoint
 
 
+@login_required
 def index(request):
     if request.method == 'POST':
         return add_feed(request)

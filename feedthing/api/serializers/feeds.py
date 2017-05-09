@@ -35,7 +35,10 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('entries', 'etag', 'href', 'last_modified', 'title', 'uid', 'url', 'user')
+        fields = (
+            'entries', 'etag', 'href', 'html_href',
+            'last_modified', 'title', 'uid', 'url', 'user'
+        )
         model = Feed
 
     def to_representation(self, instance):
