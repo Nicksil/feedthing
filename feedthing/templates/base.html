@@ -13,15 +13,17 @@
         </style>
     </head>
     <body>
+        <ul>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'feeds:index' %}">Feeds</a>
+                    <a href="{% url 'users:logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'users:login' %}">Login</a>
+                {% endif %}
+            </li>
+        </ul>
         {% block body %}{% endblock %}
-        {% comment %}
-        {% if user.is_authenticated %}
-            <script
-                    src="https://code.jquery.com/jquery-3.2.1.min.js"
-                    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-                    crossorigin="anonymous"></script>
-        {% endif %}
-        {% endcomment %}
         {% block extra_js %}{% endblock %}
     </body>
 </html>

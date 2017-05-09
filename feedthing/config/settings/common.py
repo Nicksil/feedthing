@@ -1,5 +1,7 @@
 import os
 
+from django.urls import reverse_lazy
+
 AUTH_USER_MODEL = 'users.User'
 
 PROJECT_DIR = os.path.dirname(
@@ -19,14 +21,13 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = reverse_lazy('feeds:index')
 STATIC_URL = '/static/'
 
 DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',

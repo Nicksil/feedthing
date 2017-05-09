@@ -1,17 +1,11 @@
 from django.conf.urls import include
 from django.conf.urls import url
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import logout
-from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from api import urls as api_urls
-from feeds import views as feeds_views
+from feeds import urls as feeds_urls
+from users import urls as users_urls
 
-
-def logout_view(request):
-    logout(request)
-    return redirect('/')
 
 urlpatterns = [
     url(
@@ -19,28 +13,16 @@ urlpatterns = [
         include(api_urls)
     ),
     url(
-        r'^users/login/$',
-        LoginView.as_view(template_name='login.html'),
-        name='login'
+        r'^feeds/',
+        include(feeds_urls, namespace='feeds')
     ),
     url(
-        r'^users/logout/$',
-        logout_view,
-        name='logout'
-    ),
-    url(
-        r'^import-opml/$',
-        feeds_views.import_opml,
-        name='import_opml'
-    ),
-    url(
-        r'^mark-read/$',
-        feeds_views.mark_read,
-        name='mark_read'
+        r'^users/',
+        include(users_urls, namespace='users')
     ),
     url(
         r'^$',
-        feeds_views.index,
+        TemplateView.as_view(template_name='index.html'),
         name='index'
-    ),
+    )
 ]

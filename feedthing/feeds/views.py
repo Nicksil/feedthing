@@ -5,21 +5,24 @@ from django.shortcuts import render
 
 from bs4 import BeautifulSoup
 
+from .models import Entry
+from .models import Feed
 from api.endpoints.feed_index import FeedIndexEndpoint
-from feeds.models import Entry, Feed
 
 
 def index(request):
     if request.method == 'POST':
         return add_feed(request)
+
     feeds = FeedIndexEndpoint.as_view()(request).data
-    return render(request, 'index.html', {'feeds': feeds})
+
+    return render(request, 'feeds/index.html', {'feeds': feeds})
 
 
 @login_required
 def add_feed(request):
     FeedIndexEndpoint.as_view()(request)
-    return redirect('index')
+    return redirect('feeds:index')
 
 
 @login_required
@@ -29,7 +32,8 @@ def mark_read(request):
         uid__in=entries,
         feed__user=request.user
     ).update(read=True)
-    return redirect('index')
+
+    return redirect('feeds:index')
 
 
 @login_required
@@ -45,4 +49,4 @@ def import_opml(request):
         except IntegrityError:
             pass
 
-    return redirect('index')
+    return redirect('feeds:index')

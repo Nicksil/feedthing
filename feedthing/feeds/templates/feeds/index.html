@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <h1>Feeds</h1>
+    <form action="{% url 'feeds:index' %}" method="POST">
+        {% csrf_token %}
+        <label>
+            Feed URL
+            <input name="href" type="url" required>
+        </label>
+        <button type="submit">Add</button>
+    </form>
+    <form action="{% url 'feeds:import_opml' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="opml_file">
+        <button type="submit">Import</button>
+    </form>
+    <form action="{% url 'feeds:mark_read' %}" method="POST">
+        {% csrf_token %}
+        {% if feeds %}
+            {% for feed in feeds %}
+                <h4>{{ feed.title }}</h4>
+                {% if feed.entries %}
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <button type="button" data-feed-uid="{{ feed.uid }}" class="check-all">Check all</button>
+                                    <button type="button" data-feed-uid="{{ feed.uid }}" class="check-none">Check none</button>
+                                </td>
+                            </tr>
+                            {% for entry in feed.entries %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" data-feed-uid="{{ feed.uid }}" title="Mark as read" name="entries" value="{{ entry.uid }}">
+                                    </td>
+                                    <td>
+                                        <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry{% if not entry.read %} bold{% endif %}">
+                                            {{ entry.title }}
+                                        </a>
+                                    </td>
+                                    <td title="{{ entry.published }}">
+                                        {{ entry.natural_published }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <button type="submit">Mark read</button>
+    </form>
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+        var checkAllBtns = document.getElementsByClassName('check-all');
+        var checkNoneBtns = document.getElementsByClassName('check-none');
+
+        for (var b = 0, btn; btn = checkAllBtns[b]; b++) {
+            btn.addEventListener('click', function(e) {
+                var feedUid = e.target.getAttribute('data-feed-uid');
+                var boxes = document.querySelectorAll('input[data-feed-uid="' + feedUid + '"]');
+                for (var i = 0, node; node = boxes[i]; i++) {
+                    node.checked = true;
+                }
+            })
+        }
+
+        for (var c = 0, btnn; btnn = checkNoneBtns[c]; c++) {
+            btnn.addEventListener('click', function (e) {
+                var feedUid = e.target.getAttribute('data-feed-uid');
+                var boxes = document.querySelectorAll('input[data-feed-uid="' + feedUid + '"]');
+                for (var i = 0, node; node = boxes[i]; i++) {
+                    node.checked = false;
+                }
+            })
+        }
+    </script>
+{% endblock %}

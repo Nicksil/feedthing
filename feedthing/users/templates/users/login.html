@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
         <p>You're already logged-in.</p>
     {% else %}
-        <form action="{% url 'login' %}" method="POST">
+        <form action="{% url 'users:login' %}" method="POST">
             {% csrf_token %}
             <table>
                 <tr>
@@ -18,7 +18,7 @@
                     <td>{{ form.password }}</td>
                 </tr>
             </table>
-            <input type="submit" value="login" />
+            <button type="submit">Login</button>
         </form>
     {% endif %}
 {% endblock %}
