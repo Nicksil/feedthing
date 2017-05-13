@@ -59,7 +59,7 @@ class Entry(TimeStampedModel):
     href = models.URLField()
     published = models.DateTimeField(blank=True, null=True)
     read = models.BooleanField(default=False)
-    title = models.CharField(blank=True, max_length=255)
+    title = models.TextField(blank=True)
     uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:

@@ -143,9 +143,14 @@ class EntryDataManager:
         return self.data.get('link', '')
 
     def _get_published(self) -> Optional[datetime.datetime]:
-        published = self.data.get('published_parsed', None)
+        published = None
+
+        if 'published_parsed' in self.data:
+            published = self.data['published_parsed']
+        elif 'updated_parsed' in self.data:
+            published = self.data['updated_parsed']
 
         if published is not None:
-            return struct_time_to_datetime(published)
+            published = struct_time_to_datetime(published)
 
-        return None
+        return published

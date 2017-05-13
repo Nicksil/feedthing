@@ -1,0 +1,18 @@
+footer {
+    height: 25px;
+    width: 100%;
+}
+
+.entry-table {
+    table-layout: fixed;
+}
+
+.entry-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-margin {
+    margin: 0;
+}

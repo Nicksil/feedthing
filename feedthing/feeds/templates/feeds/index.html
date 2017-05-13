@@ -1,88 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <h1>Feeds</h1>
-    <form action="{% url 'feeds:index' %}" method="POST">
-        {% csrf_token %}
-        <label>
-            Feed URL
-            <input name="href" type="url" required>
-        </label>
-        <button type="submit">Add</button>
-    </form>
-    <form action="{% url 'feeds:import_opml' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="opml_file">
-        <button type="submit">Import</button>
-    </form>
-    <form action="{% url 'feeds:mark_read' %}" method="POST">
-        {% csrf_token %}
-        {% if feeds %}
-            {% for feed in feeds %}
-                <h4>
+    <section class="row">
+        <div class="col">
+            <form action="{% url 'feeds:index' %}" method="POST">
+                {% csrf_token %}
+                <section class="row">
+                    <div class="col">
+                        <label for="id_href">Feed URL</label>
+                        <input id="id_href" name="href" type="url" autofocus required>
+                        <button type="submit">Add</button>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </section>
+    {% if feeds %}
+        {% for feed in feeds %}
+            <table class="table entry-table">
+                <caption>
                     {% if feed.html_href %}
                         <a href="{{ feed.html_href }}">{{ feed.title }}</a>
                     {% else %}
                         {{ feed.title }}
                     {% endif %}
-                </h4>
-                {% if feed.entries %}
-                    <table>
-                        <tbody>
+                </caption>
+                <tbody>
+                    {% if feed.entries %}
+                        {% for entry in feed.entries %}
                             <tr>
-                                <td colspan="3">
-                                    <button type="button" data-feed-uid="{{ feed.uid }}" class="check-all">Check all</button>
-                                    <button type="button" data-feed-uid="{{ feed.uid }}" class="check-none">Check none</button>
+                                <td>
+                                    <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry" title="{{ entry.title }}">
+                                        {{ entry.title }}
+                                    </a>
+                                </td>
+                                <td title="{{ entry.published }}" class="right">
+                                    {{ entry.natural_published }}
                                 </td>
                             </tr>
-                            {% for entry in feed.entries %}
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" data-feed-uid="{{ feed.uid }}" title="Mark as read" name="entries" value="{{ entry.uid }}">
-                                    </td>
-                                    <td>
-                                        <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry">
-                                            {{ entry.title }}
-                                        </a>
-                                    </td>
-                                    <td title="{{ entry.published }}">
-                                        {{ entry.natural_published }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        {% if feeds %}
-            <button type="submit">Mark read</button>
-        {% endif %}
-    </form>
-{% endblock %}
-{% block extra_js %}
-    <script type="text/javascript">
-        var checkAllBtns = document.getElementsByClassName('check-all');
-        var checkNoneBtns = document.getElementsByClassName('check-none');
-
-        for (var b = 0, btn; btn = checkAllBtns[b]; b++) {
-            btn.addEventListener('click', function (e) {
-                var feedUid = e.target.getAttribute('data-feed-uid');
-                var boxes = document.querySelectorAll('input[data-feed-uid="' + feedUid + '"]');
-                for (var i = 0, node; node = boxes[i]; i++) {
-                    node.checked = true;
-                }
-            })
-        }
-
-        for (var c = 0, btnn; btnn = checkNoneBtns[c]; c++) {
-            btnn.addEventListener('click', function (e) {
-                var feedUid = e.target.getAttribute('data-feed-uid');
-                var boxes = document.querySelectorAll('input[data-feed-uid="' + feedUid + '"]');
-                for (var i = 0, node; node = boxes[i]; i++) {
-                    node.checked = false;
-                }
-            })
-        }
-    </script>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
