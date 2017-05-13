@@ -36,7 +36,7 @@ def _handle(feed, user):
 
 
 class FeedIndexUpdateEndpoint(FeedEndpointMixin, Endpoint):
-    # noinspection PyUnusedLocal
+
     def post(self, request, feed_uid=None):
         feeds = self.get_queryset()
         user = self.request.user

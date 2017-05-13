@@ -16,32 +16,12 @@
         </div>
     </section>
     {% if feeds %}
-        {% for feed in feeds %}
-            <table class="table entry-table">
-                <caption>
-                    {% if feed.html_href %}
-                        <a href="{{ feed.html_href }}">{{ feed.title }}</a>
-                    {% else %}
-                        {{ feed.title }}
-                    {% endif %}
-                </caption>
-                <tbody>
-                    {% if feed.entries %}
-                        {% for entry in feed.entries %}
-                            <tr>
-                                <td>
-                                    <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry" title="{{ entry.title }}">
-                                        {{ entry.title }}
-                                    </a>
-                                </td>
-                                <td title="{{ entry.published }}" class="right">
-                                    {{ entry.natural_published }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-        {% endfor %}
+        <ul>
+            {% for feed in feeds %}
+                <li>
+                    <a href="{% url 'feeds:detail' feed.uid %}">{{ feed.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endblock %}

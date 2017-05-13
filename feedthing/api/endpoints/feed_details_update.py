@@ -7,7 +7,7 @@ from feeds.models import Entry
 
 
 class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
-    # noinspection PyUnusedLocal
+
     def post(self, request, feed_uid=None):
         feed = self.get_object()
         user = self.request.user

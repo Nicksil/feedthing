@@ -4,14 +4,9 @@ from . import views
 
 urlpatterns = [
     url(
-        r'^import-opml/$',
-        views.import_opml,
-        name='import_opml'
-    ),
-    url(
-        r'^mark-read/$',
-        views.mark_read,
-        name='mark_read'
+        r'^(?P<feed_uid>[^/]+)/$',
+        views.detail,
+        name='detail'
     ),
     url(
         r'^$',
