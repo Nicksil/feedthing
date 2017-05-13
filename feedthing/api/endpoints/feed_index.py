@@ -7,7 +7,6 @@ from feeds.models import Entry
 
 
 class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
-
     def get(self, request):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)

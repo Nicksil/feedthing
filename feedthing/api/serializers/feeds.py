@@ -40,11 +40,3 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             'last_modified', 'title', 'uid', 'url', 'user'
         )
         model = Feed
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['entries'] = EntrySerializer(
-            instance.entries.all()[:5],
-            context={'request': self.context['request']},
-            many=True).data
-        return representation
