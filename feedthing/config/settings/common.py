@@ -24,6 +24,7 @@ USE_TZ = True
 LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = reverse_lazy('feeds:index')
 
+STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'staticfiles'),)
 STATIC_URL = '/static/'
 
 DJANGO_APPS = (
