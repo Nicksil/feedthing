@@ -16,3 +16,13 @@ class FeedFactory(factory.django.DjangoModelFactory):
     last_modified = factory.Faker('date_time', tzinfo=pytz.timezone(settings.TIME_ZONE))
     title = factory.Faker('word')
     user = factory.SubFactory(UserFactory)
+
+
+class EntryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = 'feeds.Entry'
+
+    feed = factory.SubFactory(FeedFactory)
+    href = factory.Faker('url')
+    published = factory.Faker('date_time', tzinfo=pytz.timezone(settings.TIME_ZONE))
+    title = factory.Faker('word')
