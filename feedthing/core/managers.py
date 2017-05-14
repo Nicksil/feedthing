@@ -57,7 +57,7 @@ class FeedDataManager:
 
         logger.debug('Sending request to {}'.format(self._href))
         self.data = feedparser.parse(self._href, agent=settings.USER_AGENT_STR)
-        
+
         if 'status' in self.data:
             logger.debug('feedparser returns with status {}'.format(self.data.status))
 

@@ -28,5 +28,4 @@ class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
         mgr.feed = feed
         [Entry.objects.create(**e) for e in mgr.entries]
         serializer = self.get_serializer(feed)
-
         return Response(serializer.data)
