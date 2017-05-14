@@ -16,8 +16,14 @@ def ensure_aware(dt):
     """
     if timezone.is_aware(dt):
         return dt
-
     return timezone.make_aware(dt)
+
+
+def now(aware=True):
+    _now = datetime.datetime.now()
+    if aware:
+        return ensure_aware(_now)
+    return _now
 
 
 def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> datetime.datetime:
@@ -30,7 +36,6 @@ def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> dat
 
     if aware:
         return ensure_aware(dt)
-
     return dt
 
 
@@ -42,7 +47,6 @@ def time_since(dt: datetime.datetime):
 
     if delta.days == 0:
         return '{}hr'.format(int(delta.total_seconds() / 60 / 60))
-
     return '{}d'.format(int(delta.total_seconds() / 60 / 60 / 24))
 
 

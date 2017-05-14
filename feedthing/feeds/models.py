@@ -7,6 +7,7 @@ from django.db import models
 
 from core.models import TimeStampedModel
 from core.utils import FriendlyID
+from core.utils import now
 
 
 class Feed(TimeStampedModel):
@@ -22,6 +23,7 @@ class Feed(TimeStampedModel):
     etag = models.CharField(blank=True, max_length=255)
     href = models.URLField()
     html_href = models.URLField(blank=True)
+    last_fetch = models.DateTimeField(default=now)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
     uid = models.CharField(blank=True, max_length=255, unique=True)

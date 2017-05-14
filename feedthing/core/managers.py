@@ -10,6 +10,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 
 import feedparser
 
+from .utils import now
 from .utils import struct_time_to_datetime
 from feeds.models import Feed
 
@@ -56,7 +57,9 @@ class FeedDataManager:
 
         logger.debug('Sending request to {}'.format(self._href))
         self.data = feedparser.parse(self._href, agent=settings.USER_AGENT_STR)
-        logger.debug('feedparser returns with status {}'.format(self.data.status))
+        
+        if 'status' in self.data:
+            logger.debug('feedparser returns with status {}'.format(self.data.status))
 
         return self.data
 
@@ -68,6 +71,7 @@ class FeedDataManager:
             'etag': data.get('etag', ''),
             'href': self._href,
             'html_href': self._get_html_href(data),
+            'last_fetch': now(),
             'last_modified': self._get_last_modified(data),
             'title': data['feed'].get('title', ''),
             'user': self.user

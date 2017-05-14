@@ -16,12 +16,11 @@
         </div>
     </section>
     {% if feeds %}
-        <ul>
-            {% for feed in feeds %}
-                <li>
-                    <a href="{% url 'feeds:detail' feed.uid %}">{{ feed.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% for feed in feeds %}
+            <div class="entry">
+                <a title="{{ feed.title }}" class="entry-title" href="{% url 'feeds:detail' feed.uid %}">{{ feed.title }}</a>
+                <span title="{{ feed.last_fetch }}" class="time-since">{{ feed.natural_last_fetch }}</span>
+            </div>
+        {% endfor %}
     {% endif %}
 {% endblock %}

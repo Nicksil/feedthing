@@ -26,6 +26,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
     entries = EntryNestedHyperlinkedIdentityField(many=True, required=False)
+    natural_last_fetch = serializers.SerializerMethodField()
     url = serializers.HyperlinkedIdentityField(
         lookup_field='uid',
         lookup_url_kwarg='feed_uid',
@@ -34,10 +35,13 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        extra_kwargs = {'uid': {'read_only': True}}
+        extra_kwargs = {
+            'last_fetch': {'read_only': True},
+            'uid': {'read_only': True}
+        }
         fields = (
-            'entries', 'etag', 'href', 'html_href',
-            'last_modified', 'title', 'uid', 'url', 'user'
+            'entries', 'etag', 'href', 'html_href', 'last_fetch', 'last_modified',
+            'natural_last_fetch', 'title', 'uid', 'url', 'user'
         )
         model = Feed
 
@@ -48,3 +52,6 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             context={'request': self.context['request']},
             many=True).data
         return representation
+
+    def get_natural_last_fetch(self, feed):
+        return time_since(feed.last_fetch)
