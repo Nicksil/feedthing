@@ -41,12 +41,12 @@ def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> dat
 
 def time_since(dt: datetime.datetime):
     dt = ensure_aware(dt)
-    now = ensure_aware(datetime.datetime.now())
+    _now = ensure_aware(datetime.datetime.now())
 
-    delta = now - dt
+    delta = _now - dt
 
     if delta.days == 0:
-        return '{}hr'.format(int(delta.total_seconds() / 60 / 60))
+        return '{}h'.format(int(delta.total_seconds() / 60 / 60))
     return '{}d'.format(int(delta.total_seconds() / 60 / 60 / 24))
 
 

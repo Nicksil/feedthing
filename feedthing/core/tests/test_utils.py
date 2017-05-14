@@ -4,7 +4,7 @@ import time
 from django.test import TestCase
 from django.utils import timezone
 
-from ..utils import ensure_aware, struct_time_to_datetime, FriendlyID
+from ..utils import ensure_aware, struct_time_to_datetime, FriendlyID, now, time_since
 
 
 class CoreUtilsTestCase(TestCase):
@@ -63,3 +63,21 @@ class CoreUtilsTestCase(TestCase):
     def test_FriendlyID_encode_classmethod_returns_None_when_given_number_less_than_zero(self):
         none_id = FriendlyID.encode(-1)
         self.assertIsNone(none_id)
+
+    def test_now_returns_aware_datetime_object(self):
+        _now = now()
+        self.assertIsNotNone(_now.utcoffset())
+
+    def test_now_returns_naive_datetime_object(self):
+        _now = now(aware=False)
+        self.assertIsNone(_now.utcoffset())
+
+    def test_time_since_returns_correct_string_for_hours_elapsed(self):
+        then = datetime.datetime.now() - datetime.timedelta(hours=3)
+        result = time_since(then)
+        self.assertEqual(result, '3h')
+
+    def test_time_since_returns_correct_string_for_days_elapsed(self):
+        then = datetime.datetime.now() - datetime.timedelta(days=3)
+        result = time_since(then)
+        self.assertEqual(result, '3d')
