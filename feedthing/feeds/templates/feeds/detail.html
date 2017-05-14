@@ -6,12 +6,10 @@
             <h3 class="header">{{ feed.title }}</h3>
         </div>
     </section>
-    <div class="thing-cont">
-        {% for entry in feed.entries %}
-            <div class="entry">
-                <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}">{{ entry.title }}</a>
-                <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
-            </div>
-        {% endfor %}
-    </div>
+    {% for entry in feed.entries %}
+        <div class="entry">
+            <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}">{{ entry.title }}</a>
+            <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
+        </div>
+    {% endfor %}
 {% endblock %}
