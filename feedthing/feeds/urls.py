@@ -4,6 +4,16 @@ from . import views
 
 urlpatterns = [
     url(
+        r'^$',
+        views.index,
+        name='index'
+    ),
+    url(
+        r'^add/$',
+        views.add_feed,
+        name='add_feed'
+    ),
+    url(
         r'^(?P<feed_uid>[^/]+)/$',
         views.detail,
         name='detail'
@@ -23,9 +33,4 @@ urlpatterns = [
         views.update,
         name='update'
     ),
-    url(
-        r'^$',
-        views.index,
-        name='index'
-    )
 ]

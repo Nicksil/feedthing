@@ -3,7 +3,7 @@
 {% block body %}
     <section class="row">
         <div class="col">
-            <form action="{% url 'feeds:index' %}" method="POST">
+            <form action="{% url 'feeds:add_feed' %}" method="POST">
                 {% csrf_token %}
                 <section class="row">
                     <div class="col">

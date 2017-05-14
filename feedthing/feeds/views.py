@@ -9,8 +9,6 @@ from api.endpoints.feed_index import FeedIndexEndpoint
 
 @login_required
 def index(request):
-    if request.method == 'POST':
-        return add_feed(request)
     return render(request, 'feeds/index.html', {
         'feeds': FeedIndexEndpoint.as_view()(request).data
     })
