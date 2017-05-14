@@ -11,23 +11,26 @@ footer {
     width: 100%;
 }
 
-.entry-table {
-    table-layout: fixed;
+.entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.entry-table td {
-    overflow: hidden;
-    padding-bottom: 0;
-    padding-top: 0;
-    text-overflow: ellipsis;
+.entry-title {
     white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    padding-right: 10px;
 }
 
-.entry-table td:last-child {
-    width: 155px;
-    text-align: right;
+.time-since {
+    color: #a4a4a4;
+    font-weight: 200;
+    font-size: 1rem;
 }
 
-.no-margin {
-    margin: 0;
+.header {
+    font-weight: 200;
 }

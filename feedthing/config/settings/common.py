@@ -2,6 +2,11 @@ import os
 
 from django.urls import reverse_lazy
 
+from config import __version__
+
+DEBUG = False
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 AUTH_USER_MODEL = 'users.User'
 
 PROJECT_DIR = os.path.dirname(
@@ -13,9 +18,6 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 ALLOWED_HOSTS = []
-DEBUG = False
-SECRET_KEY = os.getenv('SECRET_KEY')
-
 ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -30,6 +32,8 @@ LOGIN_REDIRECT_URL = reverse_lazy('feeds:index')
 
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'staticfiles'),)
 STATIC_URL = '/static/'
+
+USER_AGENT_STR = 'Feedthing/{} testing'.format(__version__)
 
 DJANGO_APPS = (
     'django.contrib.admin',
@@ -116,10 +120,42 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'sentry.api.permissions.NoPermission',
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s '
+                      '%(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        }
+    },
+    'loggers': {
+        'django': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': True
+        },
+        'core': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': True
+        }
+    }
 }

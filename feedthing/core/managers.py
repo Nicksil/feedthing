@@ -3,13 +3,17 @@ from typing import Optional
 from typing import Type
 from typing import Union
 import datetime
+import logging
 
+from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 
 import feedparser
 
 from .utils import struct_time_to_datetime
 from feeds.models import Feed
+
+logger = logging.getLogger(__name__)
 
 
 class FeedDataManager:
@@ -47,8 +51,12 @@ class FeedDataManager:
                 kwargs['etag'] = self.feed.etag
             elif self.feed.last_modified:
                 kwargs['modified'] = str(self.feed.last_modified)
+            else:
+                logger.debug('No etag, last_modified values for {}'.format(repr(self.feed)))
 
-        self.data = feedparser.parse(self._href)
+        logger.debug('Sending request to {}'.format(self._href))
+        self.data = feedparser.parse(self._href, agent=settings.USER_AGENT_STR)
+        logger.debug('feedparser returns with status {}'.format(self.data.status))
 
         return self.data
 

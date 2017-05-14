@@ -1,8 +1,7 @@
-from django.utils.timesince import timesince
-
 from rest_framework import serializers
 
 from ..fields import NestedHyperlinkedIdentityField
+from core.utils import time_since
 from feeds.models import Entry
 from feeds.models import Feed
 
@@ -22,7 +21,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
         model = Entry
 
     def get_natural_published(self, obj):
-        return timesince(obj.published)
+        return time_since(obj.published)
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):

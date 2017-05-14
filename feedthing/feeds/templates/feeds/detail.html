@@ -1,37 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <table class="table entry-table">
-        <caption>
-            {% if feed.html_href %}
-                <a target="_blank" rel="noopener noreferrer" href="{{ feed.html_href }}">{{ feed.title }}</a>
-            {% else %}
-                {{ feed.title }}
-            {% endif %}
-        </caption>
-        <tbody>
-            {% if feed.entries %}
-                <tr>
-                <td colspan="2" style="text-align: right">
-                    <form action="{% url 'feeds:update' feed.uid %}" method="POST">
-                        {% csrf_token %}
-                        <button class="outline" type="submit">Update</button>
-                    </form>
-                </td>
-                </tr>
-                {% for entry in feed.entries %}
-                    <tr>
-                        <td>
-                            <a target="_blank" rel="noopener noreferrer" href="{{ entry.href }}" class="entry" title="{{ entry.title }}">
-                                {{ entry.title }}
-                            </a>
-                        </td>
-                        <td title="{{ entry.published }}">
-                            {{ entry.natural_published }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+    <section class="row">
+        <div class="col">
+            <h3 class="header">{{ feed.title }}</h3>
+        </div>
+    </section>
+    <div class="thing-cont">
+        {% for entry in feed.entries %}
+            <div class="entry">
+                <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}">{{ entry.title }}</a>
+                <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
