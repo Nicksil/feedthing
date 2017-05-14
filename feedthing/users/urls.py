@@ -2,11 +2,12 @@ from django.conf.urls import url
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import logout
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 
 
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect(reverse_lazy('users:login'))
 
 
 urlpatterns = [
