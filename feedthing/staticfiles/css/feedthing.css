@@ -1,3 +1,7 @@
+a:visited {
+    color: maroon;
+}
+
 footer {
     height: 25px;
     width: 100%;
@@ -8,9 +12,16 @@ footer {
 }
 
 .entry-table td {
-    white-space: nowrap;
     overflow: hidden;
+    padding-bottom: 0;
+    padding-top: 0;
     text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.entry-table td:last-child {
+    width: 155px;
+    text-align: right;
 }
 
 .no-margin {

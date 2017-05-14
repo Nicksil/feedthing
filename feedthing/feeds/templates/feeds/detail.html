@@ -4,13 +4,21 @@
     <table class="table entry-table">
         <caption>
             {% if feed.html_href %}
-                <a href="{{ feed.html_href }}">{{ feed.title }}</a>
+                <a target="_blank" rel="noopener noreferrer" href="{{ feed.html_href }}">{{ feed.title }}</a>
             {% else %}
                 {{ feed.title }}
             {% endif %}
         </caption>
         <tbody>
             {% if feed.entries %}
+                <tr>
+                <td colspan="2" style="text-align: right">
+                    <form action="{% url 'feeds:update' feed.uid %}" method="POST">
+                        {% csrf_token %}
+                        <button class="outline" type="submit">Update</button>
+                    </form>
+                </td>
+                </tr>
                 {% for entry in feed.entries %}
                     <tr>
                         <td>
@@ -18,7 +26,7 @@
                                 {{ entry.title }}
                             </a>
                         </td>
-                        <td title="{{ entry.published }}" class="right">
+                        <td title="{{ entry.published }}">
                             {{ entry.natural_published }}
                         </td>
                     </tr>

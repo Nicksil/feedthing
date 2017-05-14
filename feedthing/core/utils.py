@@ -10,6 +10,16 @@ import time
 from django.utils import timezone
 
 
+def ensure_aware(dt):
+    """Will convert datetime.datetime instance from naive into aware,
+    or return if instance is already aware.
+    """
+    if timezone.is_aware(dt):
+        return dt
+
+    return timezone.make_aware(dt)
+
+
 def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> datetime.datetime:
     """Will convert time.struct_time instance to datetime.datetime object. Will return
     aware datetime object unless aware = False (default is True).
@@ -22,16 +32,6 @@ def struct_time_to_datetime(s_time: time.struct_time, aware: bool = True) -> dat
         return ensure_aware(dt)
 
     return dt
-
-
-def ensure_aware(dt):
-    """Will convert datetime.datetime instance from naive into aware,
-    or return if instance is already aware.
-    """
-    if timezone.is_aware(dt):
-        return dt
-
-    return timezone.make_aware(dt)
 
 
 class FriendlyID:

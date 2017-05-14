@@ -1,4 +1,5 @@
-from django.contrib.humanize.templatetags.humanize import naturaltime
+from django.utils.timesince import timesince
+
 from rest_framework import serializers
 
 from ..fields import NestedHyperlinkedIdentityField
@@ -21,7 +22,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
         model = Entry
 
     def get_natural_published(self, obj):
-        return naturaltime(obj.published)
+        return timesince(obj.published)
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,3 +41,11 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             'last_modified', 'title', 'uid', 'url', 'user'
         )
         model = Feed
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['entries'] = EntrySerializer(
+            instance.entries.all(),
+            context={'request': self.context['request']},
+            many=True).data
+        return representation
