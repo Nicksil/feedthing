@@ -3,12 +3,15 @@
 {% block body %}
     <section class="row">
         <div class="col">
-            <h3 class="header">{{ feed.title }}</h3>
+            <h3 class="header feed-detail-header">{{ feed.title }}</h3>
+            <nav class="nav feed-detail-options">
+                <a class="nav-item" href="{% url 'feeds:delete' feed.uid %}">delete</a>
+            </nav>
         </div>
     </section>
     {% for entry in feed.entries %}
         <div class="entry">
-            <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}">{{ entry.title }}</a>
+            <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
             <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
         </div>
     {% endfor %}

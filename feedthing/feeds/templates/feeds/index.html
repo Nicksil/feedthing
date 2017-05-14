@@ -18,11 +18,7 @@
     {% if feeds %}
         {% for feed in feeds %}
             <div class="entry">
-                <form action="{% url 'feeds:delete' feed.uid %}" method="POST">
-                    {% csrf_token %}
-                    <button title="DELETE this feed" class="outline small" type="submit">X</button>
-                    <a title="{{ feed.title }}" class="entry-title" href="{% url 'feeds:detail' feed.uid %}">{{ feed.title }}</a>
-                </form>
+                <a title="{{ feed.title }}" class="entry-title" href="{% url 'feeds:detail' feed.uid %}" target="_blank" rel="noopener noreferrer">{{ feed.title }}</a>
                 <span title="{{ feed.last_fetch }}" class="time-since">{{ feed.natural_last_fetch }}</span>
             </div>
         {% endfor %}
