@@ -83,3 +83,19 @@ class APIEntryEndpointsTestCase(TestCase):
 
         self.test_entry.refresh_from_db()
         self.assertEqual(self.test_entry.href, data['href'])
+
+    def test_index_endpoint_GET_request_returns_entry_objects(self):
+        url = reverse(
+            'feedthing-api-v1-entry-index',
+            kwargs={'feed_uid': self.test_feed.uid}
+        )
+        self.client.login(
+            email=self.simple_user.email,
+            password=self.simple_user_pw,
+        )
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+        self.assertIn(self.test_entry.uid, [e['uid'] for e in response.data])
