@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <section class="row">
+        <div class="col">
+            <form action="{% url 'feeds:edit' feed.uid %}" method="POST">
+                {% csrf_token %}
+                <label for="id_title">Title</label>
+                <input name="title" id="id_title" type="text" value="{{ feed.title }}" autofocus required>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}

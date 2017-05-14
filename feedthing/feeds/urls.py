@@ -14,6 +14,11 @@ urlpatterns = [
         name='delete'
     ),
     url(
+        r'^(?P<feed_uid>[^/]+)/edit/$',
+        views.edit,
+        name='edit'
+    ),
+    url(
         r'^(?P<feed_uid>[^/]+)/update/$',
         views.update,
         name='update'

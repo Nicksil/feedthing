@@ -45,18 +45,18 @@ class FeedDataManager:
         return mgr.to_internal()
 
     def fetch_data(self) -> feedparser.FeedParserDict:
-        kwargs = {}
+        kwargs = {'agent': settings.USER_AGENT_STR}
 
         if self.feed:
             if self.feed.etag:
                 kwargs['etag'] = self.feed.etag
             elif self.feed.last_modified:
-                kwargs['modified'] = str(self.feed.last_modified)
+                kwargs['modified'] = self.feed.last_modified.isoformat()
             else:
                 logger.debug('No etag, last_modified values for {}'.format(repr(self.feed)))
 
         logger.debug('Sending request to {}'.format(self._href))
-        self.data = feedparser.parse(self._href, agent=settings.USER_AGENT_STR)
+        self.data = feedparser.parse(self._href, **kwargs)
 
         if 'status' in self.data:
             logger.debug('feedparser returns with status {}'.format(self.data.status))

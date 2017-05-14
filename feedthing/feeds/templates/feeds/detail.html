@@ -6,6 +6,7 @@
             <h3 class="header feed-detail-header">{{ feed.title }}</h3>
             <nav class="nav feed-detail-options">
                 <a class="nav-item" href="{% url 'feeds:update' feed.uid %}">refresh</a>
+                <a class="nav-item" href="{% url 'feeds:edit' feed.uid %}">edit</a>
                 <a class="nav-item danger" href="{% url 'feeds:delete' feed.uid %}">delete</a>
             </nav>
         </div>
