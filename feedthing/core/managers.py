@@ -73,7 +73,7 @@ class FeedDataManager:
             'html_href': self._get_html_href(data),
             'last_fetch': now(),
             'last_modified': self._get_last_modified(data),
-            'title': data['feed'].get('title', ''),
+            'title': data['feed'].get('title', 'NO TITLE'),
             'user': self.user
         }
 
@@ -125,7 +125,7 @@ class EntryDataManager:
             'feed': self.feed,
             'href': self._get_href(),
             'published': self._get_published(),
-            'title': self.data.get('title', '')
+            'title': self.data.get('title', 'NO TITLE')
         }
 
     @classmethod

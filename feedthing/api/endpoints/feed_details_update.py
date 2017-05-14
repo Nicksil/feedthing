@@ -14,8 +14,14 @@ class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
         feed_data = mgr.fetch_data()
         parsed = mgr.to_internal(feed_data)
 
+        title = parsed.pop('title', '')
+
         for k, v in parsed.items():
             setattr(feed, k, v)
+
+        if not feed.title:
+            feed.title = title
+
         feed.save()
 
         entries = mgr.entries

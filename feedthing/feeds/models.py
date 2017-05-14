@@ -29,7 +29,6 @@ class Feed(TimeStampedModel):
     uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
-        ordering = ('title',)
         unique_together = (('href', 'user'),)
 
     def save(self, *args, **kwargs):

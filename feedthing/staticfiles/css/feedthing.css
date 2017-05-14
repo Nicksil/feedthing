@@ -7,6 +7,10 @@ footer {
     width: 100%;
 }
 
+.danger {
+    color: red;
+}
+
 .feed-detail-header {
     margin-bottom: 0;
 }
