@@ -1,12 +1,10 @@
 from typing import List
 from typing import Optional
-from typing import Type
 from typing import Union
 import datetime
 import logging
 
 from django.conf import settings
-from django.contrib.auth.base_user import AbstractBaseUser
 
 import feedparser
 
@@ -17,34 +15,66 @@ from feeds.models import Feed
 logger = logging.getLogger(__name__)
 
 
-class FeedDataManager:
-    def __init__(self,
-                 href: Optional[str] = None,
-                 feed: Optional[Feed] = None,
-                 user: Type[AbstractBaseUser] = None
-                 ) -> None:
-        self.data = feedparser.FeedParserDict()
+class FeedManager:
+    def __init__(self, feed=None, href=None):
+        self._href = href
+        self.data = None
         self.feed = feed
-        self.href = href
-        self.user = user
 
     @property
-    def entries(self) -> list:
-        if self.data and self.data.entries:
+    def entries(self):
+        if self.data and 'entries' in self.data:
             return EntryDataManager.parse(self.data.entries, self.feed, many=True)
         return []
 
-    @classmethod
-    def fetch(cls,
-              href: Optional[str] = None,
-              feed: Optional[Feed] = None,
-              user: Type[AbstractBaseUser] = None
-              ) -> dict:
-        mgr = cls(href, feed=feed, user=user)
-        mgr.fetch_data()
-        return mgr.to_internal()
+    @property
+    def href(self):
+        # Fresh data will have most up-to-date
+        if self.data and 'href' in self.data:
+            return self.data['href']
 
-    def fetch_data(self) -> feedparser.FeedParserDict:
+        # Check if user supplied
+        if self._href:
+            return self._href
+
+        # Try the Feed if given
+        if self.feed and self.feed.href:
+            return self.feed.href
+
+        # Finally, there's no way to ascertain an href value.
+        raise ValueError('Could not ascertain href.')
+
+    @property
+    def html_href(self):
+        if self.data:
+            links = self.data['feed'].get('links', [])
+            for link in links:
+                if link['rel'] == 'alternate' and link['type'] == 'text/html':
+                    return link['href']
+
+        if self.feed and self.feed.html_href:
+            return self.feed.html_href
+
+        # There's not always going to be and html href w/in a feedparser payload.
+        # And we don't need the value to complete any work.
+        # Don't want to raise an exception right now, just return an empty string
+        return ''
+
+    @property
+    def title(self):
+        if self.data and 'feed' in self.data and 'title' in self.data.feed:
+            return self.data.feed.title
+
+        if self.feed:
+            return self.feed.title
+
+        return '<NO_TITLE>'
+
+    def create(self):
+        kwargs = self.build_request_kwargs()
+        self.data = self.fetch_source(**kwargs)
+
+    def build_request_kwargs(self):
         kwargs = {'agent': settings.USER_AGENT_STR}
 
         if self.feed:
@@ -52,67 +82,21 @@ class FeedDataManager:
                 kwargs['etag'] = self.feed.etag
             elif self.feed.last_modified:
                 kwargs['modified'] = self.feed.last_modified.isoformat()
-            else:
-                logger.debug('No etag, last_modified values for {}'.format(repr(self.feed)))
 
-        logger.debug('Sending request to {}'.format(self._href))
-        self.data = feedparser.parse(self._href, **kwargs)
+        return kwargs
 
-        if 'status' in self.data:
-            logger.debug('feedparser returns with status {}'.format(self.data.status))
+    def fetch_source(self, **kwargs):
+        return feedparser.parse(self.href, **kwargs)
 
-        return self.data
-
-    def to_internal(self, data: Optional[feedparser.FeedParserDict] = None) -> dict:
-        if data is None:
-            data = self.data
-
+    def to_internal(self, data):
         return {
+            'entries': self.entries,
             'etag': data.get('etag', ''),
-            'href': self._href,
-            'html_href': self._get_html_href(data),
+            'href': self.href,
+            'html_href': self.html_href,
             'last_fetch': now(),
-            'last_modified': self._get_last_modified(data),
-            'title': data['feed'].get('title', 'NO TITLE'),
-            'user': self.user
+            'title': self.title,
         }
-
-    def _get_html_href(self, data: Optional[feedparser.FeedParserDict] = None) -> str:
-        if data is None:
-            data = self.data
-
-        links = data['feed'].get('links', [])
-
-        for link in links:
-            if link['rel'] == 'alternate' and link['type'] == 'text/html':
-                return link['href']
-
-        return ''
-
-    def _get_last_modified(self, data: Optional[feedparser.FeedParserDict] = None) -> Optional[datetime.datetime]:
-        if data is None:
-            data = self.data
-
-        last_modified = data.get('modified_parsed', None)
-
-        if last_modified is not None:
-            return struct_time_to_datetime(last_modified)
-
-        return None
-
-    @property
-    def _href(self):
-        if self.href:
-            return self.href
-
-        if self.feed and self.feed.href:
-            return self.feed.href
-
-        if not self.href and not self.feed:
-            raise RuntimeError(
-                'Must provide either a valid ``href<str>`` or'
-                '``feed<Feed>`` with valid href attribute.'
-            )
 
 
 class EntryDataManager:

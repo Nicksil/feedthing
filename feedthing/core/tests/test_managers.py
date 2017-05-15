@@ -9,7 +9,7 @@ from django.test import TestCase
 import feedparser
 
 from feeds.tests.factories import FeedFactory
-from ..managers import FeedDataManager, EntryDataManager
+from ..managers import FeedManager, EntryDataManager
 
 
 def get_feedparser_parsed():
@@ -29,7 +29,7 @@ class CoreManagersTestCase(TestCase):
     def test_FeedDataManager_fetch_data_returns_FeedParserDict(self, parse):
         parse.return_value = self.feedparserdict
 
-        mgr = FeedDataManager(href='https://example.com')
+        mgr = FeedManager(href='https://example.com')
         result = mgr.fetch_data()
 
         self.assertIsInstance(result, feedparser.FeedParserDict)
@@ -38,7 +38,7 @@ class CoreManagersTestCase(TestCase):
     def test_FeedDataManager_to_internal_returns_dict(self, parse):
         parse.return_value = self.feedparserdict
 
-        mgr = FeedDataManager(href='https://example.com')
+        mgr = FeedManager(href='https://example.com')
         data = mgr.fetch_data()
         result = mgr.to_internal(data)
 
@@ -48,7 +48,7 @@ class CoreManagersTestCase(TestCase):
     def test_FeedDataManager_fetch_classmethod_returns_dict(self, parse):
         parse.return_value = self.feedparserdict
 
-        result = FeedDataManager.fetch(href='https://example.com')
+        result = FeedManager.fetch(href='https://example.com')
 
         self.assertIsInstance(result, dict)
 
@@ -56,19 +56,19 @@ class CoreManagersTestCase(TestCase):
         fake = feedparser.FeedParserDict()
         fake['modified_parsed'] = time.localtime()
 
-        mgr = FeedDataManager()
+        mgr = FeedManager()
         result = mgr._get_last_modified(fake)
 
         self.assertIsInstance(result, datetime.datetime)
 
     def test_FeedDataManager_get_last_modified_returns_None_when_key_does_not_exist(self):
-        mgr = FeedDataManager()
+        mgr = FeedManager()
         result = mgr._get_last_modified()
 
         self.assertIsNone(result)
 
     def test_FeedDataManager_href_property_raises_RuntimeError_when_no_href_or_feed_object_given(self):
-        mgr = FeedDataManager()
+        mgr = FeedManager()
 
         with self.assertRaises(RuntimeError):
             # noinspection PyStatementEffect
@@ -76,20 +76,20 @@ class CoreManagersTestCase(TestCase):
 
     def test_FeedDataManager_href_property_returns_correct_value_when_href_given_at_init(self):
         fake_href = 'https://example.com'
-        mgr = FeedDataManager(href=fake_href)
+        mgr = FeedManager(href=fake_href)
 
         self.assertEqual(mgr._href, fake_href)
 
     def test_FeedDataManager_href_property_returns_correct_value_when_feed_object_given_at_init(self):
         fake_feed = FeedFactory()
-        mgr = FeedDataManager(feed=fake_feed)
+        mgr = FeedManager(feed=fake_feed)
 
         self.assertEqual(mgr._href, fake_feed.href)
 
     def test_FeedDataManager_href_property_returns_correct_value_when_both_href_and_feed_object_given(self):
         fake_feed = FeedFactory()
         fake_href = 'https://example.com'
-        mgr = FeedDataManager(feed=fake_feed, href=fake_href)
+        mgr = FeedManager(feed=fake_feed, href=fake_href)
 
         self.assertEqual(mgr._href, fake_href)
 
@@ -97,14 +97,14 @@ class CoreManagersTestCase(TestCase):
     def test_FeedDataManager_entries_property_call_returns_list(self, parse):
         parse.return_value = self.feedparserdict
 
-        mgr = FeedDataManager(href='https://example.com')
+        mgr = FeedManager(href='https://example.com')
         mgr.fetch_data()
         result = mgr.entries
 
         self.assertIsInstance(result, list)
 
     def test_FeedDataManager_entries_property_call_returns_empty_list(self):
-        mgr = FeedDataManager()
+        mgr = FeedManager()
         result = mgr.entries
 
         self.assertEqual(len(result), 0)
@@ -152,7 +152,7 @@ class CoreManagersTestCase(TestCase):
     def test_EntryDataManager_parse_classmethod_raise_TypeError_when_called_with_many_is_True_and_passing_in_single_item(self, parse):
         parse.return_value = self.feedparserdict
 
-        feed_mgr = FeedDataManager(href='https://example.com')
+        feed_mgr = FeedManager(href='https://example.com')
         feed_mgr.fetch_data()
 
         with self.assertRaises(TypeError):

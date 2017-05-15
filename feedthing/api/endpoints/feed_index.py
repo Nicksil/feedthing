@@ -2,7 +2,7 @@ from rest_framework.response import Response
 
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
-from core.managers import FeedDataManager
+from core.managers import FeedManager
 from feeds.models import Entry
 
 
@@ -15,7 +15,7 @@ class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
         query_dict = request.data.copy()
 
         href = request.data.get('href')
-        mgr = FeedDataManager(href)
+        mgr = FeedManager(href)
         qs = self.get_queryset()
 
         if href and not qs.filter(href=href).exists():

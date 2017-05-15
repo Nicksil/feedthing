@@ -4,12 +4,12 @@ from rest_framework.response import Response
 
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
-from core.managers import FeedDataManager
+from core.managers import FeedManager
 from feeds.models import Entry
 
 
 def _handle(feed, user):
-    mgr = FeedDataManager(feed=feed, user=user)
+    mgr = FeedManager(feed=feed, user=user)
     feed_data = mgr.fetch_data()
     parsed = mgr.to_internal(feed_data)
 
