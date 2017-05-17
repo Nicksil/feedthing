@@ -1,10 +1,8 @@
 .DEFAULT_GOAL := ,noop
-.PHONY: clean-coverage clean-pyc clean-pycache coverage-html \
-		coverage-html-browser docs makemigrations-all migrate-all run \
-		test test-all test-all-withcoverage ,noop ,resetdb
+.PHONY: docs
 
-HOST=0.0.0.0
 MANAGE=feedthing/manage.py
+HOST=0.0.0.0
 PORT=8000
 
 clean-coverage:
@@ -22,6 +20,10 @@ coverage-html:
 
 coverage-html-browser: coverage-html
 	python -m webbrowser -t file://$(PWD)/htmlcov/index.html
+
+createuser:
+	@echo $(1)
+#	$(MANAGE) runserver $(HOST):$(PORT)
 
 docs:
 	cd docs && make html
@@ -44,8 +46,4 @@ test-all-withcoverage: clean-pyc clean-pycache clean-coverage
 test: test-all
 
 ,noop:
-	@echo 'noop'
-
-,resetdb:
-	dropdb feedthing
-	createdb feedthing
+	@echo noop

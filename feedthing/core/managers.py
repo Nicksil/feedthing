@@ -8,6 +8,10 @@ from django.conf import settings
 
 import feedparser
 
+from .descriptors import DateTime
+from .descriptors import String
+from .descriptors import URL
+from .descriptors import User
 from .utils import now
 from .utils import struct_time_to_datetime
 from feeds.models import Feed
@@ -16,63 +20,89 @@ logger = logging.getLogger(__name__)
 
 
 class FeedManager:
-    def __init__(self, feed=None, href=None):
-        self._href = href
+    etag = String('etag', default='')
+    href = URL('href')
+    html_href = URL('html_href', default='')
+    last_fetch = DateTime('last_fetch')
+    title = String('title', default='<NO_TITLE>')
+    user = User('user')
+
+    def __init__(self, feed=None, href=None, user=None):
+        # We must have an href value if we're going to query an API
+        # We can ascertain a href value from either a Feed object or
+        # href parameter.
+        if not feed and not href:
+            raise ValueError('Must provide a Feed object or an href value.')
+
         self.data = None
         self.feed = feed
 
-    @property
-    def entries(self):
-        if self.data and 'entries' in self.data:
-            return EntryDataManager.parse(self.data.entries, self.feed, many=True)
-        return []
+    # @property
+    # def etag(self):
+    #     if self.data and 'etag' in self.data:
+    #         return self.data.etag
+    #
+    #     if self.feed:
+    #         return self.feed.etag
+    #
+    #     return ''
 
-    @property
-    def href(self):
-        # Fresh data will have most up-to-date
-        if self.data and 'href' in self.data:
-            return self.data['href']
+    # @property
+    # def href(self):
+    #     # Fresh data will have most up-to-date
+    #     if self.data and 'href' in self.data:
+    #         return self.data['href']
+    #
+    #     # Check if user supplied
+    #     if self._href:
+    #         return self._href
+    #
+    #     # If we're here, there must be a Feed object
+    #     return self.feed.href
 
-        # Check if user supplied
-        if self._href:
-            return self._href
-
-        # Try the Feed if given
-        if self.feed and self.feed.href:
-            return self.feed.href
-
-        # Finally, there's no way to ascertain an href value.
-        raise ValueError('Could not ascertain href.')
-
-    @property
-    def html_href(self):
-        if self.data:
-            links = self.data['feed'].get('links', [])
-            for link in links:
-                if link['rel'] == 'alternate' and link['type'] == 'text/html':
-                    return link['href']
-
-        if self.feed and self.feed.html_href:
-            return self.feed.html_href
+    # @property
+    # def html_href(self):
+    #     if self.data:
+    #         links = self.data['feed'].get('links', [])
+    #         for link in links:
+    #             if link['rel'] == 'alternate' and link['type'] == 'text/html':
+    #                 return link['href']
+    #
+    #     if self.feed and self.feed.html_href:
+    #         return self.feed.html_href
 
         # There's not always going to be and html href w/in a feedparser payload.
         # And we don't need the value to complete any work.
         # Don't want to raise an exception right now, just return an empty string
-        return ''
+        # return ''
 
-    @property
-    def title(self):
-        if self.data and 'feed' in self.data and 'title' in self.data.feed:
-            return self.data.feed.title
+    # @property
+    # def last_fetch(self):
+    #     if self.data:
+    #         return now()
+    #
+    #     if self.feed:
+    #         return self.feed.last_fetch
+    #
+    #     return None
 
-        if self.feed:
-            return self.feed.title
+    # @property
+    # def title(self):
+    #     if self.data and 'feed' in self.data and 'title' in self.data.feed:
+    #         return self.data.feed.title
+    #
+    #     if self.feed:
+    #         return self.feed.title
+    #
+    #     return '<NO_TITLE>'
 
-        return '<NO_TITLE>'
-
-    def create(self):
-        kwargs = self.build_request_kwargs()
-        self.data = self.fetch_source(**kwargs)
+    # @property
+    # def user(self):
+    #     if self._user:
+    #         return self._user
+    #     if self.feed:
+    #         return self.feed.user
+    #     return None
 
     def build_request_kwargs(self):
         kwargs = {'agent': settings.USER_AGENT_STR}
@@ -85,17 +115,25 @@ class FeedManager:
 
         return kwargs
 
+    def create(self):
+        assert self.user is not None, 'Must have a User object to create a new Feed record.'
+
+        kwargs = self.build_request_kwargs()
+        self.data = self.fetch_source(**kwargs)
+        return Feed.objects.create(**self.to_internal())
+
     def fetch_source(self, **kwargs):
         return feedparser.parse(self.href, **kwargs)
 
-    def to_internal(self, data):
+    def to_internal(self):
         return {
-            'entries': self.entries,
-            'etag': data.get('etag', ''),
+            # 'entries': self.entries,
+            'etag': self.etag,
             'href': self.href,
             'html_href': self.html_href,
-            'last_fetch': now(),
+            'last_fetch': self.last_fetch,
             'title': self.title,
+            'user': self.user
         }
 
 
