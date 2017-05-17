@@ -21,6 +21,7 @@ TODO
 - Add feature to use OPML file for adding feeds
 - Add feature allowing multiple feed URLs in a single request
 - Add feature to read contents of entry (currently just providing link to external source)
+
     - If above, look into reader-friendly styles/packages.
 
 
