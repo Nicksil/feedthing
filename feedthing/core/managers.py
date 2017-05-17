@@ -36,6 +36,20 @@ class FeedManager:
 
         self.data = None
         self.feed = feed
+        self._set_href(feed, href)
+
+    def create(self):
+        assert self.user is not None, 'Must have a User object to create a new Feed record.'
+
+        kwargs = self.build_request_kwargs()
+        self.data = self.fetch_source(**kwargs)
+        return Feed.objects.create(**self.to_internal())
+
+    def _set_href(self, feed, href):
+        if href:
+            self.href = href
+        else:
+            self.href = feed.href
 
     # @property
     # def etag(self):
@@ -104,37 +118,31 @@ class FeedManager:
     #         return self.feed.user
     #     return None
 
-    def build_request_kwargs(self):
-        kwargs = {'agent': settings.USER_AGENT_STR}
+    # def build_request_kwargs(self):
+    #     kwargs = {'agent': settings.USER_AGENT_STR}
+    #
+    #     if self.feed:
+    #         if self.feed.etag:
+    #             kwargs['etag'] = self.feed.etag
+    #         elif self.feed.last_modified:
+    #             kwargs['modified'] = self.feed.last_modified.isoformat()
+    #
+    #     return kwargs
 
-        if self.feed:
-            if self.feed.etag:
-                kwargs['etag'] = self.feed.etag
-            elif self.feed.last_modified:
-                kwargs['modified'] = self.feed.last_modified.isoformat()
-
-        return kwargs
-
-    def create(self):
-        assert self.user is not None, 'Must have a User object to create a new Feed record.'
-
-        kwargs = self.build_request_kwargs()
-        self.data = self.fetch_source(**kwargs)
-        return Feed.objects.create(**self.to_internal())
-
-    def fetch_source(self, **kwargs):
-        return feedparser.parse(self.href, **kwargs)
-
-    def to_internal(self):
-        return {
-            # 'entries': self.entries,
-            'etag': self.etag,
-            'href': self.href,
-            'html_href': self.html_href,
-            'last_fetch': self.last_fetch,
-            'title': self.title,
-            'user': self.user
-        }
+    #
+    # def fetch_source(self, **kwargs):
+    #     return feedparser.parse(self.href, **kwargs)
+    #
+    # def to_internal(self):
+    #     return {
+    #         # 'entries': self.entries,
+    #         'etag': self.etag,
+    #         'href': self.href,
+    #         'html_href': self.html_href,
+    #         'last_fetch': self.last_fetch,
+    #         'title': self.title,
+    #         'user': self.user
+    #     }
 
 
 class EntryDataManager:

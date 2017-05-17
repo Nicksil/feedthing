@@ -1,15 +1,16 @@
 from unittest import mock
+import datetime
 import os
 import time
 
-import datetime
 from django.conf import settings
 from django.test import TestCase
 
 import feedparser
 
+from ..managers import EntryDataManager
+from ..managers import FeedManager
 from feeds.tests.factories import FeedFactory
-from ..managers import FeedManager, EntryDataManager
 
 
 def get_feedparser_parsed():

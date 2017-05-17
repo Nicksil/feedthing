@@ -2,7 +2,7 @@ from django.http import Http404
 
 from rest_framework.generics import GenericAPIView
 
-from .exceptions import ResourceDoesNotExist
+from core.exceptions import ResourceDoesNotExist
 
 
 class Endpoint(GenericAPIView):

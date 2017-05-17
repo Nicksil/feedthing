@@ -71,12 +71,3 @@ class URL(String):
 
 class User(Typed):
     typ = get_user_model()
-
-
-class FeedManager:
-    etag = String('etag', default='')
-    href = URL('href')
-    html_href = URL('html_href', default='')
-    last_fetch = DateTime('last_fetch')
-    title = String('title', default='<NO_TITLE>')
-    user = User('user')
