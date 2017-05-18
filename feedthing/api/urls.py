@@ -6,18 +6,12 @@ from .endpoints.entry_index import EntryIndexEndpoint
 from .endpoints.feed_details import FeedDetailsEndpoint
 from .endpoints.feed_details_update import FeedDetailsUpdateEndpoint
 from .endpoints.feed_index import FeedIndexEndpoint
-from .endpoints.feed_index_update import FeedIndexUpdateEndpoint
 
 urlpatterns = [
     url(
         r'^feeds/$',
         FeedIndexEndpoint.as_view(),
         name='feedthing-api-v1-feed-index'
-    ),
-    url(
-        r'^feeds/update/$',
-        FeedIndexUpdateEndpoint.as_view(),
-        name='feedthing-api-v1-feed-index-update'
     ),
     url(
         r'^feeds/(?P<feed_uid>[^/]+)/$',
