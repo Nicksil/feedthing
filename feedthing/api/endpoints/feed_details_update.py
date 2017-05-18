@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 
+from feeds.managers import FeedManager
+from feeds.models import Entry
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
-from core.managers import FeedManager
-from feeds.models import Entry
 
 
 class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):

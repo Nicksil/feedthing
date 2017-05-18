@@ -8,13 +8,13 @@ from django.conf import settings
 
 import feedparser
 
-from .descriptors import DateTime
-from .descriptors import String
-from .descriptors import URL
-from .descriptors import User
-from .exceptions import FeedManagerError
-from .utils import now
-from .utils import struct_time_to_datetime
+from core.descriptors import DateTime
+from core.descriptors import String
+from core.descriptors import URL
+from core.descriptors import User
+from core.exceptions import FeedManagerError
+from core.utils import now
+from core.utils import struct_time_to_datetime
 from feeds.models import Feed
 
 logger = logging.getLogger(__name__)

@@ -1,12 +1,11 @@
 import datetime
 import os
 
+import feedparser
 from django.conf import settings
 from django.test import TestCase
 
-import feedparser
-
-from ..managers import EntryDataManager
+from feeds.managers import EntryDataManager
 
 
 def get_feedparser_parsed():

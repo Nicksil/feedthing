@@ -15,7 +15,6 @@ class AutoCreatedField(models.DateTimeField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('editable', False)
         kwargs.setdefault('default', timezone.now)
-
         super(AutoCreatedField, self).__init__(*args, **kwargs)
 
 
@@ -23,5 +22,4 @@ class AutoLastModifiedField(AutoCreatedField):
     def pre_save(self, model_instance, add):
         value = timezone.now()
         setattr(model_instance, self.attname, value)
-
         return value
