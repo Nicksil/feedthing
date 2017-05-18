@@ -1,9 +1,3 @@
-from typing import List
-from typing import Optional
-from typing import Union
-import datetime
-import logging
-
 from django.conf import settings
 
 import feedparser
@@ -15,9 +9,8 @@ from core.descriptors import User
 from core.exceptions import FeedManagerError
 from core.utils import now
 from core.utils import struct_time_to_datetime
+from feeds.models import Entry
 from feeds.models import Feed
-
-logger = logging.getLogger(__name__)
 
 
 class FeedManager:
@@ -70,12 +63,15 @@ class FeedManager:
     def create(self):
         if self.user is None:
             raise FeedManagerError('Must provide a ``User`` object to create a new ``Feed``.')
+
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
-
         self._set_fields(self.data)
+        self.feed = Feed.objects.create(**self.to_dict())
 
-        return Feed.objects.create(**self.to_dict())
+        [Entry.objects.create(**entry) for entry in self._parse_entries()]
+
+        return self.feed
 
     def fetch_source(self, **kwargs):
         return feedparser.parse(self.href, **kwargs)
@@ -101,6 +97,31 @@ class FeedManager:
         # And we don't need the value to complete any work.
         # Don't want to raise an exception right now, just return an empty string
         return ''
+
+    def _parse_entries(self):
+        entries_data = self.data.get('entries', [])
+        entries = []
+        for entry in entries_data:
+            if 'feedburner_origlink' in entry:
+                href = entry['feedburner_origlink']
+            else:
+                href = entry.get('link', '')
+
+            published = None
+
+            if 'published_parsed' in entry:
+                published = entry['published_parsed']
+            elif 'updated_parsed' in entry:
+                published = entry['updated_parsed']
+            if published is not None:
+                published = struct_time_to_datetime(published)
+            entries.append({
+                'feed': self.feed,
+                'href': href,
+                'published': published,
+                'title': entry.get('title', '<NO_TITLE>')
+            })
+        return entries
 
     def _set_fields(self, data):
         _etag = self.etag
@@ -131,56 +152,3 @@ class FeedManager:
         self.last_fetch = _last_fetch
         self.last_modified = _last_modified
         self.title = _title
-
-
-class EntryDataManager:
-    def __init__(self, data: feedparser.FeedParserDict, feed: Optional[Feed] = None) -> None:
-        self.data = data
-        self.feed = feed
-
-    def to_internal(self) -> dict:
-        return {
-            'feed': self.feed,
-            'href': self._get_href(),
-            'published': self._get_published(),
-            'title': self.data.get('title', 'NO TITLE')
-        }
-
-    @classmethod
-    def parse(cls,
-              data: Union[feedparser.FeedParserDict, List[feedparser.FeedParserDict]],
-              feed: Optional[Feed] = None,
-              many: bool = False
-              ) -> Union[dict, List[dict]]:
-        if many:
-            if not isinstance(data, list):
-                raise TypeError('data should be a list if many == True.')
-
-            entries = []
-
-            for entry in data:
-                entries.append(cls.parse(entry, feed=feed, many=False))
-
-            return entries
-
-        instance = cls(data, feed=feed)
-        return instance.to_internal()
-
-    def _get_href(self) -> str:
-        if 'feedburner_origlink' in self.data:
-            return self.data['feedburner_origlink']
-
-        return self.data.get('link', '')
-
-    def _get_published(self) -> Optional[datetime.datetime]:
-        published = None
-
-        if 'published_parsed' in self.data:
-            published = self.data['published_parsed']
-        elif 'updated_parsed' in self.data:
-            published = self.data['updated_parsed']
-
-        if published is not None:
-            published = struct_time_to_datetime(published)
-
-        return published
