@@ -9,7 +9,7 @@ class NOT_PROVIDED:
 
 
 class Descriptor:
-    def __init__(self, name=None, default=NOT_PROVIDED):
+    def __init__(self, name, default=NOT_PROVIDED):
         self.name = name
         self.default = default
 
@@ -35,9 +35,9 @@ class Typed(Descriptor):
     typ = object
 
     def __init__(self, *args, **kwargs):
-        default = kwargs.get('default', NOT_PROVIDED)
-        if default is not NOT_PROVIDED:
-            if not self.is_type(default):
+        _default = kwargs.get('default', NOT_PROVIDED)
+        if _default is not NOT_PROVIDED and _default is not None:
+            if not self.is_type(_default):
                 self.raise_type_exception()
         super().__init__(*args, **kwargs)
 

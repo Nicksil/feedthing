@@ -12,7 +12,7 @@ class FeedDetailsUpdateEndpoint(FeedEndpointMixin, Endpoint):
         user = self.request.user
         mgr = FeedManager(feed=feed, user=user)
         feed_data = mgr.fetch_data()
-        parsed = mgr.to_internal(feed_data)
+        parsed = mgr.to_dict(feed_data)
 
         title = parsed.pop('title', '')
 

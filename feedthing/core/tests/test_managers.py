@@ -41,7 +41,7 @@ class CoreManagersTestCase(TestCase):
 
         mgr = FeedManager(href='https://example.com')
         data = mgr.fetch_data()
-        result = mgr.to_internal(data)
+        result = mgr.to_dict(data)
 
         self.assertIsInstance(result, dict)
 

@@ -20,7 +20,7 @@ class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
 
         if href and not qs.filter(href=href).exists():
             data = mgr.fetch_data()
-            query_dict.update(mgr.to_internal(data))
+            query_dict.update(mgr.to_dict(data))
 
         serializer = self.get_serializer(data=query_dict)
         serializer.is_valid(raise_exception=True)
