@@ -28,9 +28,4 @@ urlpatterns = [
         views.edit,
         name='edit'
     ),
-    url(
-        r'^(?P<feed_uid>[^/]+)/update/$',
-        views.update,
-        name='update'
-    ),
 ]
