@@ -2,6 +2,8 @@
 feeds.models
 ~~~~~~~~~~~~
 """
+import uuid
+
 from django.conf import settings
 from django.db import models
 
@@ -87,6 +89,12 @@ class Content(TimeStampedModel):
     A model for a single Content element.
     An Entry may have many Content objects.
     """
+    id = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        primary_key=True,
+    )
+
     entry = models.ForeignKey(
         Entry,
         models.CASCADE,
