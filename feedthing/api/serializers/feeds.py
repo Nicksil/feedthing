@@ -22,7 +22,10 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
-        extra_kwargs = {'uid': {'read_only': True}}
+        extra_kwargs = {
+            'contents': {'required': False},
+            'uid': {'read_only': True}
+        }
         fields = ('contents', 'href', 'natural_published', 'published', 'read', 'title', 'uid', 'url')
         model = Entry
 
