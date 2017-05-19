@@ -8,16 +8,16 @@ from feeds.models import Feed
 
 
 class ContentNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
-    url_kwarg_attrs = {'entry_uid': 'entry.uid', 'feed_uid': 'feed.uid', 'content_uid': 'id'}
+    url_kwarg_attrs = {'entry_uid': 'entry.uid', 'feed_uid': 'entry.feed.uid', 'content_uid': 'id'}
     view_name = 'feedthing-api-v1-content-details'
 
 
-class ContentSerializer(serializers.ModelSerializer):
+class ContentSerializer(serializers.HyperlinkedModelSerializer):
     url = ContentNestedHyperlinkedIdentityField()
 
     class Meta:
         extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('base', 'content_type', 'entry', 'id', 'language', 'url', 'value')
+        fields = ('base', 'content_type', 'id', 'language', 'url', 'value')
         model = Content
 
 
@@ -27,16 +27,22 @@ class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    contents = ContentNestedHyperlinkedIdentityField(many=True, required=False)
     natural_published = serializers.SerializerMethodField()
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
-        extra_kwargs = {
-            'contents': {'required': False},
-            'uid': {'read_only': True}
-        }
+        extra_kwargs = {'uid': {'read_only': True}}
         fields = ('contents', 'href', 'natural_published', 'published', 'read', 'title', 'uid', 'url')
         model = Entry
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['contents'] = ContentSerializer(
+            instance.contents.all(),
+            context={'request': self.context['request']},
+            many=True).data
+        return representation
 
     def get_natural_published(self, obj):
         return time_since(obj.published)

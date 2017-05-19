@@ -35,10 +35,10 @@ class Typed(Descriptor):
     typ = object
 
     def __init__(self, *args, **kwargs):
-        _default = kwargs.get('default', NOT_PROVIDED)
-        if _default is not NOT_PROVIDED and _default is not None:
-            if not self.is_type(_default):
-                self.raise_type_exception(_default)
+        default = kwargs.get('default', NOT_PROVIDED)
+        if default is not NOT_PROVIDED and default is not None:
+            if not self.is_type(default):
+                self.raise_type_exception(default)
         super().__init__(*args, **kwargs)
 
     def __set__(self, instance, value):

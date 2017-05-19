@@ -18,6 +18,6 @@ class NestedHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
             _obj = obj
             for _attr in attr_str.split('.'):
                 _obj = getattr(_obj, _attr)
-            url_kwargs[url_kwarg] = _obj
+            url_kwargs[url_kwarg] = str(_obj)
 
         return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
