@@ -29,3 +29,5 @@ Reference
 ~~~~~~~~~
 
 feedparser documentation: https://pythonhosted.org/feedparser/
+
+Beautiful Soup documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/

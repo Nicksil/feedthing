@@ -12,7 +12,10 @@
     </section>
     {% for entry in feed.entries %}
         <div class="entry">
-            <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+            <div>
+                <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+                <span>{{ entry.summary }}</span>
+            </div>
             <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
         </div>
     {% endfor %}

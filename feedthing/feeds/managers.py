@@ -9,7 +9,7 @@ from core.descriptors import User
 from core.exceptions import FeedManagerError
 from core.utils import now
 from core.utils import struct_time_to_datetime
-from feeds.models import Entry, Content
+from feeds.models import Entry
 from feeds.models import Feed
 
 
@@ -69,12 +69,7 @@ class FeedManager:
         self._set_fields(self.data)
         self.feed = Feed.objects.create(**self.to_dict())
 
-        for entry in self._parse_entries():
-            contents = entry.pop('contents', [])
-            e = Entry.objects.create(**entry)
-
-            for content in contents:
-                Content.objects.create(entry=e, **content)
+        [Entry.objects.create(**entry) for entry in self._parse_entries()]
 
         return self.feed
 
@@ -112,37 +107,24 @@ class FeedManager:
             else:
                 href = entry.get('link', '')
 
-            published = None
-
             if 'published_parsed' in entry:
                 published = entry['published_parsed']
             elif 'updated_parsed' in entry:
                 published = entry['updated_parsed']
+            else:
+                published = None
+
             if published is not None:
                 published = struct_time_to_datetime(published)
 
-            contents = []
-            if 'content' in entry:
-                for c in entry['content']:
-                    contents.append({
-                        'content_type': c['type'],
-                        'base': c['base'],
-                        'language': c['language'],
-                        'value': c['value'],
-                    })
-            elif 'summary' in entry:
-                contents.append({
-                    'content_type': '',
-                    'base': '',
-                    'language': '',
-                    'value': entry.summary,
-                })
+            content = ''.join([c.get('value', '') for c in entry.get('content', [])])
 
             entries.append({
-                'contents': contents,
+                'content': content,
                 'feed': self.feed,
                 'href': href,
                 'published': published,
+                'summary': entry.get('summary', ''),
                 'title': entry.get('title', '<NO_TITLE>')
             })
         return entries

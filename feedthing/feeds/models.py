@@ -2,8 +2,6 @@
 feeds.models
 ~~~~~~~~~~~~
 """
-import uuid
-
 from django.conf import settings
 from django.db import models
 
@@ -59,9 +57,11 @@ class Entry(TimeStampedModel):
         related_name='entries'
     )
 
+    content = models.TextField(blank=True)
     href = models.URLField()
     published = models.DateTimeField(blank=True, null=True)
     read = models.BooleanField(default=False)
+    summary = models.TextField(blank=True)
     title = models.TextField(blank=True)
     uid = models.CharField(blank=True, max_length=255, unique=True)
 
@@ -82,26 +82,3 @@ class Entry(TimeStampedModel):
 
     def __str__(self):
         return '{}: {}'.format(self.__class__.__name__, self.href)
-
-
-class Content(TimeStampedModel):
-    """
-    A model for a single Content element.
-    An Entry may have many Content objects.
-    """
-    id = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        primary_key=True,
-    )
-
-    entry = models.ForeignKey(
-        Entry,
-        models.CASCADE,
-        related_name='contents'
-    )
-
-    base = models.URLField(blank=True)
-    content_type = models.CharField(blank=True, max_length=255)
-    language = models.CharField(blank=True, max_length=255)
-    value = models.TextField(blank=True)

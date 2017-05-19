@@ -1,6 +1,6 @@
 from django.conf.urls import include
 from django.conf.urls import url
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 
 from api import urls as api_urls
 from feeds import urls as feeds_urls
@@ -22,7 +22,12 @@ urlpatterns = [
     ),
     url(
         r'^$',
-        TemplateView.as_view(template_name='index.html'),
+        RedirectView.as_view(pattern_name='feeds:index'),
         name='index'
     )
+    # url(
+    #     r'^$',
+    #     TemplateView.as_view(template_name='index.html'),
+    #     name='index'
+    # )
 ]
