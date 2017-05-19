@@ -38,19 +38,19 @@ class Typed(Descriptor):
         _default = kwargs.get('default', NOT_PROVIDED)
         if _default is not NOT_PROVIDED and _default is not None:
             if not self.is_type(_default):
-                self.raise_type_exception()
+                self.raise_type_exception(_default)
         super().__init__(*args, **kwargs)
 
     def __set__(self, instance, value):
         if not self.is_type(value):
-            self.raise_type_exception()
+            self.raise_type_exception(value)
         super().__set__(instance, value)
 
     def is_type(self, value):
         return isinstance(value, self.typ)
 
-    def raise_type_exception(self):
-        raise TypeError('Expected {}'.format(self.typ))
+    def raise_type_exception(self, value):
+        raise TypeError('Expected {}, got {}'.format(self.typ, type(value)))
 
 
 class DateTime(Typed):

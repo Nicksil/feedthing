@@ -2,14 +2,23 @@ from rest_framework import serializers
 
 from ..fields import NestedHyperlinkedIdentityField
 from core.utils import time_since
-from feeds.models import Entry, Content
+from feeds.models import Content
+from feeds.models import Entry
 from feeds.models import Feed
 
 
+class ContentNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
+    url_kwarg_attrs = {'entry_uid': 'entry.uid', 'feed_uid': 'feed.uid', 'content_uid': 'id'}
+    view_name = 'feedthing-api-v1-content-details'
+
+
 class ContentSerializer(serializers.ModelSerializer):
+    url = ContentNestedHyperlinkedIdentityField()
+
     class Meta:
+        extra_kwargs = {'uid': {'read_only': True}}
+        fields = ('base', 'content_type', 'entry', 'id', 'language', 'url', 'value')
         model = Content
-        fields = ('base', 'content_type', 'entry', 'language', 'value')
 
 
 class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
