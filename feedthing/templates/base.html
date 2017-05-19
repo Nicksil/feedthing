@@ -19,6 +19,13 @@
                     <a class="nav-item" href="{% url 'users:login' %}">Login</a>
                 {% endif %}
             </nav>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             {% block body %}{% endblock %}
         </section>
         <footer class="row"></footer>

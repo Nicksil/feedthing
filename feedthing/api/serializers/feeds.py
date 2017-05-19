@@ -2,8 +2,14 @@ from rest_framework import serializers
 
 from ..fields import NestedHyperlinkedIdentityField
 from core.utils import time_since
-from feeds.models import Entry
+from feeds.models import Entry, Content
 from feeds.models import Feed
+
+
+class ContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Content
+        fields = ('base', 'content_type', 'entry', 'language', 'value')
 
 
 class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
@@ -17,7 +23,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('href', 'natural_published', 'published', 'read', 'title', 'uid', 'url')
+        fields = ('contents', 'href', 'natural_published', 'published', 'read', 'title', 'uid', 'url')
         model = Entry
 
     def get_natural_published(self, obj):

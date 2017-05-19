@@ -22,8 +22,7 @@ coverage-html-browser: coverage-html
 	python -m webbrowser -t file://$(PWD)/htmlcov/index.html
 
 createuser:
-	@echo $(1)
-#	$(MANAGE) runserver $(HOST):$(PORT)
+	$(MANAGE) createuser $(email)
 
 docs:
 	cd docs && make html

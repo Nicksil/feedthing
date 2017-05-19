@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -15,7 +17,10 @@ def index(request):
 
 @login_required
 def add_feed(request):
-    FeedIndexEndpoint.as_view()(request)
+    try:
+        FeedIndexEndpoint.as_view()(request)
+    except IntegrityError:
+        messages.info(request, 'Feed already exists.')
     return redirect('feeds:index')
 
 

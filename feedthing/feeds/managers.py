@@ -9,7 +9,7 @@ from core.descriptors import User
 from core.exceptions import FeedManagerError
 from core.utils import now
 from core.utils import struct_time_to_datetime
-from feeds.models import Entry
+from feeds.models import Entry, Content
 from feeds.models import Feed
 
 
@@ -69,7 +69,12 @@ class FeedManager:
         self._set_fields(self.data)
         self.feed = Feed.objects.create(**self.to_dict())
 
-        [Entry.objects.create(**entry) for entry in self._parse_entries()]
+        for entry in self._parse_entries():
+            contents = entry.pop('contents', [])
+            e = Entry.objects.create(**entry)
+
+            for content in contents:
+                Content.objects.create(entry=e, **content)
 
         return self.feed
 
@@ -115,7 +120,26 @@ class FeedManager:
                 published = entry['updated_parsed']
             if published is not None:
                 published = struct_time_to_datetime(published)
+
+            contents = []
+            if 'content' in entry:
+                for c in entry['content']:
+                    contents.append({
+                        'content_type': c['type'],
+                        'base': c['base'],
+                        'language': c['language'],
+                        'value': c['value'],
+                    })
+            elif 'summary' in entry:
+                contents.append({
+                    'content_type': '',
+                    'base': '',
+                    'language': '',
+                    'value': entry.summary,
+                })
+
             entries.append({
+                'contents': contents,
                 'feed': self.feed,
                 'href': href,
                 'published': published,

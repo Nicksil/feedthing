@@ -80,3 +80,20 @@ class Entry(TimeStampedModel):
 
     def __str__(self):
         return '{}: {}'.format(self.__class__.__name__, self.href)
+
+
+class Content(TimeStampedModel):
+    """
+    A model for a single Content element.
+    An Entry may have many Content objects.
+    """
+    entry = models.ForeignKey(
+        Entry,
+        models.CASCADE,
+        related_name='contents'
+    )
+
+    base = models.URLField(blank=True)
+    content_type = models.CharField(blank=True, max_length=255)
+    language = models.CharField(blank=True, max_length=255)
+    value = models.TextField(blank=True)

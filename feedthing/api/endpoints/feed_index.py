@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 
-from feeds.managers import FeedManager
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
+from feeds.managers import FeedManager
 
 
 class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
