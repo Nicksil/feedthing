@@ -7,7 +7,8 @@ from core.descriptors import String
 from core.descriptors import URL
 from core.descriptors import User
 from core.exceptions import FeedManagerError
-from core.utils import now, HTMLCleaner
+from core.utils import HTMLCleaner
+from core.utils import now
 from core.utils import struct_time_to_datetime
 from feeds.models import Entry
 from feeds.models import Feed
@@ -84,8 +85,31 @@ class FeedManager:
             'last_fetch': self.last_fetch,
             'last_modified': self.last_modified,
             'title': self.title,
-            'user': self.user
+            'user': self.user,
         }
+
+    def update(self):
+        kwargs = self.build_request_kwargs()
+        self.data = self.fetch_source(**kwargs)
+        self._set_fields(self.data)
+
+        for k, v in self.to_dict().items():
+            setattr(self.feed, k, v)
+        self.feed.save()
+
+        entries = self._parse_entries()
+        for entry in entries:
+            href = entry.pop('href', '')
+            if Entry.objects.filter(href=href).exists():
+                feed = entry.pop('feed', None)
+                entry_obj = Entry.objects.get(href=href, feed=feed)
+                for k, v in entry.items():
+                    setattr(entry_obj, k, v)
+                entry_obj.save()
+            else:
+                Entry.objects.create(href=href, **entry)
+
+        return self.feed
 
     def _get_html_href(self, data):
         links = data['feed'].get('links', [])
@@ -145,7 +169,7 @@ class FeedManager:
             _href = data['href']
 
         if 'feed' in data:
-            _html_href = self._get_html_href(data)
+            _html_href = self._get_html_href(data) or _html_href
 
             if _title == '<NO_TITLE>' or not _title and 'title' in data['feed']:
                 _title = data['feed']['title']
