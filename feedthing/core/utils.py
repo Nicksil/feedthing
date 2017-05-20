@@ -9,6 +9,8 @@ import time
 
 from django.utils import timezone
 
+from bs4 import BeautifulSoup
+
 
 def ensure_aware(dt):
     """Will convert datetime.datetime instance from naive into aware,
@@ -132,3 +134,20 @@ class FriendlyID:
         _period = self.find_suitable_period()
 
         return int(((_num + _offset) * (self.SIZE // _period)) % (self.SIZE + 1) + 1)
+
+
+class HTMLCleaner:
+    def __init__(self, html_str):
+        self.soup = BeautifulSoup(html_str, 'html.parser')
+
+    @classmethod
+    def clean(cls, html_str):
+        instance = cls(html_str)
+        instance.clean_attrs()
+        return str(instance.soup)
+
+    def clean_attrs(self):
+        remove_attrs = ['class', 'height', 'id', 'sizes', 'style', 'width']
+        for tag in self.soup.find_all(True):
+            new_attrs = {k: v for k, v in tag.attrs.items() if k not in remove_attrs}
+            tag.attrs = new_attrs

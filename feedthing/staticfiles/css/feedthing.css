@@ -30,6 +30,19 @@ footer {
     justify-content: space-between;
 }
 
+.entry-href-summary-container {
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 10px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.entry-summary {
+    color: #636363;
+    font-size: .85em;
+}
+
 .entry-title {
     white-space: nowrap;
     overflow: hidden;

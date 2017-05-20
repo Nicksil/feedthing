@@ -7,7 +7,7 @@ from core.descriptors import String
 from core.descriptors import URL
 from core.descriptors import User
 from core.exceptions import FeedManagerError
-from core.utils import now
+from core.utils import now, HTMLCleaner
 from core.utils import struct_time_to_datetime
 from feeds.models import Entry
 from feeds.models import Feed
@@ -117,14 +117,15 @@ class FeedManager:
             if published is not None:
                 published = struct_time_to_datetime(published)
 
-            content = ''.join([c.get('value', '') for c in entry.get('content', [])])
+            content = HTMLCleaner.clean(''.join([c.get('value', '') for c in entry.get('content', [])]))
+            summary = HTMLCleaner.clean(entry.get('summary', ''))
 
             entries.append({
                 'content': content,
                 'feed': self.feed,
                 'href': href,
                 'published': published,
-                'summary': entry.get('summary', ''),
+                'summary': summary,
                 'title': entry.get('title', '<NO_TITLE>')
             })
         return entries
