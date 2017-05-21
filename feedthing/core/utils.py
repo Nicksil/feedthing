@@ -5,6 +5,7 @@ core.utils
 from typing import Optional
 import datetime
 import math
+import re
 import time
 
 from django.utils import timezone
@@ -144,6 +145,7 @@ class HTMLCleaner:
     def clean(cls, html_str):
         instance = cls(html_str)
         instance.clean_attrs()
+        instance.del_tags()
         return str(instance.soup)
 
     def clean_attrs(self):
@@ -151,3 +153,9 @@ class HTMLCleaner:
         for tag in self.soup.find_all(True):
             new_attrs = {k: v for k, v in tag.attrs.items() if k not in remove_attrs}
             tag.attrs = new_attrs
+
+    def del_tags(self):
+        # feeds.feedburner.com
+        for i in self.soup.find_all(src=re.compile('feeds.feedburner.com')):
+            i.decompose()
+

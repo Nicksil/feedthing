@@ -31,8 +31,8 @@ footer {
 }
 
 .entry-href-summary-container {
-    display: flex;
     align-items: baseline;
+    display: flex;
     margin-right: 10px;
     overflow: hidden;
     white-space: nowrap;
