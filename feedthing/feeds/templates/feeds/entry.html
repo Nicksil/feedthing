@@ -4,19 +4,30 @@
     <section class="row">
         <div class="col">
             <h3 class="header feed-detail-header">{{ entry.title }}</h3>
+            <nav class="nav feed-detail-options">
+                <a class="nav-item" href="{{ entry.href }}" target="_blank" rel="noopener noreferrer">website</a>
+            </nav>
         </div>
     </section>
     {% if entry.summary %}
         <section class="row">
             <div class="col">
-                {{ entry.summary }}
+                <h5>Summary</h5>
+                {{ entry.summary|safe }}
             </div>
         </section>
+        {% if entry.content %}
+            <section class="row">
+                <div class="col">
+                    <hr>
+                </div>
+            </section>
+        {% endif %}
     {% endif %}
     {% if entry.content %}
         <section class="row">
             <div class="col">
-                {{ entry.content }}
+                {{ entry.content|safe }}
             </div>
         </section>
     {% endif %}

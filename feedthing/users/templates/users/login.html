@@ -13,14 +13,14 @@
                 {% csrf_token %}
                 <section class="row">
                     <div class="col">
-                        {{ form.username.label_tag }}
-                        {{ form.username }}
+                        <label for="id_email">Email</label>
+                        <input id="id_email" name="email" type="email" autofocus required>
                     </div>
                 </section>
                 <section class="row">
                     <div class="col">
-                        {{ form.password.label_tag }}
-                        {{ form.password }}
+                        <label for="id_password">Password</label>
+                        <input id="id_password" name="password" type="password" required>
                     </div>
                 </section>
                 <section class="row">
