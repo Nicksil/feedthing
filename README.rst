@@ -12,7 +12,7 @@ Feed Thing
 Version
 ~~~~~~~
 
-0.00.12a (everything will change)
+0.00.13a (everything will change)
 
 TODO
 ~~~~
@@ -20,14 +20,9 @@ TODO
 - Check response status code for unreachable feeds; handle this case
 - Add feature to use OPML file for adding feeds
 - Add feature allowing multiple feed URLs in a single request
-- Add feature to read contents of entry (currently just providing link to external source)
-
-  - If above, look into reader-friendly styles/packages.
-
 
 Reference
 ~~~~~~~~~
 
 feedparser documentation: https://pythonhosted.org/feedparser/
-
 Beautiful Soup documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/

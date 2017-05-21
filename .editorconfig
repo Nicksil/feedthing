@@ -14,5 +14,8 @@ indent_style = tab
 [*.bat]
 indent_style = tab
 
+[*.md]
+insert_final_newline = false
+
 [*.yml]
 indent_size = 2

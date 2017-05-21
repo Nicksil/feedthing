@@ -5,7 +5,6 @@ core.models
 TimeStampedModel: Copyright (c) 2009-2015, Carl Meyer and contributors
                   https://github.com/jazzband/django-model-utils/blob/master/model_utils/models.py
 """
-
 from django.db import models
 
 from . import fields

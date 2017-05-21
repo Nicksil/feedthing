@@ -4,7 +4,11 @@ import time
 from django.test import TestCase
 from django.utils import timezone
 
-from ..utils import ensure_aware, struct_time_to_datetime, FriendlyID, now, time_since
+from ..utils import ensure_aware
+from ..utils import FriendlyID
+from ..utils import now
+from ..utils import struct_time_to_datetime
+from ..utils import time_since
 
 
 class CoreUtilsTestCase(TestCase):
