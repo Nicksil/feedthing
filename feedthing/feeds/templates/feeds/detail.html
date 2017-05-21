@@ -14,7 +14,7 @@
     {% for entry in feed.entries %}
         <div class="entry">
             <div class="entry-href-summary-container">
-                <a title="{{ entry.title }}" class="entry-title" href="{{ entry.href }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+                <a title="{{ entry.title }}" class="entry-title" href="{% url 'feeds:entry' feed.uid entry.uid %}">{{ entry.title }}</a>
                 <span class="entry-summary">{{ entry.summary|safe }}</span>
             </div>
             <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>

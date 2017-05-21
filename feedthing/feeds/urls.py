@@ -33,4 +33,9 @@ urlpatterns = [
         views.edit,
         name='edit'
     ),
+    url(
+        r'^(?P<feed_uid>[^/]+)/entries/(?P<entry_uid>[^/]+)/$',
+        views.entry,
+        name='entry'
+    ),
 ]

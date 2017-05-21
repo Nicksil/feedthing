@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <section class="row">
+        <div class="col">
+            <h3 class="header feed-detail-header">{{ entry.title }}</h3>
+        </div>
+    </section>
+    {% if entry.summary %}
+        <section class="row">
+            <div class="col">
+                {{ entry.summary }}
+            </div>
+        </section>
+    {% endif %}
+    {% if entry.content %}
+        <section class="row">
+            <div class="col">
+                {{ entry.content }}
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

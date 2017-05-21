@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.shortcuts import render
 
+from api.endpoints.entry_details import EntryDetailsEndpoint
 from api.endpoints.feed_details import FeedDetailsEndpoint
 from api.endpoints.feed_index import FeedIndexEndpoint
 
@@ -53,4 +54,15 @@ def edit(request, feed_uid):
         return redirect('feeds:detail', feed_uid)
     return render(request, 'feeds/edit.html', {
         'feed': FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid).data
+    })
+
+
+@login_required
+def entry(request, feed_uid, entry_uid):
+    return render(request, 'feeds/entry.html', {
+        'entry': EntryDetailsEndpoint.as_view()(
+            request,
+            feed_uid=feed_uid,
+            entry_uid=entry_uid
+        ).data
     })

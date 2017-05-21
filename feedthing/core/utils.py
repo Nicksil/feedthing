@@ -156,6 +156,18 @@ class HTMLCleaner:
 
     def del_tags(self):
         # feeds.feedburner.com
-        for i in self.soup.find_all(src=re.compile('feeds.feedburner.com')):
-            i.decompose()
-
+        for tag in self.soup.find_all(src=re.compile('feeds.feedburner.com')):
+            # Check for parent
+            parent = tag.parent
+            if parent:
+                # Now check if tag is only contents of parent
+                parent_contents = parent.contents
+                # If this tag is the only member in it's parents contents,
+                # remove parent as well.
+                if len(parent_contents) == 1:
+                    parent.decompose()
+                else:
+                    # else, just remove the tag
+                    tag.decompose()
+            else:
+                tag.decompose()
