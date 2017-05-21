@@ -24,5 +24,8 @@ TODO
 Reference
 ~~~~~~~~~
 
-- feedparser documentation: https://pythonhosted.org/feedparser/
-- Beautiful Soup documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+- `feedparser documentation`_
+- `Beautiful Soup documentation`_
+
+.. _feedparser documentation: https://pythonhosted.org/feedparser/
+.. _Beautiful Soup documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
