@@ -19,6 +19,11 @@ urlpatterns = [
         name='detail'
     ),
     url(
+        r'^(?P<feed_uid>[^/]+)/fetch/$',
+        views.fetch,
+        name='fetch'
+    ),
+    url(
         r'^(?P<feed_uid>[^/]+)/delete/$',
         views.delete,
         name='delete'

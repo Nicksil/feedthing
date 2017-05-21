@@ -25,36 +25,33 @@ footer {
 }
 
 .entry {
+    align-items: baseline;
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 
 .entry-href-summary-container {
+    display: flex;
+    align-items: baseline;
+    margin-right: 10px;
     overflow: hidden;
     white-space: nowrap;
-    margin-right: 10px;
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
 }
 
 .entry-summary {
     color: #636363;
+    display: flex;
     font-size: .85em;
 }
 
 .entry-title {
-    white-space: nowrap;
-    overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
     padding-right: 10px;
 }
 
 .time-since {
     color: #a4a4a4;
-    font-weight: 200;
     font-size: 1rem;
+    font-weight: 200;
 }
 
 .header {

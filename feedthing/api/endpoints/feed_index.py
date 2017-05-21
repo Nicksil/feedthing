@@ -7,7 +7,8 @@ from feeds.managers import FeedManager
 
 class FeedIndexEndpoint(FeedEndpointMixin, Endpoint):
     def get(self, request):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
+        feeds = self.get_queryset().order_by('title')
+        serializer = self.get_serializer(feeds, many=True)
         return Response(serializer.data)
 
     def post(self, request):

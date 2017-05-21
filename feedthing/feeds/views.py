@@ -32,6 +32,13 @@ def detail(request, feed_uid):
 
 
 @login_required
+def fetch(request, feed_uid):
+    request.method = 'POST'
+    FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid)
+    return redirect('feeds:detail', feed_uid)
+
+
+@login_required
 def delete(request, feed_uid):
     request.method = 'DELETE'
     FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid)

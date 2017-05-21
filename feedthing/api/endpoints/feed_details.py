@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 
+from feeds.managers import FeedManager
 from ..base import Endpoint
 from ..mixins import FeedEndpointMixin
 
@@ -18,6 +19,12 @@ class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
     def patch(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
+
+    def post(self, request, feed_uid=None):
+        feed = self.get_object()
+        mgr = FeedManager(feed=feed)
+        serializer = self.get_serializer(mgr.update())
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

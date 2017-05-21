@@ -89,6 +89,9 @@ class FeedManager:
         }
 
     def update(self):
+        if not self.feed:
+            raise FeedManagerError('Must provide a value for ``feed`` before being able to ``update``.')
+
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
         self._set_fields(self.data)
