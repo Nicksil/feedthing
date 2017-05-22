@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from api.endpoints.entry_details import EntryDetailsEndpoint
 from api.endpoints.feed_details import FeedDetailsEndpoint
@@ -67,10 +68,10 @@ def edit(request, feed_uid):
 
 @login_required
 def entry(request, feed_uid, entry_uid):
-    return render(request, 'feeds/entry.html', {
-        'entry': EntryDetailsEndpoint.as_view()(
-            request,
-            feed_uid=feed_uid,
-            entry_uid=entry_uid
-        ).data
-    })
+    data = EntryDetailsEndpoint.as_view()(
+        request,
+        feed_uid=feed_uid,
+        entry_uid=entry_uid
+    ).data
+    data.update({'feed': reverse('feeds:detail', kwargs={'feed_uid': feed_uid})})
+    return render(request, 'feeds/entry.html', {'entry': data})

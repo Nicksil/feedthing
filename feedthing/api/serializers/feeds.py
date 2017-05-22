@@ -12,12 +12,17 @@ class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
+    feed = serializers.HyperlinkedIdentityField(
+        lookup_field='uid',
+        lookup_url_kwarg='feed_uid',
+        view_name='feedthing-api-v1-feed-details'
+    )
     natural_published = serializers.SerializerMethodField()
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
         extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('content', 'href', 'natural_published', 'published', 'read', 'summary', 'title', 'uid', 'url')
+        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'read', 'summary', 'title', 'uid', 'url')
         model = Entry
 
     def get_natural_published(self, obj):
