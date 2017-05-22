@@ -8,6 +8,7 @@ from django.urls import reverse
 
 import feedparser
 
+from feeds.managers import FeedManager
 from feeds.models import Feed
 from feeds.tests.factories import FeedFactory
 from users.tests.factories import UserFactory
@@ -30,10 +31,10 @@ class FeedEndpointsTests(TestCase):
 
         self.assertIsInstance(data, list)
 
-    @mock.patch.object(feedparser, 'parse')
-    def test_feed_index_endpoint_POST_request_creates_new_feed_object(self, parse):
+    @mock.patch.object(FeedManager, 'fetch_source')
+    def test_feed_index_endpoint_POST_request_creates_new_feed_object(self, fetch_source):
         with open(os.path.join(settings.PROJECT_DIR, 'core', 'tests', 'data', 'feed.xml')) as xmlfile:
-            parse.return_value = feedparser.parse(xmlfile.read())
+            fetch_source.return_value = feedparser.parse(xmlfile.read())
 
         self.client.login(
             email=self.simple_user.email,
@@ -59,10 +60,10 @@ class FeedEndpointsTests(TestCase):
         self.assertEqual(feed.title, data['title'])
         self.assertEqual(response.data['title'], data['title'])
 
-    @mock.patch.object(feedparser, 'parse')
-    def test_details_endpoint_POST_request_updates_and_returns_object(self, parse):
+    @mock.patch.object(FeedManager, 'fetch_source')
+    def test_details_endpoint_POST_request_updates_and_returns_object(self, fetch_source):
         with open(os.path.join(settings.PROJECT_DIR, 'core', 'tests', 'data', 'feed.xml')) as xmlfile:
-            parse.return_value = feedparser.parse(xmlfile.read())
+            fetch_source.return_value = feedparser.parse(xmlfile.read())
 
         feed = FeedFactory(user=self.simple_user)
         last_fetch_before = feed.last_fetch

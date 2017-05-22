@@ -67,6 +67,7 @@ class FeedManager:
 
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
+        self.validate()
         self._set_fields(self.data)
         self.feed = Feed.objects.create(**self.to_dict())
 
@@ -113,6 +114,22 @@ class FeedManager:
                 Entry.objects.create(href=href, **entry)
 
         return self.feed
+
+    def validate(self):
+        message = None
+
+        if not self.data:
+            message = '``self.data`` has no value.'
+        if 'feed' not in self.data:
+            message = '``feed`` not in ``self.data``.'
+        if 'entries' not in self.data:
+            message = '``entries`` not in ``self.data``.'
+        if len(self.data.get('entries', [])) < 1:
+            message = 'No entries in feed response.'
+
+        if message is not None:
+            message = '{}: {}'.format(self.href, message)
+            raise FeedManagerError(message)
 
     def _get_html_href(self, data):
         links = data['feed'].get('links', [])

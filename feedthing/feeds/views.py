@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -7,6 +8,7 @@ from django.shortcuts import render
 from api.endpoints.entry_details import EntryDetailsEndpoint
 from api.endpoints.feed_details import FeedDetailsEndpoint
 from api.endpoints.feed_index import FeedIndexEndpoint
+from core.exceptions import FeedManagerError
 
 
 @login_required
@@ -22,6 +24,12 @@ def add_feed(request):
         FeedIndexEndpoint.as_view()(request)
     except IntegrityError:
         messages.info(request, 'Feed already exists.')
+    except ValidationError as e:
+        for msg in e.messages:
+            messages.info(request, msg)
+    except FeedManagerError as e:
+        messages.info(request, e)
+
     return redirect('feeds:index')
 
 
