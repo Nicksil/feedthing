@@ -97,3 +97,19 @@ class CoreDescriptorsTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             test_class_instance.test_url_field = 'not_a_url'
+
+    def test_setting_correct_value_on_URL_typed_field_with_default(self):
+        test_field_value = 'http://example.com/an/OK/URL/'
+        test_field_default_value = ''
+
+        class TestClass:
+            test_url_field = URL('test_url_field', default=test_field_default_value)
+
+        test_class_instance = TestClass()
+        self.assertEqual(test_class_instance.test_url_field, test_field_default_value)
+
+        with self.assertRaises(ValidationError):
+            test_class_instance.test_url_field = 'not_a_url'
+
+        test_class_instance.test_url_field = test_field_value
+        self.assertEqual(test_class_instance.test_url_field, test_field_value)
