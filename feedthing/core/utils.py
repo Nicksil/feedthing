@@ -104,7 +104,8 @@ class FriendlyID:
             if self.SIZE % p == 0:
                 return p
 
-        raise Exception('No valid period could be found for SIZE={}.\nTry avoiding prime numbers :-)'.format(self.SIZE))
+        raise Exception('No valid period could be found for SIZE={}.'
+                        '\nTry avoiding prime numbers :-)'.format(self.SIZE))  # pragma: no cover
 
     def friendly_number(self, num: int) -> str:
         """
