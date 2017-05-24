@@ -22,7 +22,7 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         extra_kwargs = {'id': {'read_only': True}}
-        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'read', 'summary', 'title', 'id', 'url')
+        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'summary', 'title', 'id', 'url')
         model = Entry
 
     def get_natural_published(self, obj):
@@ -45,8 +45,8 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
             'id': {'read_only': True}
         }
         fields = (
-            'entries', 'etag', 'href', 'html_href', 'last_fetch', 'last_modified',
-            'natural_last_fetch', 'title', 'id', 'url', 'user'
+            'entries', 'etag', 'href', 'html_href', 'last_modified',
+            'natural_last_fetch', 'title', 'id', 'url'
         )
         model = Feed
 
