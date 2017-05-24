@@ -7,13 +7,13 @@ from feeds.models import Feed
 
 
 class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
-    url_kwarg_attrs = {'entry_id': 'uid', 'feed_id': 'feed.uid'}
+    url_kwarg_attrs = {'entry_id': 'id', 'feed_id': 'feed.id'}
     view_name = 'feedthing-api-v1-entry-details'
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
     feed = serializers.HyperlinkedIdentityField(
-        lookup_field='uid',
+        lookup_field='id',
         lookup_url_kwarg='feed_id',
         view_name='feedthing-api-v1-feed-details'
     )
@@ -21,8 +21,8 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
     url = EntryNestedHyperlinkedIdentityField()
 
     class Meta:
-        extra_kwargs = {'uid': {'read_only': True}}
-        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'read', 'summary', 'title', 'uid', 'url')
+        extra_kwargs = {'id': {'read_only': True}}
+        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'read', 'summary', 'title', 'id', 'url')
         model = Entry
 
     def get_natural_published(self, obj):
@@ -33,7 +33,7 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     entries = EntryNestedHyperlinkedIdentityField(many=True, required=False)
     natural_last_fetch = serializers.SerializerMethodField()
     url = serializers.HyperlinkedIdentityField(
-        lookup_field='uid',
+        lookup_field='id',
         lookup_url_kwarg='feed_id',
         view_name='feedthing-api-v1-feed-details',
     )
@@ -42,11 +42,11 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         extra_kwargs = {
             'last_fetch': {'read_only': True},
-            'uid': {'read_only': True}
+            'id': {'read_only': True}
         }
         fields = (
             'entries', 'etag', 'href', 'html_href', 'last_fetch', 'last_modified',
-            'natural_last_fetch', 'title', 'uid', 'url', 'user'
+            'natural_last_fetch', 'title', 'id', 'url', 'user'
         )
         model = Feed
 

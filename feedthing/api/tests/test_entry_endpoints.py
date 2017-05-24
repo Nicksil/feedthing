@@ -20,8 +20,8 @@ class APIEntryEndpointsTestCase(TestCase):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_id': self.test_feed.uid,
-                'entry_id': self.test_entry.uid
+                'feed_id': self.test_feed.id,
+                'entry_id': self.test_entry.id
             }
         )
         self.client.login(
@@ -32,14 +32,14 @@ class APIEntryEndpointsTestCase(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['uid'], self.test_entry.uid)
+        self.assertEqual(response.data['id'], self.test_entry.id)
 
     def test_detail_endpoint_PATCH_request_modifies_and_returns_object(self):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_id': self.test_feed.uid,
-                'entry_id': self.test_entry.uid
+                'feed_id': self.test_feed.id,
+                'entry_id': self.test_entry.id
             }
         )
         self.client.login(
@@ -62,8 +62,8 @@ class APIEntryEndpointsTestCase(TestCase):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_id': self.test_feed.uid,
-                'entry_id': self.test_entry.uid
+                'feed_id': self.test_feed.id,
+                'entry_id': self.test_entry.id
             }
         )
         self.client.login(
@@ -87,7 +87,7 @@ class APIEntryEndpointsTestCase(TestCase):
     def test_index_endpoint_GET_request_returns_entry_objects(self):
         url = reverse(
             'feedthing-api-v1-entry-index',
-            kwargs={'feed_id': self.test_feed.uid}
+            kwargs={'feed_id': self.test_feed.id}
         )
         self.client.login(
             email=self.simple_user.email,
@@ -98,4 +98,4 @@ class APIEntryEndpointsTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.data, list)
-        self.assertIn(self.test_entry.uid, [e['uid'] for e in response.data])
+        self.assertIn(self.test_entry.id, [e['id'] for e in response.data])

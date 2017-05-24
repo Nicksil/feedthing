@@ -5,16 +5,16 @@
         <div class="col">
             <h3 class="header feed-detail-header">{{ feed.title }}</h3>
             <nav class="nav feed-detail-options">
-                <a class="nav-item" href="{% url 'feeds:fetch' feed.uid %}">fetch</a>
-                <a class="nav-item" href="{% url 'feeds:edit' feed.uid %}">edit</a>
-                <a class="nav-item danger" href="{% url 'feeds:delete' feed.uid %}">delete</a>
+                <a class="nav-item" href="{% url 'feeds:fetch' feed.id %}">fetch</a>
+                <a class="nav-item" href="{% url 'feeds:edit' feed.id %}">edit</a>
+                <a class="nav-item danger" href="{% url 'feeds:delete' feed.id %}">delete</a>
             </nav>
         </div>
     </section>
     {% for entry in feed.entries %}
         <div class="entry">
             <div class="entry-href-summary-container">
-                <a title="{{ entry.title }}" class="entry-title" href="{% url 'feeds:entry' feed.uid entry.uid %}">{{ entry.title }}</a>
+                <a title="{{ entry.title }}" class="entry-title" href="{% url 'feeds:entry' feed.id entry.id %}">{{ entry.title }}</a>
                 <span class="entry-summary">{{ entry.summary|safe }}</span>
             </div>
             <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>

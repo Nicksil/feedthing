@@ -5,7 +5,7 @@ from feeds.models import Feed
 
 
 class EntryEndpointMixin:
-    lookup_field = 'uid'
+    lookup_field = 'id'
     lookup_url_kwarg = 'entry_id'
     serializer_class = EntrySerializer
 
@@ -14,7 +14,7 @@ class EntryEndpointMixin:
 
 
 class FeedEndpointMixin:
-    lookup_field = 'uid'
+    lookup_field = 'id'
     lookup_url_kwarg = 'feed_id'
     serializer_class = FeedSerializer
 

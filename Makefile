@@ -48,7 +48,12 @@ test-app: clean-pyc clean-pycache
 test-app-withcoverage: clean-pyc clean-pycache clean-coverage
 	coverage run --source=$(app) $(MANAGE) test $(app) --settings=config.settings.tests
 
+test-all-failfast: clean-pyc clean-pycache
+	$(MANAGE) test feedthing --settings=config.settings.tests --failfast
+
 test: test-all
+
+test-failfast: test-all-failfast
 
 ,noop:
 	@echo noop
