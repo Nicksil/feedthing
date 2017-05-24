@@ -2,42 +2,24 @@
 feeds.models
 ~~~~~~~~~~~~
 """
-from django.conf import settings
+import uuid
+
 from django.db import models
 
 from core.models import TimeStampedModel
-from core.utils import FriendlyID
-from core.utils import now
 
 
 class Feed(TimeStampedModel):
-    """
-    A model for a single Feed
-    """
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        models.CASCADE,
-        related_name='feeds'
-    )
+    """A model for a single Feed"""
+
+    # Primary key
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
 
     etag = models.CharField(blank=True, max_length=255)
-    href = models.URLField()
+    href = models.URLField(unique=True)
     html_href = models.URLField(blank=True)
-    last_fetch = models.DateTimeField(default=now)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
-    uid = models.CharField(blank=True, max_length=255, unique=True)
-
-    class Meta:
-        unique_together = (('href', 'user'),)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if not self.uid:
-            self.uid = FriendlyID.encode(self.id)
-            kwargs['force_insert'] = False
-            super().save(*args, **kwargs)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)
@@ -47,10 +29,12 @@ class Feed(TimeStampedModel):
 
 
 class Entry(TimeStampedModel):
-    """
-    A model for a single Entry
-    """
+    """A model for a single Entry"""
 
+    # Primary key
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+
+    # Relationships
     feed = models.ForeignKey(
         Feed,
         models.CASCADE,
@@ -58,24 +42,14 @@ class Entry(TimeStampedModel):
     )
 
     content = models.TextField(blank=True)
-    href = models.URLField()
+    href = models.URLField(unique=True)
     published = models.DateTimeField(blank=True, null=True)
-    read = models.BooleanField(default=False)
     summary = models.TextField(blank=True)
     title = models.TextField(blank=True)
-    uid = models.CharField(blank=True, max_length=255, unique=True)
 
     class Meta:
         ordering = ('-published',)
         unique_together = (('feed', 'href'),)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if not self.uid:
-            self.uid = FriendlyID.encode(self.id)
-            kwargs['force_insert'] = False
-            super().save(*args, **kwargs)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)

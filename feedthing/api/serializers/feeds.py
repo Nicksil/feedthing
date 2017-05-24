@@ -7,14 +7,14 @@ from feeds.models import Feed
 
 
 class EntryNestedHyperlinkedIdentityField(NestedHyperlinkedIdentityField):
-    url_kwarg_attrs = {'entry_uid': 'uid', 'feed_uid': 'feed.uid'}
+    url_kwarg_attrs = {'entry_id': 'uid', 'feed_id': 'feed.uid'}
     view_name = 'feedthing-api-v1-entry-details'
 
 
 class EntrySerializer(serializers.HyperlinkedModelSerializer):
     feed = serializers.HyperlinkedIdentityField(
         lookup_field='uid',
-        lookup_url_kwarg='feed_uid',
+        lookup_url_kwarg='feed_id',
         view_name='feedthing-api-v1-feed-details'
     )
     natural_published = serializers.SerializerMethodField()
@@ -34,7 +34,7 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     natural_last_fetch = serializers.SerializerMethodField()
     url = serializers.HyperlinkedIdentityField(
         lookup_field='uid',
-        lookup_url_kwarg='feed_uid',
+        lookup_url_kwarg='feed_id',
         view_name='feedthing-api-v1-feed-details',
     )
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())

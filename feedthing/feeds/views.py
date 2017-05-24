@@ -35,43 +35,43 @@ def add_feed(request):
 
 
 @login_required
-def detail(request, feed_uid):
+def detail(request, feed_id):
     return render(request, 'feeds/detail.html', {
-        'feed': FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid).data
+        'feed': FeedDetailsEndpoint.as_view()(request, feed_id=feed_id).data
     })
 
 
 @login_required
-def fetch(request, feed_uid):
+def fetch(request, feed_id):
     request.method = 'POST'
-    FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid)
-    return redirect('feeds:detail', feed_uid)
+    FeedDetailsEndpoint.as_view()(request, feed_id=feed_id)
+    return redirect('feeds:detail', feed_id)
 
 
 @login_required
-def delete(request, feed_uid):
+def delete(request, feed_id):
     request.method = 'DELETE'
-    FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid)
+    FeedDetailsEndpoint.as_view()(request, feed_id=feed_id)
     return redirect('feeds:index')
 
 
 @login_required
-def edit(request, feed_uid):
+def edit(request, feed_id):
     if request.method == 'POST':
         request.method = 'PATCH'
-        FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid)
-        return redirect('feeds:detail', feed_uid)
+        FeedDetailsEndpoint.as_view()(request, feed_id=feed_id)
+        return redirect('feeds:detail', feed_id)
     return render(request, 'feeds/edit.html', {
-        'feed': FeedDetailsEndpoint.as_view()(request, feed_uid=feed_uid).data
+        'feed': FeedDetailsEndpoint.as_view()(request, feed_id=feed_id).data
     })
 
 
 @login_required
-def entry(request, feed_uid, entry_uid):
+def entry(request, feed_id, entry_id):
     data = EntryDetailsEndpoint.as_view()(
         request,
-        feed_uid=feed_uid,
-        entry_uid=entry_uid
+        feed_id=feed_id,
+        entry_id=entry_id
     ).data
-    data.update({'feed': reverse('feeds:detail', kwargs={'feed_uid': feed_uid})})
+    data.update({'feed': reverse('feeds:detail', kwargs={'feed_id': feed_id})})
     return render(request, 'feeds/entry.html', {'entry': data})

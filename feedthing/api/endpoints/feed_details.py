@@ -7,11 +7,11 @@ from feeds.managers import FeedManager
 
 
 class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
-    def get(self, request, feed_uid=None):
+    def get(self, request, feed_id=None):
         serializer = self.get_serializer(self.get_object())
         return Response(serializer.data)
 
-    def delete(self, request, feed_uid=None):
+    def delete(self, request, feed_id=None):
         feed = self.get_object()
         feed.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -20,7 +20,7 @@ class FeedDetailsEndpoint(FeedEndpointMixin, Endpoint):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
 
-    def post(self, request, feed_uid=None):
+    def post(self, request, feed_id=None):
         feed = self.get_object()
         mgr = FeedManager(feed=feed)
         serializer = self.get_serializer(mgr.update())

@@ -14,7 +14,7 @@ class APIBaseTestCase(TestCase):
         self.test_feed = FeedFactory(user=self.test_user)
 
     def test_Endpoint_get_object_returns_object(self):
-        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_uid': self.test_feed.uid})
+        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': self.test_feed.uid})
         client = APIClient()
         client.login(email=self.test_user.email, password=self.test_user_pw)
 
@@ -24,7 +24,7 @@ class APIBaseTestCase(TestCase):
         self.assertEqual(response.data['uid'], self.test_feed.uid)
 
     def test_Endpoint_returns_correct_response_when_resource_does_not_exist(self):
-        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_uid': 'some-bogus-ID'})
+        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': 'some-bogus-ID'})
         client = APIClient()
         client.login(email=self.test_user.email, password=self.test_user_pw)
 

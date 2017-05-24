@@ -13,17 +13,17 @@ urlpatterns = [
         name='feedthing-api-v1-feed-index'
     ),
     url(
-        r'^feeds/(?P<feed_uid>[^/]+)/$',
+        r'^feeds/(?P<feed_id>[^/]+)/$',
         FeedDetailsEndpoint.as_view(),
         name='feedthing-api-v1-feed-details'
     ),
     url(
-        r'^feeds/(?P<feed_uid>[^/]+)/entries/$',
+        r'^feeds/(?P<feed_id>[^/]+)/entries/$',
         EntryIndexEndpoint.as_view(),
         name='feedthing-api-v1-entry-index'
     ),
     url(
-        r'^feeds/(?P<feed_uid>[^/]+)/entries/(?P<entry_uid>[^/]+)/$',
+        r'^feeds/(?P<feed_id>[^/]+)/entries/(?P<entry_id>[^/]+)/$',
         EntryDetailsEndpoint.as_view(),
         name='feedthing-api-v1-entry-details'
     ),

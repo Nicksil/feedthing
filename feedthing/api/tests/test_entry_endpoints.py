@@ -20,8 +20,8 @@ class APIEntryEndpointsTestCase(TestCase):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_uid': self.test_feed.uid,
-                'entry_uid': self.test_entry.uid
+                'feed_id': self.test_feed.uid,
+                'entry_id': self.test_entry.uid
             }
         )
         self.client.login(
@@ -38,8 +38,8 @@ class APIEntryEndpointsTestCase(TestCase):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_uid': self.test_feed.uid,
-                'entry_uid': self.test_entry.uid
+                'feed_id': self.test_feed.uid,
+                'entry_id': self.test_entry.uid
             }
         )
         self.client.login(
@@ -62,8 +62,8 @@ class APIEntryEndpointsTestCase(TestCase):
         url = reverse(
             'feedthing-api-v1-entry-details',
             kwargs={
-                'feed_uid': self.test_feed.uid,
-                'entry_uid': self.test_entry.uid
+                'feed_id': self.test_feed.uid,
+                'entry_id': self.test_entry.uid
             }
         )
         self.client.login(
@@ -87,7 +87,7 @@ class APIEntryEndpointsTestCase(TestCase):
     def test_index_endpoint_GET_request_returns_entry_objects(self):
         url = reverse(
             'feedthing-api-v1-entry-index',
-            kwargs={'feed_uid': self.test_feed.uid}
+            kwargs={'feed_id': self.test_feed.uid}
         )
         self.client.login(
             email=self.simple_user.email,

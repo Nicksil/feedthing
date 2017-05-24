@@ -5,7 +5,6 @@ from django.test import TestCase
 from django.utils import timezone
 
 from ..utils import ensure_aware
-from ..utils import FriendlyID
 from ..utils import now
 from ..utils import struct_time_to_datetime
 from ..utils import time_since
@@ -53,20 +52,6 @@ class CoreUtilsTestCase(TestCase):
 
         self.assertIsInstance(_datetime, datetime.datetime)
         self.assertIsNone(_datetime.utcoffset())
-
-    def test_FriendlyID_encode_classmethod_returns_string_ID(self):
-        str_id = FriendlyID.encode(1)
-
-        self.assertIsInstance(str_id, str)
-        self.assertEqual(str_id, 'TTH9R')
-
-    def test_FriendlyID_encode_classmethod_returns_None_when_given_number_greater_than_SIZE(self):
-        none_id = FriendlyID.encode(FriendlyID.SIZE + 1)
-        self.assertIsNone(none_id)
-
-    def test_FriendlyID_encode_classmethod_returns_None_when_given_number_less_than_zero(self):
-        none_id = FriendlyID.encode(-1)
-        self.assertIsNone(none_id)
 
     def test_now_returns_aware_datetime_object(self):
         _now = now()

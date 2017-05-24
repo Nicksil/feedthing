@@ -14,27 +14,27 @@ urlpatterns = [
         name='add_feed'
     ),
     url(
-        r'^(?P<feed_uid>[^/]+)/$',
+        r'^(?P<feed_id>[^/]+)/$',
         views.detail,
         name='detail'
     ),
     url(
-        r'^(?P<feed_uid>[^/]+)/fetch/$',
+        r'^(?P<feed_id>[^/]+)/fetch/$',
         views.fetch,
         name='fetch'
     ),
     url(
-        r'^(?P<feed_uid>[^/]+)/delete/$',
+        r'^(?P<feed_id>[^/]+)/delete/$',
         views.delete,
         name='delete'
     ),
     url(
-        r'^(?P<feed_uid>[^/]+)/edit/$',
+        r'^(?P<feed_id>[^/]+)/edit/$',
         views.edit,
         name='edit'
     ),
     url(
-        r'^(?P<feed_uid>[^/]+)/entries/(?P<entry_uid>[^/]+)/$',
+        r'^(?P<feed_id>[^/]+)/entries/(?P<entry_id>[^/]+)/$',
         views.entry,
         name='entry'
     ),

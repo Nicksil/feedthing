@@ -6,16 +6,16 @@ from feeds.models import Feed
 
 class EntryEndpointMixin:
     lookup_field = 'uid'
-    lookup_url_kwarg = 'entry_uid'
+    lookup_url_kwarg = 'entry_id'
     serializer_class = EntrySerializer
 
     def get_queryset(self):
-        return Entry.objects.filter(feed__uid=self.kwargs['feed_uid'])
+        return Entry.objects.filter(feed__uid=self.kwargs['feed_id'])
 
 
 class FeedEndpointMixin:
     lookup_field = 'uid'
-    lookup_url_kwarg = 'feed_uid'
+    lookup_url_kwarg = 'feed_id'
     serializer_class = FeedSerializer
 
     def get_queryset(self):
