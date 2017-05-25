@@ -7,7 +7,6 @@ from .models import Feed
 from core.descriptors import typed
 from core.exceptions import FeedManagerError
 from core.utils import HTMLCleaner
-from core.utils import now
 from core.utils import struct_time_to_datetime
 
 
@@ -15,7 +14,6 @@ class FeedManager:
     etag = typed.String('etag', default='')
     href = typed.URL('href', default='')
     html_href = typed.URL('html_href', default='')
-    last_fetch = typed.DateTime('last_fetch', default=None)
     last_modified = typed.DateTime('last_modified', default=None)
     title = typed.String('title', default='')
     user = typed.User('user', default=None)
@@ -41,7 +39,6 @@ class FeedManager:
         if self.feed:
             self.etag = self.feed.etag
             self.html_href = self.feed.html_href
-            self.last_fetch = self.feed.last_fetch
             self.last_modified = self.feed.last_modified
             self.title = self.feed.title
             self.user = self.feed.user
@@ -80,7 +77,6 @@ class FeedManager:
             'etag': self.etag,
             'href': self.href,
             'html_href': self.html_href,
-            'last_fetch': self.last_fetch,
             'last_modified': self.last_modified,
             'title': self.title,
             'user': self.user,
@@ -129,15 +125,18 @@ class FeedManager:
             raise FeedManagerError(message)
 
     def _get_html_href(self, data):
+        html_href = ''
         links = data['feed'].get('links', [])
+
         for link in links:
             if link.get('rel') == 'alternate' and link.get('type') == 'text/html':
-                return link['href']
+                html_href = link['href']
+                break
 
         # There's not always going to be and html href w/in a feedparser payload.
         # And we don't need the value to complete any work.
         # Don't want to raise an exception right now, just return an empty string
-        return ''
+        return html_href
 
     def _parse_entries(self):
         entries_data = self.data.get('entries', [])
@@ -172,31 +171,10 @@ class FeedManager:
         return entries
 
     def _set_fields(self, data):
-        _etag = self.etag
-        _href = self.href
-        _html_href = self.html_href
-        _last_fetch = now()
-        _last_modified = self.last_modified
-        _title = self.title
-
-        if 'etag' in data:
-            _etag = data['etag']
-
-        if 'href' in data:
-            _href = data['href']
-
-        if 'feed' in data:
-            _html_href = self._get_html_href(data) or _html_href
-
-            if _title == '<NO_TITLE>' or not _title and 'title' in data['feed']:
-                _title = data['feed']['title']
+        self.etag = data.get('etag', self.etag)
+        self.href = data.get('href', self.href)
+        self.html_href = self._get_html_href(data) or self.html_href
+        self.title = data['feed'].get('title', self.title)
 
         if 'modified_parsed' in data:
-            _last_modified = struct_time_to_datetime(data['modified_parsed'])
-
-        self.etag = _etag
-        self.href = _href
-        self.html_href = _html_href
-        self.last_fetch = _last_fetch
-        self.last_modified = _last_modified
-        self.title = _title
+            self.last_modified = struct_time_to_datetime(data['modified_parsed'])
