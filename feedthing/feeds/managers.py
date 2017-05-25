@@ -15,13 +15,10 @@ class FeedManager:
     href = typed.URL('href', default='')
     html_href = typed.URL('html_href', default='')
     last_modified = typed.DateTime('last_modified', default=None)
-    title = typed.String('title', default='')
+    title = typed.String('title', default='<NO_TITLE>')
     user = typed.User('user', default=None)
 
     def __init__(self, feed=None, href=None, user=None):
-        self.data = None
-        self.feed = feed
-
         # We must have an href value if we're going to query an API
         # We can ascertain a href value from either a Feed object or
         # href parameter.
@@ -31,21 +28,16 @@ class FeedManager:
         if not feed and not user:
             raise FeedManagerError('Must provide a value for ``feed`` or ``user`` parameters.')
 
-        if href:
-            self.href = href
-        else:
-            self.href = feed.href
+        self.data = None
+        self.feed = feed
+        self.user = user
+        self.href = href if href else feed.href
 
         if self.feed:
             self.etag = self.feed.etag
             self.html_href = self.feed.html_href
             self.last_modified = self.feed.last_modified
             self.title = self.feed.title
-            self.user = self.feed.user
-        else:
-            self.etag = ''
-            self.title = '<NO_TITLE>'
-            self.user = user
 
     def build_request_kwargs(self):
         kwargs = {'agent': settings.USER_AGENT_STR}
@@ -63,9 +55,13 @@ class FeedManager:
         self.data = self.fetch_source(**kwargs)
         self.validate()
         self._set_fields(self.data)
-        self.feed = Feed.objects.create(**self.to_dict())
 
-        [Entry.objects.create(**entry) for entry in self._parse_entries()]
+        # Create new Feed record
+        self.feed = Feed.objects.create(**self.to_dict())
+        self.feed.users.add(self.user)
+
+        # Create new Feed's Entry records
+        [Entry.objects.create(**entry) for entry in EntryManager.parse(self.data.get('entries', []), self.feed)]
 
         return self.feed
 
@@ -79,7 +75,6 @@ class FeedManager:
             'html_href': self.html_href,
             'last_modified': self.last_modified,
             'title': self.title,
-            'user': self.user,
         }
 
     def update(self):
@@ -94,7 +89,7 @@ class FeedManager:
             setattr(self.feed, k, v)
         self.feed.save()
 
-        entries = self._parse_entries()
+        entries = EntryManager.parse(self.data.get('entries', []), self.feed)
         for entry in entries:
             href = entry.pop('href', '')
             if Entry.objects.filter(href=href).exists():
@@ -138,10 +133,21 @@ class FeedManager:
         # Don't want to raise an exception right now, just return an empty string
         return html_href
 
-    def _parse_entries(self):
-        entries_data = self.data.get('entries', [])
-        entries = []
-        for entry in entries_data:
+    def _set_fields(self, data):
+        self.etag = data.get('etag', self.etag)
+        self.href = data.get('href', self.href)
+        self.html_href = self._get_html_href(data) or self.html_href
+        self.title = data['feed'].get('title', self.title)
+
+        if 'modified_parsed' in data:
+            self.last_modified = struct_time_to_datetime(data['modified_parsed'])
+
+
+class EntryManager:
+    @classmethod
+    def parse(cls, entries, feed):
+        parsed = []
+        for entry in entries:
             if 'feedburner_origlink' in entry:
                 href = entry['feedburner_origlink']
             else:
@@ -160,21 +166,13 @@ class FeedManager:
             content = HTMLCleaner.clean(''.join([c.get('value', '') for c in entry.get('content', [])]))
             summary = HTMLCleaner.clean(entry.get('summary', ''))
 
-            entries.append({
+            parsed.append({
                 'content': content,
-                'feed': self.feed,
+                'feed': feed,
                 'href': href,
                 'published': published,
                 'summary': summary,
                 'title': entry.get('title', '<NO_TITLE>')
             })
-        return entries
 
-    def _set_fields(self, data):
-        self.etag = data.get('etag', self.etag)
-        self.href = data.get('href', self.href)
-        self.html_href = self._get_html_href(data) or self.html_href
-        self.title = data['feed'].get('title', self.title)
-
-        if 'modified_parsed' in data:
-            self.last_modified = struct_time_to_datetime(data['modified_parsed'])
+        return parsed
