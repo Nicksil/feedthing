@@ -1,14 +1,8 @@
 import json
-import os
-from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
-import feedparser
-
-from feeds.managers import FeedManager
 from feeds.models import Feed
 from feeds.tests.factories import FeedFactory
 from users.tests.factories import UserFactory
@@ -33,6 +27,7 @@ class FeedEndpointsTests(TestCase):
 
     def test_details_endpoint_PATCH_request_updates_and_returns_object(self):
         feed = FeedFactory()
+        feed.users.add(self.simple_user)
         url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': feed.id})
         data = {'title': 'This is new title'}
         self.assertNotEqual(feed.title, data['title'])
@@ -49,6 +44,7 @@ class FeedEndpointsTests(TestCase):
 
     def test_details_endpoint_DELETE_request_deletes_object(self):
         feed = FeedFactory()
+        feed.users.add(self.simple_user)
         feed_id = feed.id
         url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': feed.id})
 

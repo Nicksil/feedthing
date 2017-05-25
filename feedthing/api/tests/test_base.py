@@ -14,6 +14,7 @@ class APIBaseTestCase(TestCase):
         self.test_user_pw = 'test_pw'
         self.test_user = UserFactory(password=self.test_user_pw)
         self.test_feed = FeedFactory()
+        self.test_feed.users.add(self.test_user)
 
     def test_Endpoint_get_object_returns_object(self):
         url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': self.test_feed.id})
