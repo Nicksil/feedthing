@@ -23,10 +23,10 @@ class FeedManager:
         # We can ascertain a href value from either a Feed object or
         # href parameter.
         if not feed and not href:
-            raise FeedManagerError('Must provide a value for ``feed`` or ``href`` parameters.')
+            raise FeedManagerError('Must provide a value for `feed` or `href` parameters.')
 
         if not feed and not user:
-            raise FeedManagerError('Must provide a value for ``feed`` or ``user`` parameters.')
+            raise FeedManagerError('Must provide a value for `feed` or `user` parameters.')
 
         self.data = None
         self.feed = feed
@@ -49,7 +49,7 @@ class FeedManager:
 
     def create(self):
         if self.user is None:
-            raise FeedManagerError('Must provide a ``User`` object to create a new ``Feed``.')
+            raise FeedManagerError('Must provide a `User` object to create a new `Feed`.')
 
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
@@ -79,7 +79,7 @@ class FeedManager:
 
     def update(self):
         if not self.feed:
-            raise FeedManagerError('Must provide a value for ``feed`` before being able to ``update``.')
+            raise FeedManagerError('Must provide a value for `feed` before being able to `update`.')
 
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
@@ -107,11 +107,11 @@ class FeedManager:
         message = None
 
         if not self.data:
-            message = '``self.data`` has no value.'
+            message = '`self.data` has no value.'
         if 'feed' not in self.data:
-            message = '``feed`` not in ``self.data``.'
+            message = '`feed` not in `self.data`.'
         if 'entries' not in self.data:
-            message = '``entries`` not in ``self.data``.'
+            message = '`entries` not in `self.data`.'
         if len(self.data.get('entries', [])) < 1:
             message = 'No entries in feed response.'
 

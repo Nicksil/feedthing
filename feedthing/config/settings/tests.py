@@ -14,7 +14,7 @@ CACHES = {
     }
 }
 
-# Note: Be sure ``TEMPLATES[0]['APP_DIRS'] = False`` is set.
+# Note: Be sure `TEMPLATES[0]['APP_DIRS'] = False` is set.
 TEMPLATES[0]['OPTIONS']['loaders'] = [(
     'django.template.loaders.cached.Loader',
     [

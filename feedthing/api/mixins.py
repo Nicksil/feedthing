@@ -19,4 +19,4 @@ class FeedEndpointMixin:
     serializer_class = FeedSerializer
 
     def get_queryset(self):
-        return Feed.objects.all()
+        return Feed.objects.filter(users=self.request.user)
