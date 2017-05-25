@@ -2,26 +2,23 @@ from django.conf import settings
 
 import feedparser
 
-from core.descriptors import DateTime
-from core.descriptors import String
-from core.descriptors import URL
-from core.descriptors import User
+from .models import Entry
+from .models import Feed
+from core.descriptors import typed
 from core.exceptions import FeedManagerError
 from core.utils import HTMLCleaner
 from core.utils import now
 from core.utils import struct_time_to_datetime
-from feeds.models import Entry
-from feeds.models import Feed
 
 
 class FeedManager:
-    etag = String('etag', default='')
-    href = URL('href', default='')
-    html_href = URL('html_href', default='')
-    last_fetch = DateTime('last_fetch', default=None)
-    last_modified = DateTime('last_modified', default=None)
-    title = String('title', default='')
-    user = User('user', default=None)
+    etag = typed.String('etag', default='')
+    href = typed.URL('href', default='')
+    html_href = typed.URL('html_href', default='')
+    last_fetch = typed.DateTime('last_fetch', default=None)
+    last_modified = typed.DateTime('last_modified', default=None)
+    title = typed.String('title', default='')
+    user = typed.User('user', default=None)
 
     def __init__(self, feed=None, href=None, user=None):
         self.data = None

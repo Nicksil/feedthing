@@ -1,13 +1,13 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from ..descriptors import Descriptor, URL
-from ..descriptors import Typed
+from ..descriptors import Descriptor
+from ..descriptors import typed
 
 
 class CoreDescriptorsTestCase(TestCase):
     def setUp(self):
-        class TestStringField(Typed):
+        class TestStringField(typed.Typed):
             typ = str
 
         self.typed_string_field_class = TestStringField
@@ -91,7 +91,7 @@ class CoreDescriptorsTestCase(TestCase):
 
     def test_setting_incorrect_value_on_URL_typed_field_raises_ValidationError(self):
         class TestClass:
-            test_url_field = URL('test_url_field')
+            test_url_field = typed.URL('test_url_field')
 
         test_class_instance = TestClass()
 
@@ -103,7 +103,7 @@ class CoreDescriptorsTestCase(TestCase):
         test_field_default_value = ''
 
         class TestClass:
-            test_url_field = URL('test_url_field', default=test_field_default_value)
+            test_url_field = typed.URL('test_url_field', default=test_field_default_value)
 
         test_class_instance = TestClass()
         self.assertEqual(test_class_instance.test_url_field, test_field_default_value)
