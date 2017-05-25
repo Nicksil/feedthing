@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .factories import UserFactory
+from users.tests.factories import UserFactory
 
 
 class FeedsViewsTestCase(TestCase):

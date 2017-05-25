@@ -13,7 +13,7 @@ class APIEntryEndpointsTestCase(TestCase):
     def setUp(self):
         self.simple_user_pw = 'simple_password'
         self.simple_user = UserFactory(password=self.simple_user_pw)
-        self.test_feed = FeedFactory(user=self.simple_user)
+        self.test_feed = FeedFactory()
         self.test_entry = EntryFactory(feed=self.test_feed)
 
     def test_detail_endpoint_GET_request_returns_correct_data(self):
@@ -32,7 +32,7 @@ class APIEntryEndpointsTestCase(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['id'], self.test_entry.id)
+        self.assertEqual(response.data['id'], str(self.test_entry.id))
 
     def test_detail_endpoint_PATCH_request_modifies_and_returns_object(self):
         url = reverse(
@@ -98,4 +98,4 @@ class APIEntryEndpointsTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.data, list)
-        self.assertIn(self.test_entry.id, [e['id'] for e in response.data])
+        self.assertIn(str(self.test_entry.id), [e['id'] for e in response.data])

@@ -1,3 +1,5 @@
+import uuid
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -11,7 +13,7 @@ class APIBaseTestCase(TestCase):
     def setUp(self):
         self.test_user_pw = 'test_pw'
         self.test_user = UserFactory(password=self.test_user_pw)
-        self.test_feed = FeedFactory(user=self.test_user)
+        self.test_feed = FeedFactory()
 
     def test_Endpoint_get_object_returns_object(self):
         url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': self.test_feed.id})
@@ -21,10 +23,10 @@ class APIBaseTestCase(TestCase):
         response = client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['id'], self.test_feed.id)
+        self.assertEqual(response.data['id'], str(self.test_feed.id))
 
     def test_Endpoint_returns_correct_response_when_resource_does_not_exist(self):
-        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': 'some-bogus-ID'})
+        url = reverse('feedthing-api-v1-feed-details', kwargs={'feed_id': str(uuid.uuid4())})
         client = APIClient()
         client.login(email=self.test_user.email, password=self.test_user_pw)
 

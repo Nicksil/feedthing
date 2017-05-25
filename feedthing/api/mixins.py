@@ -10,7 +10,7 @@ class EntryEndpointMixin:
     serializer_class = EntrySerializer
 
     def get_queryset(self):
-        return Entry.objects.filter(feed__uid=self.kwargs['feed_id'])
+        return Entry.objects.filter(feed__id=self.kwargs['feed_id'])
 
 
 class FeedEndpointMixin:
@@ -19,4 +19,4 @@ class FeedEndpointMixin:
     serializer_class = FeedSerializer
 
     def get_queryset(self):
-        return Feed.objects.filter(user=self.request.user)
+        return Feed.objects.all()
