@@ -1,5 +1,3 @@
-from pathlib import Path
-import json
 import os
 
 from django.urls import reverse_lazy
@@ -9,13 +7,9 @@ from config import __version__
 PROJECT_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
-ROOT = Path(PROJECT_DIR).parent.absolute()
-
-with open(os.path.join(str(ROOT), 'env.json')) as envfile:
-    ENV = json.loads(envfile.read())
 
 DEBUG = False
-SECRET_KEY = ENV['SECRET_KEY']
+SECRET_KEY = os.getenv('SECRET_KEY', None)
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -151,31 +145,26 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(str(ROOT), 'logs', 'feedthing.log'),
-        },
     },
     'loggers': {
         'django': {
             'level': 'WARNING',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True
         },
         'api': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True
         },
         'core': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True
         },
         'feeds': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True
         }
     }

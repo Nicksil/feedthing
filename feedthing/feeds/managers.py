@@ -51,6 +51,9 @@ class FeedManager:
         if self.user is None:
             raise FeedManagerError('Must provide a `User` object to create a new `Feed`.')
 
+        if Feed.objects.filter(href=self.href).exists():
+            raise FeedManagerError('A Feed with provided href already exists.')
+
         kwargs = self.build_request_kwargs()
         self.data = self.fetch_source(**kwargs)
         self.validate()

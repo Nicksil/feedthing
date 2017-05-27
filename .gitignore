@@ -7,5 +7,4 @@ docs/_build
 htmlcov
 scripts
 logs
-env*
 gunicorn*
