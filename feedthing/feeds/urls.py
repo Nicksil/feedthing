@@ -35,7 +35,7 @@ urlpatterns = [
     ),
     url(
         r'^(?P<feed_id>[^/]+)/entries/(?P<entry_id>[^/]+)/$',
-        views.entry,
+        views.entry_detail,
         name='entry'
     ),
 ]

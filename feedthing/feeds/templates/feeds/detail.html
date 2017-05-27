@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load core_tags %}
 {% load static %}
 {% block body %}
     <section class="row">
@@ -15,13 +16,9 @@
         <div class="entry">
             <div class="entry-href-summary-container">
                 <a title="{{ entry.title }}" class="entry-title" href="{% url 'feeds:entry' feed.id entry.id %}">{{ entry.title }}</a>
-                {% if entry.summary_string %}
-                    <span class="entry-summary">{{ entry.summary_string }}</span>
-                {% else %}
-                    <span class="entry-summary">{{ entry.content_string }}</span>
-                {% endif %}
+                <span class="entry-summary">{{ entry.summary }}</span>
             </div>
-            <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
+            <span title="{{ entry.published }}" class="time-since">{{ entry.published|core_timesince }}</span>
         </div>
     {% endfor %}
 {% endblock %}
