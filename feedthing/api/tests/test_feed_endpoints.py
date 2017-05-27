@@ -102,6 +102,24 @@ class FeedEndpointsTests(TestCase):
         # Ensure we're receiving an error in the response.
         self.assertIn('error', response.data)
 
+    def test_feed_index_endpoint_POST_request_with_existing_Feed_href_returns_error(self):
+        self._login()
+
+        # Create new Feed
+        href = 'http://example.com/feed/'
+        feed = FeedFactory(href=href)
+        feed.users.add(self.simple_user)
+
+        # Request
+        url = reverse('feedthing-api-v1-feed-index')
+        response = self.client.post(url, data=json.dumps({'href': href}), content_type='application/json')
+
+        # Ensure we're getting correct HTTP status code for a bad request
+        self.assertEqual(response.status_code, 400)
+
+        # Ensure we're receiving an error in the response.
+        self.assertIn('error', response.data)
+
     def test_details_endpoint_PATCH_request_updates_and_returns_object(self):
         self._login()
 

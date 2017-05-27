@@ -85,3 +85,8 @@ class HTMLCleaner:
                     tag.decompose()
             else:
                 tag.decompose()
+
+    @classmethod
+    def make_string(cls, html_str):
+        instance = cls(html_str)
+        return ''.join(list(map(lambda s: s.strip('\n'), instance.soup.strings)))

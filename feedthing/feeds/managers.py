@@ -64,7 +64,10 @@ class FeedManager:
         self.feed.users.add(self.user)
 
         # Create new Feed's Entry records
-        [Entry.objects.create(**entry) for entry in EntryManager.parse(self.data.get('entries', []), self.feed)]
+        for entry in EntryManager.parse(self.data.get('entries', []), self.feed):
+            # TODO: Handle notifying user duplicate entries exist. Maybe.
+            if not Entry.objects.filter(href=entry['href']):
+                Entry.objects.create(**entry)
 
         return self.feed
 
@@ -117,6 +120,10 @@ class FeedManager:
             message = '`entries` not in `self.data`.'
         if 'status' in self.data and self.data['status'] == 404:
             message = 'Feed does not exist.'
+        # Sometimes the href will change after fetching data. So, check href for duplicate record again.
+        href = self.data.get('href', None)
+        if href and Feed.objects.filter(href=href):
+            message = 'A Feed with provided href already exists.'
         if len(self.data.get('entries', [])) < 1:
             message = 'No entries in feed response.'
 
@@ -169,14 +176,18 @@ class EntryManager:
                 published = struct_time_to_datetime(published)
 
             content = HTMLCleaner.clean(''.join([c.get('value', '') for c in entry.get('content', [])]))
+            content_string = HTMLCleaner.make_string(content)
             summary = HTMLCleaner.clean(entry.get('summary', ''))
+            summary_string = HTMLCleaner.make_string(summary)
 
             parsed.append({
                 'content': content,
+                'content_string': content_string,
                 'feed': feed,
                 'href': href,
                 'published': published,
                 'summary': summary,
+                'summary_string': summary_string,
                 'title': entry.get('title', '<NO_TITLE>')
             })
 

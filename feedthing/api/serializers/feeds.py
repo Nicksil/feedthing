@@ -22,11 +22,17 @@ class EntrySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         extra_kwargs = {'id': {'read_only': True}}
-        fields = ('content', 'feed', 'href', 'natural_published', 'published', 'summary', 'title', 'id', 'url')
+        fields = (
+            'content', 'content_string', 'feed', 'href', 'id', 'natural_published',
+            'published', 'summary', 'summary_string', 'title', 'url'
+        )
         model = Entry
 
     def get_natural_published(self, obj):
-        return time_since(obj.published)
+        result = ''
+        if obj.published:
+            result = time_since(obj.published)
+        return result
 
 
 class FeedSerializer(serializers.HyperlinkedModelSerializer):

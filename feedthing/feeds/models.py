@@ -42,9 +42,11 @@ class Entry(TimeStampedModel):
     )
 
     content = models.TextField(blank=True)
-    href = models.URLField(unique=True)
+    content_string = models.TextField(blank=True)
+    href = models.URLField()
     published = models.DateTimeField(blank=True, null=True)
     summary = models.TextField(blank=True)
+    summary_string = models.TextField(blank=True)
     title = models.TextField(blank=True)
 
     class Meta:

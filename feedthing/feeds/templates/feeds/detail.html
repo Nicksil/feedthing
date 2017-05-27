@@ -15,7 +15,11 @@
         <div class="entry">
             <div class="entry-href-summary-container">
                 <a title="{{ entry.title }}" class="entry-title" href="{% url 'feeds:entry' feed.id entry.id %}">{{ entry.title }}</a>
-                <span class="entry-summary">{{ entry.summary|safe }}</span>
+                {% if entry.summary_string %}
+                    <span class="entry-summary">{{ entry.summary_string }}</span>
+                {% else %}
+                    <span class="entry-summary">{{ entry.content_string }}</span>
+                {% endif %}
             </div>
             <span title="{{ entry.published }}" class="time-since">{{ entry.natural_published }}</span>
         </div>
