@@ -20,6 +20,7 @@ class Feed(TimeStampedModel):
     html_href = models.URLField(blank=True)
     last_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(blank=True, max_length=255)
+    updated = models.DateTimeField(blank=True, null=True)
 
     def __repr__(self):
         return '{}(href=\'{}\')'.format(self.__class__.__name__, self.href)

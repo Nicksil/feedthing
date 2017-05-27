@@ -7,6 +7,7 @@ from .models import Feed
 from core.descriptors import typed
 from core.exceptions import FeedManagerError
 from core.utils import HTMLCleaner
+from core.utils import now
 from core.utils import struct_time_to_datetime
 
 
@@ -16,6 +17,7 @@ class FeedManager:
     html_href = typed.URL('html_href', default='')
     last_modified = typed.DateTime('last_modified', default=None)
     title = typed.String('title', default='<NO_TITLE>')
+    updated = typed.DateTime('updated', default=None)
     user = typed.User('user', default=None)
 
     def __init__(self, feed=None, href=None, user=None):
@@ -38,6 +40,7 @@ class FeedManager:
             self.html_href = self.feed.html_href
             self.last_modified = self.feed.last_modified
             self.title = self.feed.title
+            self.updated = self.feed.updated
 
     def build_request_kwargs(self):
         kwargs = {'agent': settings.USER_AGENT_STR}
@@ -81,6 +84,7 @@ class FeedManager:
             'html_href': self.html_href,
             'last_modified': self.last_modified,
             'title': self.title,
+            'updated': self.updated
         }
 
     def update(self):
@@ -150,6 +154,7 @@ class FeedManager:
         self.href = data.get('href', self.href)
         self.html_href = self._get_html_href(data) or self.html_href
         self.title = data['feed'].get('title', self.title)
+        self.updated = now()
 
         if 'modified_parsed' in data:
             self.last_modified = struct_time_to_datetime(data['modified_parsed'])

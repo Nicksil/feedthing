@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load core_tags %}
 {% load static %}
 {% block body %}
     <section class="row">
@@ -19,7 +20,9 @@
         {% for feed in feeds %}
             <div class="entry">
                 <a title="{{ feed.title }}" class="entry-title" href="{% url 'feeds:detail' feed.id %}">{{ feed.title }}</a>
-                <span title="{{ feed.last_fetch }}" class="time-since">{{ feed.natural_last_fetch }}</span>
+                {% if feed.updated %}
+                    <span title="{{ feed.updated }}" class="time-since">{{ feed.updated|core_timesince }}</span>
+                {% endif %}
             </div>
         {% endfor %}
     {% else %}

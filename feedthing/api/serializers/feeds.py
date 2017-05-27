@@ -45,11 +45,12 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         extra_kwargs = {
-            'last_fetch': {'read_only': True},
-            'id': {'read_only': True}
+            'updated': {'read_only': True},
+            'id': {'read_only': True},
         }
         fields = (
-            'entries', 'etag', 'href', 'html_href', 'last_modified', 'title', 'id', 'url'
+            'entries', 'etag', 'href', 'html_href', 'id', 'last_modified', 'title',
+            'updated', 'url'
         )
         model = Feed
 
