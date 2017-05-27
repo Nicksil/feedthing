@@ -14,13 +14,6 @@ Version
 
 0.00.13a (everything will change)
 
-TODO
-~~~~
-
-- Check response status code for unreachable feeds; handle this case
-- Add feature to use OPML file for adding feeds
-- Add feature allowing multiple feed URLs in a single request
-
 Reference
 ~~~~~~~~~
 
