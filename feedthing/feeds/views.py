@@ -1,3 +1,6 @@
+import logging
+import time
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -8,12 +11,24 @@ from api.endpoints.entry_details import EntryDetailsEndpoint
 from api.endpoints.feed_details import FeedDetailsEndpoint
 from api.endpoints.feed_index import FeedIndexEndpoint
 
+logger = logging.getLogger(__name__)
+
 
 @login_required
 def index(request):
-    return render(request, 'feeds/index.html', {
-        'feeds': FeedIndexEndpoint.as_view()(request).data
-    })
+    start = time.time()
+    feeds = []
+
+    for feed in request.user.feeds.all().order_by('title'):
+        feeds.append({
+            'title': feed.title,
+            'id': feed.id,
+            'updated': feed.updated
+        })
+
+    logger.debug('Time elapsed serializing Feed index data: {}'.format(time.time() - start))
+
+    return render(request, 'feeds/index.html', {'feeds': feeds})
 
 
 @login_required
