@@ -112,6 +112,8 @@ class FeedManager:
             message = '`feed` not in `self.data`.'
         if 'entries' not in self.data:
             message = '`entries` not in `self.data`.'
+        if 'status' in self.data and self.data['status'] == 404:
+            message = 'Feed does not exist.'
         if len(self.data.get('entries', [])) < 1:
             message = 'No entries in feed response.'
 
